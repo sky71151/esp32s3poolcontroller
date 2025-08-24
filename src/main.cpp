@@ -362,14 +362,7 @@ void updateTimeToFirebaseTask(void *pvParameters)
         safePrint("Fout bij uploaden runtime: ");
         safePrintln(fbdo.errorReason());
       }
-      String pathgpio = "devices/";
-      pathgpio.concat(deviceId);
-      pathgpio.concat("/GPIO/DipSwitches");
-      if (Firebase.RTDB.setString(&fbdo, pathgpio, readDipSwitches()))
-      {
-        safePrint("DipSwitches update: ");
-        safePrintln(readDipSwitches());
-      }
+
     }
     vTaskDelay(updateInterval / portTICK_PERIOD_MS);
   }
