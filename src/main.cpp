@@ -19,17 +19,20 @@ typedef struct
 #define FIREBASE_STACK 8192
 #define STATUS_STACK 8192
 #define UPDATE_STACK 8192
+#define MAIN_STACK 8192
 
 TaskHandle_t wifiHandle = nullptr;
 TaskHandle_t firebaseHandle = nullptr;
 TaskHandle_t statusHandle = nullptr;
 TaskHandle_t updateHandle = nullptr;
+TaskHandle_t mainHandle = nullptr;
 
 TaskStackInfo taskStackInfos[] = {
     {"WiFiTask", &wifiHandle, WIFI_STACK},
     {"FirebaseTask", &firebaseHandle, FIREBASE_STACK},
     {"StatusTask", &statusHandle, STATUS_STACK},
     {"UpdateTask", &updateHandle, UPDATE_STACK},
+    {"MainTask", &mainHandle, MAIN_STACK},
 };
 const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
 
@@ -53,10 +56,12 @@ void safePrintln(const String &msg);
 void gpioConfig();
 String getUniqueClientId();
 String readDipSwitches();
+void updateFirebaseInstant(String path, String data);
 void connectToWiFiTask(void *pvParameters);
 void initFirebaseTask(void *pvParameters);
 void systemStatusTask(void *pvParameters);
 void updateTimeToFirebaseTask(void *pvParameters);
+void mainTask(void *pvParameters);
 
 // ===================== SETUP & LOOP =====================
 
@@ -91,6 +96,7 @@ void setup()
 
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 1, &firebaseHandle, 1);
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1);
+  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
 }
 
 void loop()
@@ -244,6 +250,31 @@ void initFirebaseTask(void *pvParameters)
       // firebaseInitialized = true;
     }
     vTaskDelay(5000 / portTICK_PERIOD_MS);
+  }
+}
+
+void mainTask(void *pvParameters)
+{
+  const String DipSwitchPath = String("/GPIO/DipSwitches");
+  const String DigitalInputPath = String("/GPIO/DigitalInputs");
+  const String AnalogInputPath = String("/GPIO/AnalogInputs");
+  const String RelayPath = String("/GPIO/Relays");
+  String PreviousDipSwitchState = "";
+  String PreviousDigitalInputState = "";
+  String PreviousAnalogInputState = "";
+  String PreviousRelayState = "";
+  while (true)
+  {
+    if (Firebase.ready())
+    {
+
+      if (readDipSwitches() != PreviousDipSwitchState)
+      {
+        PreviousDipSwitchState = readDipSwitches();
+        updateFirebaseInstant(DipSwitchPath, PreviousDipSwitchState);
+      }
+    }
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
 
@@ -429,4 +460,18 @@ String readDipSwitches()
     }
   }
   return dipStates;
+}
+
+void updateFirebaseInstant(String path, String data)
+{
+  String destination = "devices/";
+  destination.concat(deviceId);
+  destination.concat(path);
+  if (Firebase.RTDB.setString(&fbdo, destination, data))
+  {
+    safePrint("volgende path is geupdated: ");
+    safePrint(destination);
+    safePrint(" -> ");
+    safePrintln(data);
+  }
 }
