@@ -3,6 +3,7 @@
 #include <Firebase_ESP_Client.h>
 #include "Board.h"
 #include "version.h"
+#include "secrets.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
