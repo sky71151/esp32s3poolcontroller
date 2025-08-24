@@ -65,7 +65,7 @@ void setup()
   delay(2000);
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
-  deviceId = getUniqueClientId(); // Unieke ID (voorbeeld)
+  deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln("Apparaat gestart, unieke ID: " + deviceId);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
   // xTaskCreatePinnedToCore(systemStatusTask, "StatusTask", STATUS_STACK, NULL, 1, &statusHandle, 1);
