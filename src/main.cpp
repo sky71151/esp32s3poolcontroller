@@ -193,17 +193,14 @@ void initFirebaseTask(void *pvParameters)
       }
       else
       {
-        {
-          String msg = "Pad bestaat niet: ";
-          msg.concat(regPath);
-          safePrintln(msg);
-        }
-        {
-          String msg = "Device wordt geregistreerd: ";
-          msg.concat(deviceId);
-          safePrintln(msg);
-        }
-        // Create device data JSON
+
+        String msg = "Pad bestaat niet: ";
+        msg.concat(regPath);
+        safePrintln(msg);
+
+        msg = "Device wordt geregistreerd: ";
+        msg.concat(deviceId);
+        safePrintln(msg);
 
         // Create device data JSON
         FirebaseJson deviceJson;
@@ -213,7 +210,6 @@ void initFirebaseTask(void *pvParameters)
         DeviceInfo.set("clientId", deviceId);
         DeviceInfo.set("boardType", "ESP32-S3  R1N16");
         DeviceInfo.set("firmware", FIRMWARE_VERSION);
-        DeviceInfo.set("freeHeap", ESP.getFreeHeap());
         deviceJson.set("DeviceInfo", DeviceInfo);
 
         // Registration section
@@ -223,6 +219,14 @@ void initFirebaseTask(void *pvParameters)
         Registration.set("lastSeen", bootTimeStr);
         Registration.set("uptime", "0");
         deviceJson.set("Registration", Registration);
+
+        // GPIO section
+        FirebaseJson Device;
+        Device.set("Relays", "0,0,0,0,0,0,0,0");
+        Device.set("DipSwitches", "0,0,0,0");
+        Device.set("DigitalInputs", "0,0,0,0");
+        Device.set("AnalogInputs", "0,0,0,0");
+        deviceJson.set("GPIO", Device);
 
         if (Firebase.RTDB.setJSON(&fbdo, regPath.c_str(), &deviceJson))
         {
