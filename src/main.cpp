@@ -52,6 +52,7 @@ void safePrint(const String &msg);
 void safePrintln(const String &msg);
 void gpioConfig();
 String getUniqueClientId();
+String readDipSwitches();
 void connectToWiFiTask(void *pvParameters);
 void initFirebaseTask(void *pvParameters);
 void systemStatusTask(void *pvParameters);
@@ -330,6 +331,12 @@ void updateTimeToFirebaseTask(void *pvParameters)
         safePrint("Fout bij uploaden runtime: ");
         safePrintln(fbdo.errorReason());
       }
+      pathRuntime.concat("/GPIO/DipSwitches");
+      if (Firebase.RTDB.setString(&fbdo, pathRuntime, readDipSwitches()))
+      {
+        safePrint("DipSwitches update: ");
+        safePrintln(readDipSwitches());
+      }
     }
     vTaskDelay(updateInterval / portTICK_PERIOD_MS);
   }
@@ -405,4 +412,19 @@ String HuidigeTijd()
   char timeStr[32];
   strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
   return String(timeStr);
+}
+
+String readDipSwitches()
+{
+  String dipStates = "";
+  for (int i = 0; i < NUM_DIP_SWITCHES; i++)
+  {
+    int state = digitalRead(DIP_SWITCH_PINS[i]);
+    dipStates += String(state);
+    if (i < NUM_DIP_SWITCHES - 1)
+    {
+      dipStates += ",";
+    }
+  }
+  return dipStates;
 }
