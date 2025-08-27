@@ -214,7 +214,7 @@ void initFirebaseTask(void *pvParameters)
         String pathFirmware = "devices/";
         pathFirmware.concat(deviceId);
         pathFirmware.concat("/DeviceInfo/firmware");
-        if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(bootCount)))
+        if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(bootCount) + timeStr))
         {
           safePrint("Firmware version update: ");
           safePrintln(String(bootCount));
