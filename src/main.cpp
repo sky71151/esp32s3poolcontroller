@@ -82,26 +82,18 @@ void setup()
   // Lezen
   if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount)))
   {
-    Serial.print("BootCount uit flash: ");
-    Serial.println(bootCount);
-  }
-  else
-  {
-    Serial.println("Fout bij lezen van bootCount uit flash!");
-    bootCount = 0;
-  }
-  // Verhogen en terugschrijven
-  bootCount++;
-  if (externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount)))
-  {
-    Serial.print("BootCount opgeslagen: ");
-    Serial.println(bootCount);
-  }
-  else
-  {
-    Serial.println("Fout bij schrijven van bootCount naar flash!");
-  }
+    bootCount++;
+    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount)))
+    {
+      Serial.print("BootCount opgeslagen: ");
+      Serial.println(bootCount);
+    }
+    else
+    {
+      Serial.println("Fout bij wissen/schrijven van bootCount naar flash!");
+    }
 
+  }
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln(String("Apparaat gestart, unieke ID: ") + deviceId);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);

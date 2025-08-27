@@ -1,3 +1,5 @@
+// 4KB sector wissen
+
 #include <Arduino.h>
 #include <SPI.h>
 #include "Board.h"
@@ -64,6 +66,33 @@ bool externalFlashWrite(uint32_t addr, const uint8_t* buffer, size_t len) {
         digitalWrite(SPI_FLASH_CS_PIN, HIGH);
         if ((status & 0x01) == 0) break;
         if (millis() - start > 100) return false;
+        delay(1);
+    }
+    return true;
+}
+
+bool externalFlashErase4k(uint32_t addr) {
+    // Write Enable
+    digitalWrite(SPI_FLASH_CS_PIN, LOW);
+    SPI.transfer(0x06);
+    digitalWrite(SPI_FLASH_CS_PIN, HIGH);
+    delayMicroseconds(1);
+    // 4KB Sector Erase
+    digitalWrite(SPI_FLASH_CS_PIN, LOW);
+    SPI.transfer(0x20); // 4KB Erase
+    SPI.transfer((addr >> 16) & 0xFF);
+    SPI.transfer((addr >> 8) & 0xFF);
+    SPI.transfer(addr & 0xFF);
+    digitalWrite(SPI_FLASH_CS_PIN, HIGH);
+    // Wachten tot klaar
+    unsigned long start = millis();
+    while (1) {
+        digitalWrite(SPI_FLASH_CS_PIN, LOW);
+        SPI.transfer(0x05);
+        uint8_t status = SPI.transfer(0x00);
+        digitalWrite(SPI_FLASH_CS_PIN, HIGH);
+        if ((status & 0x01) == 0) break;
+        if (millis() - start > 1000) return false;
         delay(1);
     }
     return true;
