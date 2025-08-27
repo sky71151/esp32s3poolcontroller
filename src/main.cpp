@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "version.h"
 #include "secrets.h"
+#include "external_flash.h"
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -71,6 +72,7 @@ void setup()
   delay(2000);
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
+  initExternalFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln("Apparaat gestart, unieke ID: " + deviceId);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
