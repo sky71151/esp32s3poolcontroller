@@ -7,9 +7,11 @@
 #include "external_flash.h"
 
 // Persistent boot counter
+// Veilige flash initialisatie
 #include <Adafruit_SPIFlash.h>
 extern Adafruit_SPIFlash flash;
 uint32_t bootCount = 0;
+bool flashReady = false;
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -77,16 +79,24 @@ void setup()
   delay(2000);
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
-  initExternalFlash();
-  // Lees bootCount uit flash, verhoog en schrijf terug
-  flash.readBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount));
-  bootCount++;
-  flash.eraseSector(0); // sector moet eerst gewist worden
-  flash.writeBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount));
-  Serial.print("Aantal boots: ");
-  Serial.println(bootCount);
+  // Probeer flash te initialiseren en onthoud het resultaat
+  flashReady = flash.begin();
+  if (flashReady) {
+    // Lees bootCount uit flash, verhoog en schrijf terug
+    if (flash.readBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount))) {
+      bootCount++;
+      flash.eraseSector(0); // sector moet eerst gewist worden
+      flash.writeBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount));
+      Serial.print("Aantal boots: ");
+      Serial.println(bootCount);
+    } else {
+      Serial.println("Fout bij lezen van bootCount uit flash!");
+    }
+  } else {
+    Serial.println("SPI Flash niet beschikbaar, bootCount wordt niet bijgehouden!");
+  }
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
-  safePrintln("Apparaat gestart, unieke ID: " + deviceId);
+  safePrintln(String("Apparaat gestart, unieke ID: ") + deviceId);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
   // xTaskCreatePinnedToCore(systemStatusTask, "StatusTask", STATUS_STACK, NULL, 1, &statusHandle, 1);
   while (WiFi.status() != WL_CONNECTED)
@@ -106,7 +116,7 @@ void setup()
   char bootStr[32];
   strftime(bootStr, sizeof(bootStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
   bootTimeStr = String(bootStr);
-  safePrintln("Huidige tijd: " + bootTimeStr);
+  safePrintln(String("Huidige tijd: ") + bootTimeStr);
 
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 1, &firebaseHandle, 1);
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1);
