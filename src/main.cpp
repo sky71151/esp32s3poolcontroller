@@ -80,21 +80,7 @@ void setup()
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
   // Probeer flash te initialiseren en onthoud het resultaat
-  flashReady = flash.begin();
-  if (flashReady) {
-    // Lees bootCount uit flash, verhoog en schrijf terug
-    if (flash.readBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount))) {
-      bootCount++;
-      flash.eraseSector(0); // sector moet eerst gewist worden
-      flash.writeBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount));
-      Serial.print("Aantal boots: ");
-      Serial.println(bootCount);
-    } else {
-      Serial.println("Fout bij lezen van bootCount uit flash!");
-    }
-  } else {
-    Serial.println("SPI Flash niet beschikbaar, bootCount wordt niet bijgehouden!");
-  }
+  initExternalFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln(String("Apparaat gestart, unieke ID: ") + deviceId);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
