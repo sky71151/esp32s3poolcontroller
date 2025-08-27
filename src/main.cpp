@@ -5,6 +5,11 @@
 #include "version.h"
 #include "secrets.h"
 #include "external_flash.h"
+
+// Persistent boot counter
+#include <Adafruit_SPIFlash.h>
+extern Adafruit_SPIFlash flash;
+uint32_t bootCount = 0;
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -73,6 +78,13 @@ void setup()
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
   initExternalFlash();
+  // Lees bootCount uit flash, verhoog en schrijf terug
+  flash.readBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount));
+  bootCount++;
+  flash.eraseSector(0); // sector moet eerst gewist worden
+  flash.writeBuffer(0, (uint8_t*)&bootCount, sizeof(bootCount));
+  Serial.print("Aantal boots: ");
+  Serial.println(bootCount);
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln("Apparaat gestart, unieke ID: " + deviceId);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
