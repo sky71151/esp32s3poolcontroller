@@ -10,6 +10,7 @@
 
 uint32_t bootCount = 0;
 bool flashReady = false;
+void updateBootCount();
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -77,25 +78,11 @@ void setup()
   delay(2000);
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
-  // Probeer flash te initialiseren en onthoud het resultaat
+  // Probeer flash te initialiseren en update bootCount
   initExternalFlash();
-  // Lezen
-  if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount)))
-  {
-    bootCount++;
-    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount)))
-    {
-      Serial.print("BootCount opgeslagen: ");
-      Serial.println(bootCount);
-    }
-    else
-    {
-      Serial.println("Fout bij wissen/schrijven van bootCount naar flash!");
-    }
-
-  }
+  updateBootCount();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
-  safePrintln(String("Apparaat gestart, unieke ID: ") + deviceId);
+  safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
   // xTaskCreatePinnedToCore(systemStatusTask, "StatusTask", STATUS_STACK, NULL, 1, &statusHandle, 1);
   while (WiFi.status() != WL_CONNECTED)
@@ -120,6 +107,24 @@ void setup()
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 1, &firebaseHandle, 1);
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1);
   xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
+}
+// BootCount flash logica
+void updateBootCount() {
+  if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount))) {
+    // Check op onbeschreven flash (0xFFFFFFFF)
+    if (bootCount == 0xFFFFFFFF) {
+      bootCount = 0;
+    }
+    bootCount++;
+    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount))) {
+      Serial.print("BootCount opgeslagen: ");
+      Serial.println(bootCount);
+    } else {
+      Serial.println("Fout bij wissen/schrijven van bootCount naar flash!");
+    }
+  } else {
+    Serial.println("Fout bij lezen van bootCount uit flash!");
+  }
 }
 
 void loop()
