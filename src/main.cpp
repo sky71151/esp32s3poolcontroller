@@ -7,9 +7,7 @@
 #include "external_flash.h"
 
 // Persistent boot counter
-// Veilige flash initialisatie
-#include <Adafruit_SPIFlash.h>
-extern Adafruit_SPIFlash flash;
+
 uint32_t bootCount = 0;
 bool flashReady = false;
 #include <freertos/FreeRTOS.h>
