@@ -22,6 +22,7 @@ typedef struct
   uint32_t stackWords;
 } TaskStackInfo;
 
+
 #define WIFI_STACK 4096
 #define FIREBASE_STACK 8192
 #define STATUS_STACK 8192
@@ -494,4 +495,16 @@ void updateFirebaseInstant(String path, String data)
     safePrint(" -> ");
     safePrintln(data);
   }
+}
+
+extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
+  LogEntry entry;
+  entry.timestamp = millis();
+  entry.type = 1; // stack overflow
+  entry.value = 0xFE;
+  strncpy(entry.taskName, pcTaskName, sizeof(entry.taskName));
+  entry.freeHeap = ESP.getFreeHeap();
+  entry.stackWatermark = uxTaskGetStackHighWaterMark(xTask);
+  logToFlash(&entry, sizeof(entry));
+  // Eventueel: knipper LED, reboot, etc.
 }

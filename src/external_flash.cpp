@@ -1,8 +1,15 @@
-// 4KB sector wissen
-
 #include <Arduino.h>
 #include <SPI.h>
 #include "Board.h"
+#include "external_flash.h"
+
+#define LOG_FLASH_ADDR   0x10000      // Startadres loggebied
+#define LOG_SECTOR_SIZE  4096         // 4k sector
+#define LOG_ENTRY_SIZE   sizeof(LogEntry)
+#define LOG_MAX_ENTRIES  (LOG_SECTOR_SIZE / LOG_ENTRY_SIZE)
+static uint16_t logWriteIndex = 0;    // Houdt bij waar de volgende logregel komt
+
+
 
 void initExternalFlash() {
     // SPI bus initialiseren met de juiste pinnen
@@ -22,6 +29,7 @@ void initExternalFlash() {
     Serial.print(manufacturer, HEX); Serial.print(" ");
     Serial.print(memoryType, HEX); Serial.print(" ");
     Serial.println(capacity, HEX);
+    logWriteIndex = 0; // Reset log index bij initialisatie
 }
 
 // Lees bytes uit de flash (max 256 per keer)
@@ -96,4 +104,41 @@ bool externalFlashErase4k(uint32_t addr) {
         delay(1);
     }
     return true;
+}
+
+// Logregel toevoegen (ringbuffer, overschrijft oudste als vol)
+void logToFlash(const LogEntry* entry, size_t len) {
+    if (len != LOG_ENTRY_SIZE) return; // Veiligheidscheck
+
+    uint32_t addr = LOG_FLASH_ADDR + (logWriteIndex * LOG_ENTRY_SIZE);
+
+    // Sector wissen als we aan het begin zijn (optioneel: alleen als sector vol is)
+    if (logWriteIndex == 0) {
+        externalFlashErase4k(LOG_FLASH_ADDR);
+    }
+
+    externalFlashWrite(addr, (const uint8_t*)entry, LOG_ENTRY_SIZE);
+
+    logWriteIndex++;
+    if (logWriteIndex >= LOG_MAX_ENTRIES) {
+        logWriteIndex = 0; // Ringbuffer: terug naar begin
+    }
+}
+
+// Uitlezen van logregels (voorbeeld)
+void printLogFromFlash() {
+    LogEntry entry;
+    for (uint16_t i = 0; i < LOG_MAX_ENTRIES; i++) {
+        uint32_t addr = LOG_FLASH_ADDR + (i * LOG_ENTRY_SIZE);
+        externalFlashRead(addr, (uint8_t*)&entry, LOG_ENTRY_SIZE);
+        // Check op geldige entry, bijvoorbeeld timestamp != 0xFFFFFFFF
+        if (entry.timestamp != 0xFFFFFFFF && entry.timestamp != 0) {
+            Serial.print("Log "); Serial.print(i); Serial.print(": ");
+            Serial.print("Type: "); Serial.print(entry.type);
+            Serial.print(", Value: "); Serial.print(entry.value);
+            Serial.print(", Task: "); Serial.print(entry.taskName);
+            Serial.print(", Heap: "); Serial.print(entry.freeHeap);
+            Serial.print(", Stack: "); Serial.println(entry.stackWatermark);
+        }
+    }
 }
