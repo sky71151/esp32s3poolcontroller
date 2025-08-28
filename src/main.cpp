@@ -82,6 +82,7 @@ void setup()
   // Probeer flash te initialiseren en update bootCount
   initExternalFlash();
   updateBootCount();
+   printLogFromFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
