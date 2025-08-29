@@ -22,7 +22,6 @@ typedef struct
   uint32_t stackWords;
 } TaskStackInfo;
 
-
 #define WIFI_STACK 4096
 #define FIREBASE_STACK 8192
 #define STATUS_STACK 8192
@@ -76,13 +75,13 @@ void mainTask(void *pvParameters);
 void setup()
 {
   Serial.begin(SERIAL_BAUD_RATE);
-  delay(2000);
+  delay(5000);
   serialMutex = xSemaphoreCreateMutex();
   gpioConfig();
   // Probeer flash te initialiseren en update bootCount
   initExternalFlash();
   updateBootCount();
-   printLogFromFlash();
+  printLogFromFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
@@ -111,20 +110,28 @@ void setup()
   xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
 }
 // BootCount flash logica
-void updateBootCount() {
-  if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount))) {
+void updateBootCount()
+{
+  if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount)))
+  {
     // Check op onbeschreven flash (0xFFFFFFFF)
-    if (bootCount == 0xFFFFFFFF) {
+    if (bootCount == 0xFFFFFFFF)
+    {
       bootCount = 0;
     }
     bootCount++;
-    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount))) {
+    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount)))
+    {
       Serial.print("BootCount opgeslagen: ");
       Serial.println(bootCount);
-    } else {
+    }
+    else
+    {
       Serial.println("Fout bij wissen/schrijven van bootCount naar flash!");
     }
-  } else {
+  }
+  else
+  {
     Serial.println("Fout bij lezen van bootCount uit flash!");
   }
 }
@@ -498,7 +505,8 @@ void updateFirebaseInstant(String path, String data)
   }
 }
 
-extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
+extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
+{
   LogEntry entry;
   entry.timestamp = millis();
   entry.type = 1; // stack overflow
