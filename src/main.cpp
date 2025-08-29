@@ -108,14 +108,14 @@ void setup()
   // TZ string: "CET-1CEST,M3.5.0,M10.5.0/3"
 
   // configTime(3600, 3600, "pool.ntp.org");
-  /*configTime(0, 0, "pool.ntp.org");
+  configTime(0, 0, "pool.ntp.org");
   time_t now = 0;
   while (now < 100000)
   {
     vTaskDelay(100 / portTICK_PERIOD_MS);
     now = time(nullptr);
-  }*/
-
+  }
+/*
   // Tijd synchroniseren
   configTime(0, 0, "pool.ntp.org", "time.nist.gov");
   time_t now = 0;
@@ -123,7 +123,7 @@ void setup()
   {
     delay(100);
     now = time(nullptr);
-  }
+  }*/
   safePrintln("Tijd gesynchroniseerd.");
   char bootStr[32];
   strftime(bootStr, sizeof(bootStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
