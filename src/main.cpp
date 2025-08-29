@@ -20,6 +20,7 @@ typedef struct
 // Persistent boot counter
 uint32_t bootCount = 0;
 bool flashReady = false;
+bool streamConnected = false;
 
 #define WIFI_STACK 8192
 #define FIREBASE_STACK 16384
@@ -207,7 +208,7 @@ void initFirebaseTask(void *pvParameters)
 {
   String regPath = String("/devices/");
   regPath += deviceId;
-  bool streamConnected = false;
+  
   for (;;)
   {
     if (WiFi.status() == WL_CONNECTED && !Firebase.ready())
@@ -227,17 +228,18 @@ void initFirebaseTask(void *pvParameters)
       streamConnected = false;
     }
 
-    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized)
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized && !streamConnected)
     {
       if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
       {
         Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
         Serial.println("Stream gestart!");
+        streamConnected = true;
       }
       else
       {
         Serial.print("Stream start mislukt: ");
-        Serial.println(fbdo.errorReason());
+        Serial.println(fbdoStream.errorReason());
       }
     }
 
@@ -645,4 +647,5 @@ void streamTimeoutCallback(bool timeout)
 {
   if (timeout)
     Serial.println("[STREAM] Timeout, probeer opnieuw...");
+    streamConnected = false;
 }
