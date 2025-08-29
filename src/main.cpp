@@ -213,8 +213,8 @@ void initFirebaseTask(void *pvParameters)
     }
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !streamConnected)
     {
-      Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
-      Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
+      //Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
+      //Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
       streamConnected = true;
     }
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !firebaseInitialized)
