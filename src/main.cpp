@@ -213,8 +213,18 @@ void initFirebaseTask(void *pvParameters)
     }
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !streamConnected)
     {
-      //Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
-      //Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
+      try
+      {
+        Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
+        Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
+      }
+      catch (const std::exception &e)
+      {
+        Serial.println(e.what());
+      }
+
+      // Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
+      // Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
       streamConnected = true;
     }
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !firebaseInitialized)
@@ -607,6 +617,6 @@ extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskNa
 
 void firmwareVersionCallback(FirebaseStream data)
 {
-    String newVersion = data.stringData();
-    // Vergelijk met huidige versie en start OTA indien nodig
+  String newVersion = data.stringData();
+  // Vergelijk met huidige versie en start OTA indien nodig
 }
