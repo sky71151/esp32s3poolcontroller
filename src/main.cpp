@@ -650,14 +650,14 @@ void streamCallback(FirebaseStream data)
   {
     Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...");
     //Firebase.RTDB.endStream(&fbdoStream);
-    vTaskSuspend(mainHandle);
-    vTaskSuspend(updateHandle);
-    vTaskSuspend(statusHandle);
-    vTaskSuspend(firebaseHandle);
+    //vTaskSuspend(mainHandle);
+    //vTaskSuspend(updateHandle);
+    //vTaskSuspend(statusHandle);
+    //vTaskSuspend(firebaseHandle);
     // Suspend the stack monitor task if its handle is available
     // If you want to suspend the stack monitor task, you need to store its handle.
     // If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
-     vTaskSuspend(stackMonitorHandle);
+    // vTaskSuspend(stackMonitorHandle);
 
     performOTA();
   }
