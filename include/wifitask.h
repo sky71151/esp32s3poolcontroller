@@ -6,6 +6,7 @@
 #include "freertos/task.h"
 #include <WiFi.h>
 #include "secrets.h"
+#include "board.h"
 
 void connectToWiFiTask(void *pvParameters);
 

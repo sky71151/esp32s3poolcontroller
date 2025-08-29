@@ -1,4 +1,8 @@
 #include "firebase.h"
+#include "external_flash.h"
+#include "ota.h"
+#include "wifitask.h"
+#include "board.h"
 
 void initFirebaseTask(void *pvParameters)
 {

@@ -152,54 +152,6 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/freertos_stats.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Print.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiType.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types_generic.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_hw_support/include/esp_interface.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/local/esp_wifi_types_native.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types_generic.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiSTA.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiGeneric.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_smartconfig.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_types.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_ip_addr.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_driver.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_com.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/eth_types.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_spec.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_mac_spi.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_mac.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_driver_spi/include/driver/spi_master.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/spi_types.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_driver_spi/include/driver/spi_common.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_system/include/esp_ipc.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_phy.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/espressif__network_provisioning/include/network_provisioning/manager.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/protocomm/include/common/protocomm.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/protocomm/include/security/protocomm_security.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/espressif__network_provisioning/include/network_provisioning/network_config.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/Network.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkInterface.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Printable.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkEvents.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkManager.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/WString.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkClient.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Client.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkServer.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Server.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_ringbuf/include/freertos/ringbuf.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiAP.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiScan.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiClient.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiServer.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
- C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase_ESP_Client.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./core/Firebase_Client_Version.h \
@@ -217,11 +169,59 @@
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././FB_Network.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././FirebaseFS.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src/ETH.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/Network.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkInterface.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_ip_addr.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Printable.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkEvents.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_driver.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_com.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/eth_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_spec.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_mac_spi.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_mac.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_driver_spi/include/driver/spi_master.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/spi_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_driver_spi/include/driver/spi_common.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_system/include/esp_ipc.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_phy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types_generic.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_hw_support/include/esp_interface.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/local/esp_wifi_types_native.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types_generic.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_smartconfig.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/espressif__network_provisioning/include/network_provisioning/network_config.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkManager.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/WString.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkClient.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Client.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkServer.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Server.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_ringbuf/include/freertos/ringbuf.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_netif_glue.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_types.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_defaults.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Print.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiType.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiSTA.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiGeneric.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/espressif__network_provisioning/include/network_provisioning/manager.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/protocomm/include/common/protocomm.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/protocomm/include/security/protocomm_security.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiAP.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiScan.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiClient.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiServer.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././mbfs/MB_FS.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././mbfs/MB_FS_Interfaces.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FirebaseFS.h \
@@ -302,8 +302,8 @@
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FunctionsConfig.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/PolicyBuilder.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FunctionsConfig.h \
- include/Board.h src/version.h include/secrets.h include/external_flash.h \
- include/ota.h \
+ include/firebase.h include/main.h src/version.h include/secrets.h \
+ include/external_flash.h include/ota.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src/HTTPUpdate.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src/HTTPClient.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
@@ -398,4 +398,4 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/error.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/WiFiClientSecure.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
- include/wifitask.h include/main.h include/firebase.h
+ include/wifitask.h include/board.h include/board.h

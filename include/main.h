@@ -2,24 +2,17 @@
 #define MAIN_H
 
 #include <Arduino.h>
-#include <Arduino.h>
-#include <WiFi.h>
 #include <Firebase_ESP_Client.h>
-#include "Board.h"
-#include "version.h"
-#include "secrets.h"
-#include "external_flash.h"
-#include "ota.h"
-#include "wifitask.h"
-#include "firebase.h"
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
-typedef struct
-{
+typedef struct {
   const char *name;
   TaskHandle_t *handle;
   uint32_t stackWords;
 } TaskStackInfo;
 
+// Globale variabelen (alleen extern!)
 extern TaskHandle_t wifiHandle;
 extern TaskHandle_t firebaseHandle;
 extern TaskHandle_t statusHandle;
@@ -27,6 +20,7 @@ extern TaskHandle_t updateHandle;
 extern TaskHandle_t mainHandle;
 extern TaskHandle_t stackMonitorHandle;
 extern TaskStackInfo taskStackInfos[];
+extern const int numTasks;
 extern FirebaseData fbdo;
 extern FirebaseData fbdoStream;
 extern FirebaseAuth auth;
@@ -43,23 +37,11 @@ extern bool updateAvailable;
 extern uint32_t bootCount;
 extern bool flashReady;
 
-// Forward declarations
+// Alleen forward declarations die je in andere modules gebruikt
 void safePrint(const String &msg);
 void safePrintln(const String &msg);
-//void gpioConfig();
-//String getUniqueClientId();
-//String readDipSwitches();
-//void updateFirebaseInstant(String path, String data);
-//void connectToWiFiTask(void *pvParameters);
-//void initFirebaseTask(void *pvParameters);
 void systemStatusTask(void *pvParameters);
-//void updateTimeToFirebaseTask(void *pvParameters);
 void mainTask(void *pvParameters);
 void stackMonitorTask(void *pvParameters);
-//void updateBootCount();
-//void firmwareVersionCallback(FirebaseStream data);
-//void streamTimeoutCallback(bool timeout);
-//void streamCallback(FirebaseStream data);
-
 
 #endif

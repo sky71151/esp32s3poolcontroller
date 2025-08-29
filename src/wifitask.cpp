@@ -1,4 +1,6 @@
 #include "main.h"
+#include "board.h"
+#include "wifitask.h"
 
 void connectToWiFiTask(void *pvParameters)
 {

@@ -1,4 +1,9 @@
 #include "main.h"
+#include "firebase.h"
+#include "external_flash.h"
+#include "ota.h"
+#include "wifitask.h"
+#include "board.h"
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -90,15 +95,7 @@ void setup()
     vTaskDelay(100 / portTICK_PERIOD_MS);
     now = time(nullptr);
   }
-  /*
-    // Tijd synchroniseren
-    configTime(0, 0, "pool.ntp.org", "time.nist.gov");
-    time_t now = 0;
-    while (now < 100000)
-    {
-      delay(100);
-      now = time(nullptr);
-    }*/
+
   safePrintln("Tijd gesynchroniseerd.");
   char bootStr[32];
   strftime(bootStr, sizeof(bootStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
