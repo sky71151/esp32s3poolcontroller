@@ -676,6 +676,8 @@ void streamCallback(FirebaseStream data)
     // vTaskSuspend(stackMonitorHandle);
 
     updateAvailable = true;
+    //Turn on LED to indicate update available
+    digitalWrite(LED_PIN, HIGH);
 
     //performOTA();
   }
