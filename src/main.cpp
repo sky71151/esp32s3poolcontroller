@@ -645,7 +645,10 @@ void streamCallback(FirebaseStream data)
 
 void streamTimeoutCallback(bool timeout)
 {
-  if (timeout)
+  if (timeout) {
     Serial.println("[STREAM] Timeout, probeer opnieuw...");
+    Firebase.RTDB.endStream(&fbdoStream);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
     streamConnected = false;
+  }
 }
