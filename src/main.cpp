@@ -61,6 +61,7 @@ bool bootTimeUploaded = false;
 bool firebaseInitialized = false;
 bool streamConnected = false;
 String deviceId;
+bool updateAvailable = false;
 
 // Forward declarations
 void safePrint(const String &msg);
@@ -355,6 +356,21 @@ void mainTask(void *pvParameters)
   String PreviousRelayState = "";
   while (true)
   {
+    if (updateAvailable)
+    {
+      safePrintln("[MAIN] OTA update beschikbaar, start OTA...");
+      //updateAvailable = false;
+      Firebase.RTDB.endStream(&fbdoStream);
+      vTaskSuspend(updateHandle);
+      vTaskSuspend(statusHandle);
+      vTaskSuspend(firebaseHandle);
+      if (debug)
+      {
+        vTaskSuspend(stackMonitorHandle);
+      }
+      performOTA();
+    }
+
     if (Firebase.ready())
     {
 
@@ -659,7 +675,9 @@ void streamCallback(FirebaseStream data)
     // If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
     // vTaskSuspend(stackMonitorHandle);
 
-    performOTA();
+    updateAvailable = true;
+
+    //performOTA();
   }
 }
 
