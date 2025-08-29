@@ -3,7 +3,7 @@ name: Build & Release Firmware
 on:
   push:
     branches:
-      - firmware
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
