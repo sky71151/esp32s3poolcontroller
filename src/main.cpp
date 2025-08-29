@@ -37,6 +37,15 @@ TaskHandle_t updateHandle = nullptr;
 TaskHandle_t mainHandle = nullptr;
 TaskHandle_t stackMonitorHandle = nullptr;
 
+// Array of task handles for easier management
+TaskHandle_t taskHandles[] = {
+    wifiHandle,
+    firebaseHandle,
+    statusHandle,
+    updateHandle,
+    mainHandle,
+    stackMonitorHandle};
+
 TaskStackInfo taskStackInfos[] = {
     {"WiFiTask", &wifiHandle, WIFI_STACK},
     {"FirebaseTask", &firebaseHandle, FIREBASE_STACK},
@@ -358,20 +367,16 @@ void mainTask(void *pvParameters)
   {
     if (updateAvailable)
     {
-      safePrintln("[MAIN] OTA update beschikbaar, start OTA...!!!");
-      //updateAvailable = false;
-      safePrintln("[MAIN] ending stream !!!");
-      Firebase.RTDB.endStream(&fbdoStream);
-      safePrintln("[MAIN] stream ended !!!");
-      vTaskSuspend(updateHandle);
-      safePrintln("[MAIN] updateHandle suspended !!!");
-      vTaskSuspend(firebaseHandle);
-      safePrintln("[MAIN] firebaseHandle suspended !!!");
-      vTaskSuspend(stackMonitorHandle);
-      safePrintln("[MAIN] stackMonitorHandle suspended !!!");
-      safePrintln("[MAIN] dit moet werken !!!");
-      safePrintln("[MAIN] en werkt het!!!");
-      safePrintln("[MAIN] en werkt het!!!");
+
+      for (int i = 0; i < numTasks - 1; i++)
+      {
+        // check if task is running
+        if ((taskHandles[i] != nullptr) && eTaskGetState(taskHandles[i]) == eRunning)
+        {
+          safePrintln("[MAIN] Task " + String(i) + " is running.");
+          vTaskSuspend(taskHandles[i]);
+        }
+      }
       
       performOTA();
     }
@@ -670,21 +675,21 @@ void streamCallback(FirebaseStream data)
   if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
   {
     Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
-    //Firebase.RTDB.endStream(&fbdoStream);
-    //vTaskSuspend(mainHandle);
-    //vTaskSuspend(updateHandle);
-    //vTaskSuspend(statusHandle);
-    //vTaskSuspend(firebaseHandle);
-    // Suspend the stack monitor task if its handle is available
-    // If you want to suspend the stack monitor task, you need to store its handle.
-    // If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
-    // vTaskSuspend(stackMonitorHandle);
+    // Firebase.RTDB.endStream(&fbdoStream);
+    // vTaskSuspend(mainHandle);
+    // vTaskSuspend(updateHandle);
+    // vTaskSuspend(statusHandle);
+    // vTaskSuspend(firebaseHandle);
+    //  Suspend the stack monitor task if its handle is available
+    //  If you want to suspend the stack monitor task, you need to store its handle.
+    //  If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
+    //  vTaskSuspend(stackMonitorHandle);
 
     updateAvailable = true;
-    //Turn on LED to indicate update available
+    // Turn on LED to indicate update available
     digitalWrite(LED_PIN, HIGH);
 
-    //performOTA();
+    // performOTA();
   }
 }
 
