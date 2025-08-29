@@ -69,6 +69,7 @@ void initFirebaseTask(void *pvParameters);
 void systemStatusTask(void *pvParameters);
 void updateTimeToFirebaseTask(void *pvParameters);
 void mainTask(void *pvParameters);
+void stackMonitorTask(void *pvParameters);
 
 // ===================== SETUP & LOOP =====================
 
@@ -108,6 +109,7 @@ void setup()
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 1, &firebaseHandle, 1);
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1);
   xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
+  xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", 8192, NULL, 1, NULL, 1);
 }
 // BootCount flash logica
 void updateBootCount()
@@ -401,6 +403,64 @@ void updateTimeToFirebaseTask(void *pvParameters)
       }
     }
     vTaskDelay(updateInterval / portTICK_PERIOD_MS);
+  }
+}
+
+// Zeer uitgebreide stack/heap monitoring task
+void stackMonitorTask(void *pvParameters)
+{
+  while (true)
+  {
+    uint32_t freeHeap = ESP.getFreeHeap();
+    uint32_t minFreeHeap = ESP.getMinFreeHeap();
+    safePrintln("\n[STACK MONITOR] =====================");
+    safePrint("Vrije heap: "); safePrint(String(freeHeap)); safePrint(" bytes | Min. ooit: "); safePrintln(String(minFreeHeap));
+
+    // Print status van alle bekende taken
+    safePrintln("Naam | Stack gebruikt (bytes) | Stack totaal (bytes) | % gebruikt | HighWaterMark | Handle");
+    for (int i = 0; i < numTasks; i++)
+    {
+      TaskStackInfo &info = taskStackInfos[i];
+      if (*(info.handle))
+      {
+        UBaseType_t highWaterMark = uxTaskGetStackHighWaterMark(*(info.handle));
+        uint32_t stackTotalBytes = info.stackWords * sizeof(StackType_t);
+        uint32_t stackFreeBytes = highWaterMark * sizeof(StackType_t);
+        uint32_t stackUsedBytes = stackTotalBytes - stackFreeBytes;
+        int percentUsed = (stackUsedBytes * 100) / stackTotalBytes;
+  safePrint(info.name); safePrint(" | ");
+  safePrint(String(stackUsedBytes)); safePrint("/");
+  safePrint(String(stackTotalBytes)); safePrint(" = ");
+  safePrint(String(percentUsed)); safePrint("% | ");
+  safePrint(String(stackFreeBytes)); safePrint(" | 0x");
+  safePrint(String((uint32_t)(*(info.handle)), HEX)); safePrintln("");
+      }
+      else
+      {
+        safePrint(info.name); safePrintln(" | (geen handle)");
+      }
+    }
+
+    // Print status van huidige taak (optioneel)
+    UBaseType_t currHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
+    safePrint("Huidige taak stack high water mark: ");
+    safePrintln(String(currHighWaterMark * sizeof(StackType_t)));
+
+    // Print WiFi en Firebase status
+    safePrint("WiFi status: "); safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden");
+    safePrint("Firebase status: "); safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden");
+
+    // Optioneel: log naar flash
+    // LogEntry entry;
+    // entry.timestamp = millis();
+    // entry.type = 0xAA; // stack monitor
+    // entry.value = 0;
+    // strncpy(entry.taskName, "stackMonitor", sizeof(entry.taskName));
+    // entry.freeHeap = freeHeap;
+    // entry.stackWatermark = currHighWaterMark * sizeof(StackType_t);
+    // logToFlash(&entry, sizeof(entry));
+
+    vTaskDelay(15000 / portTICK_PERIOD_MS); // elke 15s
   }
 }
 
