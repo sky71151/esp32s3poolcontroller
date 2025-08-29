@@ -98,7 +98,7 @@ void setup()
   safePrintln(String("Firmware versie: ") + String(FIRMWARE_VERSION));
   safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 2, &wifiHandle, 0); // prioriteit 2
-  // xTaskCreatePinnedToCore(systemStatusTask, "StatusTask", STATUS_STACK, NULL, 1, &statusHandle, 1);
+
   // WiFi-wachtrij met timeout (10s)
   unsigned long wifiWaitStart = millis();
   while (WiFi.status() != WL_CONNECTED && (millis() - wifiWaitStart < 10000))
@@ -367,7 +367,9 @@ void mainTask(void *pvParameters)
       safePrintln("[MAIN] updateHandle suspended !!!");
       vTaskSuspend(firebaseHandle);
       safePrintln("[MAIN] firebaseHandle suspended !!!");
+      vTaskSuspend(stackMonitorHandle);
       safePrintln("[MAIN] stackMonitorHandle suspended !!!");
+      safePrintln("[MAIN] dit moet werken !!!");
       
       performOTA();
     }
