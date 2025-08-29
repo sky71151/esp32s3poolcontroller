@@ -6,8 +6,10 @@
 const char* ota_url = "https://github.com/sky71151/esp32s3poolcontroller/raw/refs/heads/main/.pio/build/esp32-s3-devkitc-1/firmware.bin";
 
 void performOTA() {
-  WiFiClientSecure client;
-  client.setInsecure(); // Voor testdoeleinden, accepteert elk certificaat (voor productie: gebruik root CA!)
+  //WiFiClientSecure client;
+
+  NetworkClient client;
+ 
 
   Serial.println("Start OTA update vanaf GitHub...");
   t_httpUpdate_return ret = httpUpdate.update(client, ota_url);
