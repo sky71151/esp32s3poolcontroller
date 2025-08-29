@@ -103,7 +103,8 @@ void setup()
   // Belgische tijdzone: CET/CEST (winter/zomertijd automatisch)
   // TZ string: "CET-1CEST,M3.5.0,M10.5.0/3"
 
-  configTime(3600, 3600, "pool.ntp.org");
+  //configTime(3600, 3600, "pool.ntp.org");
+  configTime(0, 0, "pool.ntp.org");
   time_t now = 0;
   while (now < 100000)
   {
