@@ -87,6 +87,7 @@ void setup()
   Serial.begin(SERIAL_BAUD_RATE);
   delay(5000);
   serialMutex = xSemaphoreCreateMutex();
+  safePrintln(String("Firmware versie: ") + String(FIRMWARE_VERSION));
   gpioConfig();
   // Probeer flash te initialiseren en update bootCount
   initExternalFlash();
