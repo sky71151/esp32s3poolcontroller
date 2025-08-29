@@ -37,15 +37,6 @@ TaskHandle_t updateHandle = nullptr;
 TaskHandle_t mainHandle = nullptr;
 TaskHandle_t stackMonitorHandle = nullptr;
 
-// Array of task handles for easier management
-TaskHandle_t taskHandles[] = {
-    wifiHandle,
-    firebaseHandle,
-    statusHandle,
-    updateHandle,
-    mainHandle,
-    stackMonitorHandle};
-
 TaskStackInfo taskStackInfos[] = {
     {"WiFiTask", &wifiHandle, WIFI_STACK},
     {"FirebaseTask", &firebaseHandle, FIREBASE_STACK},
@@ -371,16 +362,17 @@ void mainTask(void *pvParameters)
 
       for (int i = 0; i < numTasks; i++)
       {
+        TaskHandle_t handle = *(taskStackInfos[i].handle);
         safePrintln(String("[MAIN] Controleren taak: ") + String(i));
-        if (taskHandles[i] == nullptr)
+        if (handle == nullptr || handle == mainHandle)
         {
           safePrintln(String("[MAIN] Taak ") + String(i) + String(" is niet gestart."));
           continue;
         }
         // check if task is running
-        if (eTaskGetState(taskHandles[i]) == eRunning)
+        if (eTaskGetState(handle) == eRunning)
         {
-          if (taskHandles[i] == mainHandle)
+          if (handle == mainHandle)
           {
             // Skip suspending the main task to avoid deadlock
             safePrintln("[MAIN] Skipping suspend of MainTask to avoid deadlock.");
@@ -388,7 +380,7 @@ void mainTask(void *pvParameters)
             continue;
           }
           safePrintln("[MAIN] Task " + String(i) + " is running.");
-          vTaskSuspend(taskHandles[i]);
+          vTaskSuspend(handle);
         }
       }
 
