@@ -1,4 +1,4 @@
-.pio/build/esp32-s3-devkitc-1/src/main.cpp.o: src/main.cpp \
+.pio/build/esp32-s3-devkitc-1/src/main.cpp.o: src/main.cpp include/main.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp_arduino_version.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/freertos/FreeRTOS-Kernel/include/freertos/FreeRTOS.h \
@@ -398,4 +398,4 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/error.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/WiFiClientSecure.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
- include/main.h
+ include/wifitask.h include/main.h

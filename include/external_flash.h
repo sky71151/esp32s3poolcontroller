@@ -15,3 +15,4 @@ bool externalFlashWrite(uint32_t addr, const uint8_t* buffer, size_t len);
 bool externalFlashErase4k(uint32_t addr);
 void logToFlash(const LogEntry* entry, size_t len);
 void printLogFromFlash();
+void updateBootCount();

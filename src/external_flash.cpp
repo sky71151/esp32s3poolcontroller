@@ -2,6 +2,7 @@
 #include <SPI.h>
 #include "Board.h"
 #include "external_flash.h"
+#include "main.h"
 
 #define LOG_FLASH_ADDR   0x10000      // Startadres loggebied
 #define LOG_SECTOR_SIZE  4096         // 4k sector
@@ -143,4 +144,31 @@ void printLogFromFlash() {
             Serial.print("Log "); Serial.print(i); Serial.println(": <empty>");
         }
     }
+}
+
+// BootCount flash logica
+void updateBootCount()
+{
+  if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount)))
+  {
+    // Check op onbeschreven flash (0xFFFFFFFF)
+    if (bootCount == 0xFFFFFFFF)
+    {
+      bootCount = 0;
+    }
+    bootCount++;
+    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount)))
+    {
+      Serial.print("BootCount opgeslagen: ");
+      Serial.println(bootCount);
+    }
+    else
+    {
+      Serial.println("Fout bij wissen/schrijven van bootCount naar flash!");
+    }
+  }
+  else
+  {
+    Serial.println("Fout bij lezen van bootCount uit flash!");
+  }
 }

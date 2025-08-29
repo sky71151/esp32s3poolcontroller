@@ -155,4 +155,248 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src/SPI.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal-spi.h \
- include/Board.h include/external_flash.h
+ include/Board.h include/external_flash.h include/main.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Print.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiType.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types_generic.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_hw_support/include/esp_interface.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/local/esp_wifi_types_native.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_wifi_types_generic.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiSTA.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiGeneric.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_wifi/include/esp_smartconfig.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_ip_addr.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_driver.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_com.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/eth_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_spec.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_mac_spi.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_mac.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_driver_spi/include/driver/spi_master.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/spi_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_driver_spi/include/driver/spi_common.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_system/include/esp_ipc.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_phy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/espressif__network_provisioning/include/network_provisioning/manager.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/protocomm/include/common/protocomm.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/protocomm/include/security/protocomm_security.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/espressif__network_provisioning/include/network_provisioning/network_config.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/Network.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkInterface.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Printable.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkEvents.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkManager.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/WString.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkClient.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Client.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkServer.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Server.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_ringbuf/include/freertos/ringbuf.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiAP.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiScan.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiClient.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiServer.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase_ESP_Client.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./core/Firebase_Client_Version.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./mbfs/MB_MCU.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FirebaseFS.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/LittleFS/src/LittleFS.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/SD/src/SD.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/SD/src/sd_defines.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././core/Firebase_Build_Options.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FB_Const.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././FirebaseFS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././FB_Network.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././FirebaseFS.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src/ETH.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_eth/include/esp_eth_netif_glue.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_netif/include/esp_netif_defaults.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././mbfs/MB_FS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/././mbfs/MB_FS_Interfaces.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FirebaseFS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/json/FirebaseJson.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/json/MB_List.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/json/MB_String.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/json/MB_JSON/MB_JSON.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/Update/src/Update.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_rom/include/esp_rom_md5.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/HashBuilder.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/HEXBuilder.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FB_Error.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/FB_Utils.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/client/FB_TCP_Client.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FB_Error.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FB_Const.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./mbfs/MB_FS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FB_Utils.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/ESP_SSLClient.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/ESP_SSLClient_FS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/ESP_SSLClient_Const.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/BSSL_TCP_Client.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../ESP_SSLClient_Const.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/BSSL_SSL_Client.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/BSSL_Helper.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_hash.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_hmac.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_kdf.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_rand.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_block.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_prf.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_aead.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_rsa.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_ec.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_ssl.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_x509.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/../bssl/bearssl_pem.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/SSLClient/client/BSSL_CertStore.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FB_Network.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/include/lwip/sockets.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/sockets.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/netif.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/err.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/pbuf.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/stats.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/mem.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/memp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/priv/memp_std.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/priv/memp_priv.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/priv/mem_priv.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/inet.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/lwip/lwip/src/include/lwip/errno.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/client/WiFiClientImpl.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/core/FirebaseCore.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./client/FB_TCP_Client.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/session/FB_Session.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./core/FirebaseCore.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/stream/FB_Stream.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/stream/FB_MP_Stream.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/stream/FB_Stream.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/QueueInfo.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/QueryFilter.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/QueueManager.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./rtdb/QueueInfo.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/rtdb/FB_RTDB.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./session/FB_Session.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/rtdb/QueueInfo.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/rtdb/./stream/FB_MP_Stream.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/rtdb/./stream/FB_Stream.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/message/FCM.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/storage/FCS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/gcs/GCS.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/firestore/FB_Firestore.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./json/FirebaseJson.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FB_Functions.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FunctionsConfig.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/PolicyBuilder.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FunctionsConfig.h \
+ include/Board.h src/version.h include/secrets.h include/ota.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src/HTTPUpdate.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src/HTTPClient.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/ssl_client.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/platform.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/private_access.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/build_info.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/mbedtls/esp_config.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/mbedtls_config.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/esp_mem.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/config_psa.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_legacy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_adjust_config_synonyms.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_adjust_config_dependencies.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/config_adjust_psa_superset_legacy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/config_adjust_psa_from_legacy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_adjust_config_key_pair_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_adjust_auto_enabled.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/config_adjust_legacy_crypto.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/config_adjust_x509.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/config_adjust_ssl.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/check_config.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/platform_time.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/net_sockets.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ssl.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/platform_util.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/mbedtls/bignum.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/bignum.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/mbedtls/ecp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ecp.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ssl_ciphersuites.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/pk.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/md.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/rsa.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ecdsa.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_platform.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/build_info.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_values.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_sizes.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_struct.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_driver_contexts_primitives.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_driver_common.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_sizes.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_builtin_primitives.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/md5.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/md5_alt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/md/esp_md.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ripemd160.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/sha1.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/sha1_alt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/sha_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_rom/include/esp32s3/rom/sha.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/sha256.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/sha256_alt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/sha512.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/sha512_alt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/sha3.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/cipher.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_driver_contexts_composites.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_builtin_composites.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/cmac.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/mbedtls/gcm.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/gcm.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/gcm_alt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/aes/esp_aes_gcm.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/aes/esp_aes.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/esp_common/include/esp_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/hal/include/hal/aes_types.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ccm.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/chachapoly.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/poly1305.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/chacha20.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ecjpake.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_driver_contexts_key_derivation.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_builtin_key_derivation.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_extra.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/psa/crypto_compat.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/x509_crt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/x509.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/asn1.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/x509_crl.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ecdh.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/debug.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/entropy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/md.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/ctr_drbg.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/aes.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/port/include/aes_alt.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/entropy.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/mbedtls/mbedtls/include/mbedtls/error.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/WiFiClientSecure.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
+ include/wifitask.h include/main.h

@@ -3,6 +3,56 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
+// ===================== VARIABELEN =====================
+
+
+// Persistent boot counter
+uint32_t bootCount = 0;
+bool flashReady = false;
+
+#define WIFI_STACK 8192
+#define FIREBASE_STACK 16384
+#define STATUS_STACK 16384
+#define UPDATE_STACK 16384
+#define MAIN_STACK 16384
+
+#define debug true
+
+TaskHandle_t wifiHandle = nullptr;
+TaskHandle_t firebaseHandle = nullptr;
+TaskHandle_t statusHandle = nullptr;
+TaskHandle_t updateHandle = nullptr;
+TaskHandle_t mainHandle = nullptr;
+TaskHandle_t stackMonitorHandle = nullptr;
+
+TaskStackInfo taskStackInfos[] = {
+    {"WiFiTask", &wifiHandle, WIFI_STACK},
+    {"FirebaseTask", &firebaseHandle, FIREBASE_STACK},
+    {"StatusTask", &statusHandle, STATUS_STACK},
+    {"UpdateTask", &updateHandle, UPDATE_STACK},
+    {"MainTask", &mainHandle, MAIN_STACK},
+    {"StackMonitorTask", &stackMonitorHandle, STATUS_STACK},
+};
+const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
+
+FirebaseData fbdo;
+FirebaseData fbdoStream;
+FirebaseAuth auth;
+FirebaseConfig config;
+
+SemaphoreHandle_t serialMutex;
+
+unsigned long lastUpdate = 0;
+const unsigned long updateInterval = 60000; // 1 minuut
+String bootTimeStr = "";
+
+bool bootTimeUploaded = false;
+bool firebaseInitialized = false;
+bool streamConnected = false;
+String deviceId;
+bool updateAvailable = false;
+
+
 
 // ===================== SETUP & LOOP =====================
 
@@ -67,32 +117,7 @@ void setup()
   }
 }
 
-// BootCount flash logica
-void updateBootCount()
-{
-  if (externalFlashRead(0, (uint8_t *)&bootCount, sizeof(bootCount)))
-  {
-    // Check op onbeschreven flash (0xFFFFFFFF)
-    if (bootCount == 0xFFFFFFFF)
-    {
-      bootCount = 0;
-    }
-    bootCount++;
-    if (externalFlashErase4k(0) && externalFlashWrite(0, (uint8_t *)&bootCount, sizeof(bootCount)))
-    {
-      Serial.print("BootCount opgeslagen: ");
-      Serial.println(bootCount);
-    }
-    else
-    {
-      Serial.println("Fout bij wissen/schrijven van bootCount naar flash!");
-    }
-  }
-  else
-  {
-    Serial.println("Fout bij lezen van bootCount uit flash!");
-  }
-}
+
 
 void loop()
 {
@@ -101,36 +126,7 @@ void loop()
 
 // ===================== FREERTOS TAKEN (alfabetisch) =====================
 
-void connectToWiFiTask(void *pvParameters)
-{
-  while (true)
-  {
-    if (WiFi.status() != WL_CONNECTED)
-    {
-      safePrint("(Re)connect WiFi: ");
-      safePrintln(WIFI_SSID);
-      WiFi.disconnect();
-      WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-      unsigned long startAttemptTime = millis();
-      while (WiFi.status() != WL_CONNECTED && millis() - startAttemptTime < WIFI_TIMEOUT_MS)
-      {
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-        safePrint(".");
-      }
-      if (WiFi.status() == WL_CONNECTED)
-      {
-        safePrintln("\nWiFi verbonden!");
-        safePrint("IP adres: ");
-        safePrintln(WiFi.localIP().toString());
-      }
-      else
-      {
-        safePrintln("\nWiFi verbinding mislukt!");
-      }
-    }
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
-  }
-}
+
 
 void initFirebaseTask(void *pvParameters)
 {
