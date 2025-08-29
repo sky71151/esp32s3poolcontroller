@@ -378,9 +378,9 @@ void mainTask(void *pvParameters)
           continue;
         }
         // check if task is running
-        if ((taskHandles[i] != nullptr) && eTaskGetState(taskHandles[i]) == eRunning)
+        if ((&taskHandles[i] != nullptr) && eTaskGetState(taskHandles[i]) == eRunning)
         {
-          if (taskHandles[i] == mainHandle)
+          if (&taskHandles[i] == &mainHandle)
           {
             // Skip suspending the main task to avoid deadlock
             safePrintln("[MAIN] Skipping suspend of MainTask to avoid deadlock.");
