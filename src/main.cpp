@@ -642,7 +642,8 @@ void streamCallback(FirebaseStream data)
 {
   Serial.print("[STREAM] Nieuwe waarde: ");
   Serial.println(data.stringData());
-  if (atoi(data.stringData().c_str()) > atoi(FIRMWARE_VERSION ))
+  //convert strindata to double
+  if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
   {
     Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...");
     // Start OTA update hier
