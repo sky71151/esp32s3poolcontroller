@@ -365,8 +365,6 @@ void mainTask(void *pvParameters)
       safePrintln("[MAIN] stream ended !!!");
       vTaskSuspend(updateHandle);
       safePrintln("[MAIN] updateHandle suspended !!!");
-      vTaskSuspend(statusHandle);
-      safePrintln("[MAIN] statusHandle suspended !!!");
       vTaskSuspend(firebaseHandle);
       safePrintln("[MAIN] firebaseHandle suspended !!!");
       safePrintln("[MAIN] stackMonitorHandle suspended !!!");
