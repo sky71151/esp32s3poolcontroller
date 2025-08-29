@@ -3,7 +3,7 @@
 #include "ota.h"
 
 // Zet dit op je eigen GitHub release-asset URL
-const char* ota_url = "https://github.com/sky71151/esp32s3poolcontroller/releases/download/latest/firmware.bin";
+const char* ota_url = "https://github.com/sky71151/esp32s3poolcontroller/raw/refs/heads/main/.pio/build/esp32-s3-devkitc-1/firmware.bin";
 
 void performOTA() {
   WiFiClientSecure client;
