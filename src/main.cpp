@@ -597,6 +597,7 @@ void gpioConfig()
   for (int i = 0; i < NUM_RELAYS; i++)
   {
     pinMode(RELAY_PINS[i], OUTPUT);
+    digitalWrite(RELAY_PINS[i], LOW);
   }
   for (int i = 0; i < NUM_DIP_SWITCHES; i++)
   {
@@ -610,6 +611,7 @@ void gpioConfig()
   {
     pinMode(ANALOG_INPUT_PINS[i], INPUT);
   }
+  digitalWrite(LED_PIN, LOW);
 }
 
 String getUniqueClientId()
