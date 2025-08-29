@@ -373,11 +373,17 @@ void mainTask(void *pvParameters)
         // check if task is running
         if ((taskHandles[i] != nullptr) && eTaskGetState(taskHandles[i]) == eRunning)
         {
+          if (taskHandles[i] == mainHandle)
+          {
+            // Skip suspending the main task to avoid deadlock
+            safePrintln("[MAIN] Skipping suspend of MainTask to avoid deadlock.");
+            continue;
+          }
           safePrintln("[MAIN] Task " + String(i) + " is running.");
           vTaskSuspend(taskHandles[i]);
         }
       }
-      
+
       performOTA();
     }
 
