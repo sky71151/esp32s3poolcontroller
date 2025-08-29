@@ -377,6 +377,7 @@ void mainTask(void *pvParameters)
           {
             // Skip suspending the main task to avoid deadlock
             safePrintln("[MAIN] Skipping suspend of MainTask to avoid deadlock.");
+            safePrintln("[MAIN] MainTask is running and keeps running!");
             continue;
           }
           safePrintln("[MAIN] Task " + String(i) + " is running.");
