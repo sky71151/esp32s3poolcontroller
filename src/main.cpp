@@ -648,7 +648,7 @@ void streamCallback(FirebaseStream data)
   // convert strindata to double
   if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
   {
-    Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!");
+    Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
     //Firebase.RTDB.endStream(&fbdoStream);
     //vTaskSuspend(mainHandle);
     //vTaskSuspend(updateHandle);
