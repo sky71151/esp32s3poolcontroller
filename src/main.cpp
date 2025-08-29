@@ -45,6 +45,7 @@ TaskStackInfo taskStackInfos[] = {
 const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
 
 FirebaseData fbdo;
+FirebaseData fbdoStream;
 FirebaseAuth auth;
 FirebaseConfig config;
 
@@ -228,9 +229,9 @@ void initFirebaseTask(void *pvParameters)
 
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized)
     {
-      if (Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version"))
+      if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
       {
-        Firebase.RTDB.setStreamCallback(&fbdo, streamCallback, streamTimeoutCallback);
+        Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
         Serial.println("Stream gestart!");
       }
       else
