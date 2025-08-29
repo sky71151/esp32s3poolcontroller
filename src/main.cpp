@@ -367,6 +367,8 @@ void mainTask(void *pvParameters)
         if (handle == nullptr || handle == mainHandle)
         {
           safePrintln(String("[MAIN] Taak ") + String(i) + String(" is niet gestart."));
+          safePrintln("[MAIN] Of overslaan van opschorting van MainTask om deadlock te voorkomen.");
+          safePrintln("[MAIN] MainTask is actief en blijft actief!");
           continue;
         }
         // check if task is running
