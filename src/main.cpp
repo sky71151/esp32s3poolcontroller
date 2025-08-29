@@ -35,6 +35,7 @@ TaskHandle_t firebaseHandle = nullptr;
 TaskHandle_t statusHandle = nullptr;
 TaskHandle_t updateHandle = nullptr;
 TaskHandle_t mainHandle = nullptr;
+TaskHandle_t stackMonitorHandle = nullptr;
 
 TaskStackInfo taskStackInfos[] = {
     {"WiFiTask", &wifiHandle, WIFI_STACK},
@@ -138,7 +139,7 @@ void setup()
   xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);                       // prioriteit 1
   if (debug)
   {
-    xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, NULL, 1); // prioriteit 0
+    xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
   }
 }
 
@@ -653,6 +654,11 @@ void streamCallback(FirebaseStream data)
     vTaskSuspend(updateHandle);
     vTaskSuspend(statusHandle);
     vTaskSuspend(firebaseHandle);
+    // Suspend the stack monitor task if its handle is available
+    // If you want to suspend the stack monitor task, you need to store its handle.
+    // If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
+     vTaskSuspend(stackMonitorHandle);
+
     performOTA();
   }
 }
