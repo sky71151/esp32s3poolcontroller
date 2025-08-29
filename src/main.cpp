@@ -460,7 +460,7 @@ void stackMonitorTask(void *pvParameters)
       else
       {
         safePrint(info.name);
-        safePrintln(" | (geen handle)");
+        safePrintln(" | (geen handle!)");
       }
     }
 
