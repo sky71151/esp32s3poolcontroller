@@ -5,6 +5,7 @@
 #include "version.h"
 #include "secrets.h"
 #include "external_flash.h"
+#include "ota.h"
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -646,7 +647,7 @@ void streamCallback(FirebaseStream data)
   if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
   {
     Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...");
-    // Start OTA update hier
+    performOTA();
   }
 }
 
