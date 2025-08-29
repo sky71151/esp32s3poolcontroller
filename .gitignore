@@ -4,3 +4,4 @@ include/secrets.h
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+pool-671d1-firebase-adminsdk-fbsvc-2a17bc22fb.json
