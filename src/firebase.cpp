@@ -3,6 +3,9 @@
 #include "ota.h"
 #include "wifitask.h"
 #include "board.h"
+#include "main.h"
+#include "version.h"
+#include "secrets.h"
 
 void initFirebaseTask(void *pvParameters)
 {

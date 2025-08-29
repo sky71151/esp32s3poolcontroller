@@ -4,6 +4,7 @@
 #include "ota.h"
 #include "wifitask.h"
 #include "board.h"
+#include "version.h"
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
