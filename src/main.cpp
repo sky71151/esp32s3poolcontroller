@@ -127,7 +127,7 @@ void loop()
 // ===================== FREERTOS TAKEN (alfabetisch) =====================
 
 
-
+/*
 void initFirebaseTask(void *pvParameters)
 {
   String regPath = String("/devices/");
@@ -261,7 +261,7 @@ void initFirebaseTask(void *pvParameters)
     }
     vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
-}
+}*/
 
 void mainTask(void *pvParameters)
 {
