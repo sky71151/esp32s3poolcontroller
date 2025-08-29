@@ -25,7 +25,7 @@ def after_build(source, target, env):
     try:
         print("[auto_commit.py] git add -A")
         subprocess.run(["git", "add", "."], check=True)
-        msg = f"Auto-commit: build {version}"
+        msg = f"v{version} Auto-commit: build "
         print(f"[auto_commit.py] git commit -m '{msg}'")
         subprocess.run(["git", "commit", "-m", msg], check=True)
         subprocess.run(["git", "push"], check=True)
