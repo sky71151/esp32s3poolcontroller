@@ -359,10 +359,10 @@ void mainTask(void *pvParameters)
   {
     if (updateAvailable)
     {
-
+       TaskHandle_t handle;
       for (int i = 0; i < numTasks; i++)
       {
-        TaskHandle_t handle = *(taskStackInfos[i].handle);
+        handle = *(taskStackInfos[i].handle);
         safePrintln(String("[MAIN] Controleren taak: ") + String(i));
         if (handle == nullptr || handle == mainHandle)
         {
@@ -372,17 +372,18 @@ void mainTask(void *pvParameters)
           continue;
         }
         // check if task is running
-        if (eTaskGetState(handle) == eRunning)
+        eTaskState state = eTaskGetState(handle);
+
+        safePrintln(String("[MAIN] Task ") + String(i) + " state: " + String(state));
+        if (state == eRunning)
         {
-          if (handle == mainHandle)
-          {
-            // Skip suspending the main task to avoid deadlock
-            safePrintln("[MAIN] Skipping suspend of MainTask to avoid deadlock.");
-            safePrintln("[MAIN] MainTask is running and keeps running!");
-            continue;
-          }
-          safePrintln("[MAIN] Task " + String(i) + " is running.");
+          safePrintln(String("[MAIN] Task ") + String(i) + " is running (eRunning). Probeer te suspenden...");
           vTaskSuspend(handle);
+          safePrintln(String("[MAIN] Task ") + String(i) + " is gesuspendeerd!");
+        }
+        else
+        {
+          safePrintln(String("[MAIN] Task ") + String(i) + " is NIET running (state=" + String(state) + ")");
         }
       }
 
