@@ -369,7 +369,8 @@ void mainTask(void *pvParameters)
       safePrintln("[MAIN] statusHandle suspended !!!");
       vTaskSuspend(firebaseHandle);
       safePrintln("[MAIN] firebaseHandle suspended !!!");
-
+      safePrintln("[MAIN] stackMonitorHandle suspended !!!");
+      
       performOTA();
     }
 
