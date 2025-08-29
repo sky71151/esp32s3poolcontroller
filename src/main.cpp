@@ -360,10 +360,15 @@ void mainTask(void *pvParameters)
     {
       safePrintln("[MAIN] OTA update beschikbaar, start OTA...!!!");
       //updateAvailable = false;
+      safePrintln("[MAIN] ending stream !!!");
       Firebase.RTDB.endStream(&fbdoStream);
+      safePrintln("[MAIN] stream ended !!!");
       vTaskSuspend(updateHandle);
+      safePrintln("[MAIN] updateHandle suspended !!!");
       vTaskSuspend(statusHandle);
+      safePrintln("[MAIN] statusHandle suspended !!!");
       vTaskSuspend(firebaseHandle);
+      safePrintln("[MAIN] firebaseHandle suspended !!!");
 
       performOTA();
     }
