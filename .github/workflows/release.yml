@@ -12,17 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install PlatformIO
-        run: pip install platformio
-
-      - name: Build firmware
-        run: platformio run
-
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v2
         with:
