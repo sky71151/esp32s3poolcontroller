@@ -22,7 +22,6 @@ typedef struct
 uint32_t bootCount = 0;
 bool flashReady = false;
 
-
 #define WIFI_STACK 8192
 #define FIREBASE_STACK 16384
 #define STATUS_STACK 16384
@@ -87,7 +86,7 @@ void setup()
   Serial.begin(SERIAL_BAUD_RATE);
   delay(5000);
   serialMutex = xSemaphoreCreateMutex();
-  
+
   gpioConfig();
   // Probeer flash te initialiseren en update bootCount
   initExternalFlash();
@@ -112,22 +111,22 @@ void setup()
   // TZ string: "CET-1CEST,M3.5.0,M10.5.0/3"
 
   configTime(3600, 3600, "pool.ntp.org");
-  //configTime(0, 0, "pool.ntp.org");
+  // configTime(0, 0, "pool.ntp.org");
   time_t now = 0;
   while (now < 100000)
   {
     vTaskDelay(100 / portTICK_PERIOD_MS);
     now = time(nullptr);
   }
-/*
-  // Tijd synchroniseren
-  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
-  time_t now = 0;
-  while (now < 100000)
-  {
-    delay(100);
-    now = time(nullptr);
-  }*/
+  /*
+    // Tijd synchroniseren
+    configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+    time_t now = 0;
+    while (now < 100000)
+    {
+      delay(100);
+      now = time(nullptr);
+    }*/
   safePrintln("Tijd gesynchroniseerd.");
   char bootStr[32];
   strftime(bootStr, sizeof(bootStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
@@ -212,7 +211,7 @@ void initFirebaseTask(void *pvParameters)
 {
   String regPath = String("/devices/");
   regPath += deviceId;
-  
+
   for (;;)
   {
     if (WiFi.status() == WL_CONNECTED && !Firebase.ready())
@@ -645,17 +644,23 @@ void streamCallback(FirebaseStream data)
 {
   Serial.print("[STREAM] Nieuwe waarde: ");
   Serial.println(data.stringData());
-  //convert strindata to double
+  // convert strindata to double
   if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
   {
     Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...");
+    Firebase.RTDB.endStream(&fbdoStream);
+    vTaskSuspend(mainHandle);
+    vTaskSuspend(updateHandle);
+    vTaskSuspend(statusHandle);
+    vTaskSuspend(firebaseHandle);
     performOTA();
   }
 }
 
 void streamTimeoutCallback(bool timeout)
 {
-  if (timeout) {
+  if (timeout)
+  {
     Serial.println("[STREAM] Timeout, probeer opnieuw...");
     Firebase.RTDB.endStream(&fbdoStream);
     vTaskDelay(1000 / portTICK_PERIOD_MS);
