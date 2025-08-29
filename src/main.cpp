@@ -364,10 +364,7 @@ void mainTask(void *pvParameters)
       vTaskSuspend(updateHandle);
       vTaskSuspend(statusHandle);
       vTaskSuspend(firebaseHandle);
-      if (debug)
-      {
-        vTaskSuspend(stackMonitorHandle);
-      }
+
       performOTA();
     }
 
