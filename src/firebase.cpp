@@ -78,10 +78,12 @@ void initFirebaseTask(void *pvParameters)
                         safePrint("Fout bij uploaden boot tijd: ");
                         safePrintln(fbdo.errorReason());
                     }
+                    safePrintln("Na boot tijd update");
                     String pathFirmware = "devices/";
                     pathFirmware.concat(deviceId);
                     pathFirmware.concat("/DeviceInfo/firmware");
-                    if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(FIRMWARE_VERSION) + String(" ") + String(timeStr)))
+                    String fwString = String(FIRMWARE_VERSION) + String(" ") + String(timeStr);
+                    if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), fwString))
                     {
                         safePrint("Firmware version update: ");
                         safePrintln(String(FIRMWARE_VERSION));
@@ -91,6 +93,7 @@ void initFirebaseTask(void *pvParameters)
                         safePrint("Fout bij uploaden firmware versie: ");
                         safePrintln(fbdo.errorReason());
                     }
+                    safePrintln("Na firmware versie update");
                     firebaseInitialized = true;
                 }
                 else
@@ -134,12 +137,14 @@ void initFirebaseTask(void *pvParameters)
                     if (Firebase.RTDB.setJSON(&fbdo, regPath.c_str(), &deviceJson))
                     {
                         safePrintln("Device geregistreerd in Firebase Realtime Database.");
+                        safePrintln("Na device registratie");
                         firebaseInitialized = true;
                     }
                     else
                     {
                         safePrint("Fout bij registreren device: ");
                         safePrintln(fbdo.errorReason());
+                        safePrintln("Na device registratie (fout)");
                     }
                 }
 
