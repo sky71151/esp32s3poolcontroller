@@ -370,6 +370,7 @@ void mainTask(void *pvParameters)
       vTaskSuspend(stackMonitorHandle);
       safePrintln("[MAIN] stackMonitorHandle suspended !!!");
       safePrintln("[MAIN] dit moet werken !!!");
+      safePrintln("[MAIN] en werkt het!!!");
       
       performOTA();
     }
