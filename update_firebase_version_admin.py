@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Pad naar je service account JSON bestand
-cred = credentials.Certificate('pool-671d1-firebase-adminsdk-fbsvc-2a17bc22fb.json')
+cred = credentials.Certificate('pool-671d1-firebase-adminsdk-fbsvc-f5e2ff230f.json')
 
 # Initialiseer de app met de service account en database URL
 firebase_admin.initialize_app(cred, {
