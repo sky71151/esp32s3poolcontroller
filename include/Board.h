@@ -35,6 +35,12 @@ const int ANALOG_INPUT_PINS[] = {4, 5, 6, 7};
 // Serial Configuration
 #define SERIAL_BAUD_RATE 115200
 
+//prototypes
+void gpioConfig();
+String getUniqueClientId();
+String readDipSwitches();
+
+
 
 
 #endif // BOARD_H
