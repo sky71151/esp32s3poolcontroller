@@ -358,7 +358,7 @@ void mainTask(void *pvParameters)
   {
     if (updateAvailable)
     {
-      safePrintln("[MAIN] OTA update beschikbaar, start OTA...");
+      safePrintln("[MAIN] OTA update beschikbaar, start OTA...!!!");
       //updateAvailable = false;
       Firebase.RTDB.endStream(&fbdoStream);
       vTaskSuspend(updateHandle);
