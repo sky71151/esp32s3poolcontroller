@@ -180,3 +180,54 @@ void updateTimeToFirebaseTask(void *pvParameters)
     vTaskDelay(updateInterval / portTICK_PERIOD_MS);
   }
 }
+
+void streamCallback(FirebaseStream data)
+{
+  Serial.print("[STREAM] Nieuwe waarde: ");
+  Serial.println(data.stringData());
+  // convert strindata to double
+  if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
+  {
+    Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
+    // Firebase.RTDB.endStream(&fbdoStream);
+    // vTaskSuspend(mainHandle);
+    // vTaskSuspend(updateHandle);
+    // vTaskSuspend(statusHandle);
+    // vTaskSuspend(firebaseHandle);
+    //  Suspend the stack monitor task if its handle is available
+    //  If you want to suspend the stack monitor task, you need to store its handle.
+    //  If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
+    //  vTaskSuspend(stackMonitorHandle);
+
+    updateAvailable = true;
+    // Turn on LED to indicate update available
+    digitalWrite(LED_PIN, HIGH);
+
+    // performOTA();
+  }
+}
+
+void streamTimeoutCallback(bool timeout)
+{
+  if (timeout)
+  {
+    Serial.println("[STREAM] Timeout, probeer opnieuw...");
+    Firebase.RTDB.endStream(&fbdoStream);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    streamConnected = false;
+  }
+}
+
+void updateFirebaseInstant(String path, String data)
+{
+  String destination = "devices/";
+  destination.concat(deviceId);
+  destination.concat(path);
+  if (Firebase.RTDB.setString(&fbdo, destination, data))
+  {
+    safePrint("volgende path is geupdated: ");
+    safePrint(destination);
+    safePrint(" -> ");
+    safePrintln(data);
+  }
+}

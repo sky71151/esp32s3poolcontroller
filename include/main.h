@@ -11,6 +11,7 @@
 #include "external_flash.h"
 #include "ota.h"
 #include "wifitask.h"
+#include "firebase.h"
 
 typedef struct
 {
@@ -48,17 +49,17 @@ void safePrintln(const String &msg);
 //void gpioConfig();
 //String getUniqueClientId();
 //String readDipSwitches();
-void updateFirebaseInstant(String path, String data);
+//void updateFirebaseInstant(String path, String data);
 //void connectToWiFiTask(void *pvParameters);
-void initFirebaseTask(void *pvParameters);
+//void initFirebaseTask(void *pvParameters);
 void systemStatusTask(void *pvParameters);
-void updateTimeToFirebaseTask(void *pvParameters);
+//void updateTimeToFirebaseTask(void *pvParameters);
 void mainTask(void *pvParameters);
 void stackMonitorTask(void *pvParameters);
 //void updateBootCount();
-void firmwareVersionCallback(FirebaseStream data);
-void streamTimeoutCallback(bool timeout);
-void streamCallback(FirebaseStream data);
+//void firmwareVersionCallback(FirebaseStream data);
+//void streamTimeoutCallback(bool timeout);
+//void streamCallback(FirebaseStream data);
 
 
 #endif

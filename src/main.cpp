@@ -5,7 +5,6 @@
 
 // ===================== VARIABELEN =====================
 
-
 // Persistent boot counter
 uint32_t bootCount = 0;
 bool flashReady = false;
@@ -52,8 +51,6 @@ bool streamConnected = false;
 String deviceId;
 bool updateAvailable = false;
 
-
-
 // ===================== SETUP & LOOP =====================
 
 void setup()
@@ -66,7 +63,7 @@ void setup()
   // Probeer flash te initialiseren en update bootCount
   initExternalFlash();
   updateBootCount();
-  //printLogFromFlash();
+  // printLogFromFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln(String("Firmware versie: ") + String(FIRMWARE_VERSION));
   safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
@@ -117,15 +114,12 @@ void setup()
   }
 }
 
-
-
 void loop()
 {
   vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
 // ===================== FREERTOS TAKEN (alfabetisch) =====================
-
 
 /*
 void initFirebaseTask(void *pvParameters)
@@ -277,7 +271,7 @@ void mainTask(void *pvParameters)
   {
     if (updateAvailable)
     {
-       TaskHandle_t handle;
+      TaskHandle_t handle;
       for (int i = 0; i < numTasks; i++)
       {
         handle = *(taskStackInfos[i].handle);
@@ -509,30 +503,12 @@ void safePrintln(const String &msg)
   }
 }
 
-
-
 String HuidigeTijd()
 {
   time_t now = time(nullptr);
   char timeStr[32];
   strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
   return String(timeStr);
-}
-
-
-
-void updateFirebaseInstant(String path, String data)
-{
-  String destination = "devices/";
-  destination.concat(deviceId);
-  destination.concat(path);
-  if (Firebase.RTDB.setString(&fbdo, destination, data))
-  {
-    safePrint("volgende path is geupdated: ");
-    safePrint(destination);
-    safePrint(" -> ");
-    safePrintln(data);
-  }
 }
 
 extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
@@ -545,47 +521,4 @@ extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskNa
   entry.freeHeap = ESP.getFreeHeap();
   entry.stackWatermark = uxTaskGetStackHighWaterMark(xTask);
   logToFlash(&entry, sizeof(entry));
-}
-
-void firmwareVersionCallback(FirebaseStream data)
-{
-  String newVersion = data.stringData();
-  // Vergelijk met huidige versie en start OTA indien nodig
-}
-
-void streamCallback(FirebaseStream data)
-{
-  Serial.print("[STREAM] Nieuwe waarde: ");
-  Serial.println(data.stringData());
-  // convert strindata to double
-  if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
-  {
-    Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
-    // Firebase.RTDB.endStream(&fbdoStream);
-    // vTaskSuspend(mainHandle);
-    // vTaskSuspend(updateHandle);
-    // vTaskSuspend(statusHandle);
-    // vTaskSuspend(firebaseHandle);
-    //  Suspend the stack monitor task if its handle is available
-    //  If you want to suspend the stack monitor task, you need to store its handle.
-    //  If you have a handle (e.g., TaskHandle_t stackMonitorHandle), use it here:
-    //  vTaskSuspend(stackMonitorHandle);
-
-    updateAvailable = true;
-    // Turn on LED to indicate update available
-    digitalWrite(LED_PIN, HIGH);
-
-    // performOTA();
-  }
-}
-
-void streamTimeoutCallback(bool timeout)
-{
-  if (timeout)
-  {
-    Serial.println("[STREAM] Timeout, probeer opnieuw...");
-    Firebase.RTDB.endStream(&fbdoStream);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    streamConnected = false;
-  }
 }
