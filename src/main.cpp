@@ -52,6 +52,7 @@ TaskStackInfo taskStackInfos[] = {
     {"StatusTask", &statusHandle, STATUS_STACK},
     {"UpdateTask", &updateHandle, UPDATE_STACK},
     {"MainTask", &mainHandle, MAIN_STACK},
+    {"StackMonitorTask", &stackMonitorHandle, STATUS_STACK},
 };
 const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
 
@@ -368,8 +369,14 @@ void mainTask(void *pvParameters)
     if (updateAvailable)
     {
 
-      for (int i = 0; i < numTasks - 1; i++)
+      for (int i = 0; i < numTasks; i++)
       {
+        safePrintln(String("[MAIN] Controleren taak: ") + String(i));
+        if (taskHandles[i] == nullptr)
+        {
+          safePrintln(String("[MAIN] Taak ") + String(i) + String(" is niet gestart."));
+          continue;
+        }
         // check if task is running
         if ((taskHandles[i] != nullptr) && eTaskGetState(taskHandles[i]) == eRunning)
         {
