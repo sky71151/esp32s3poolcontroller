@@ -139,6 +139,8 @@ void printLogFromFlash() {
             Serial.print(", Task: "); Serial.print(entry.taskName);
             Serial.print(", Heap: "); Serial.print(entry.freeHeap);
             Serial.print(", Stack: "); Serial.println(entry.stackWatermark);
+        }else{
+            Serial.print("Log "); Serial.print(i); Serial.println(": <empty>");
         }
     }
 }
