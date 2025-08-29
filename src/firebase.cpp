@@ -103,6 +103,7 @@ void initFirebaseTask(void *pvParameters)
         DeviceInfo.set("clientId", deviceId);
         DeviceInfo.set("boardType", "ESP32-S3  R1N16");
         DeviceInfo.set("firmware", FIRMWARE_VERSION);
+        DeviceInfo.set("identity", false);
         deviceJson.set("DeviceInfo", DeviceInfo);
 
         // Registration section
