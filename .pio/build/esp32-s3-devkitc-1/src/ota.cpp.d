@@ -285,4 +285,5 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/HEXBuilder.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/WiFiClientSecure.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
+ C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiClient.h \
  include/ota.h
