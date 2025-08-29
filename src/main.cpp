@@ -6,11 +6,8 @@
 #include "secrets.h"
 #include "external_flash.h"
 
-// Persistent boot counter
 
-uint32_t bootCount = 0;
-bool flashReady = false;
-void updateBootCount();
+
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -22,11 +19,17 @@ typedef struct
   uint32_t stackWords;
 } TaskStackInfo;
 
-#define WIFI_STACK     8192
+// Persistent boot counter
+uint32_t bootCount = 0;
+bool flashReady = false;
+
+#define WIFI_STACK 8192
 #define FIREBASE_STACK 16384
-#define STATUS_STACK   16384
-#define UPDATE_STACK   16384
-#define MAIN_STACK     16384
+#define STATUS_STACK 16384
+#define UPDATE_STACK 16384
+#define MAIN_STACK 16384
+
+#define debug true
 
 TaskHandle_t wifiHandle = nullptr;
 TaskHandle_t firebaseHandle = nullptr;
@@ -70,6 +73,7 @@ void systemStatusTask(void *pvParameters);
 void updateTimeToFirebaseTask(void *pvParameters);
 void mainTask(void *pvParameters);
 void stackMonitorTask(void *pvParameters);
+void updateBootCount();
 
 // ===================== SETUP & LOOP =====================
 
@@ -85,11 +89,16 @@ void setup()
   printLogFromFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
   safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
-  xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 1, &wifiHandle, 0);
+  xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 2, &wifiHandle, 0); // prioriteit 2
   // xTaskCreatePinnedToCore(systemStatusTask, "StatusTask", STATUS_STACK, NULL, 1, &statusHandle, 1);
-  while (WiFi.status() != WL_CONNECTED)
+  // WiFi-wachtrij met timeout (10s)
+  unsigned long wifiWaitStart = millis();
+  while (WiFi.status() != WL_CONNECTED && (millis() - wifiWaitStart < 10000))
   {
     vTaskDelay(100 / portTICK_PERIOD_MS);
+  }
+  if (WiFi.status() != WL_CONNECTED) {
+    safePrintln("[ERROR] WiFi niet verbonden na timeout in setup!");
   }
   // Belgische tijdzone: CET/CEST (winter/zomertijd automatisch)
   // TZ string: "CET-1CEST,M3.5.0,M10.5.0/3"
@@ -104,13 +113,17 @@ void setup()
   char bootStr[32];
   strftime(bootStr, sizeof(bootStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
   bootTimeStr = String(bootStr);
-  safePrintln(String("Huidige tijd: ") + bootTimeStr);
+  safePrintln(String("Huidige tijd: ") + String(bootTimeStr));
 
-  xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 1, &firebaseHandle, 1);
-  xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1);
-  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
-  xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", 8192, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1); // prioriteit 2
+  xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
+  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1); // prioriteit 1
+  if (debug)
+  {
+    xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, NULL, 1); // prioriteit 0
+  }
 }
+
 // BootCount flash logica
 void updateBootCount()
 {
@@ -225,7 +238,7 @@ void initFirebaseTask(void *pvParameters)
         String pathFirmware = "devices/";
         pathFirmware.concat(deviceId);
         pathFirmware.concat("/DeviceInfo/firmware");
-        if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(bootCount) + " " + timeStr))
+  if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(bootCount) + String(" ") + String(timeStr)))
         {
           safePrint("Firmware version update: ");
           safePrintln(String(bootCount));
@@ -414,7 +427,10 @@ void stackMonitorTask(void *pvParameters)
     uint32_t freeHeap = ESP.getFreeHeap();
     uint32_t minFreeHeap = ESP.getMinFreeHeap();
     safePrintln("\n[STACK MONITOR] =====================");
-    safePrint("Vrije heap: "); safePrint(String(freeHeap)); safePrint(" bytes | Min. ooit: "); safePrintln(String(minFreeHeap));
+    safePrint("Vrije heap: ");
+    safePrint(String(freeHeap));
+    safePrint(" bytes | Min. ooit: ");
+    safePrintln(String(minFreeHeap));
 
     // Print status van alle bekende taken
     safePrintln("Naam | Stack gebruikt (bytes) | Stack totaal (bytes) | % gebruikt | HighWaterMark | Handle");
@@ -428,16 +444,23 @@ void stackMonitorTask(void *pvParameters)
         uint32_t stackFreeBytes = highWaterMark * sizeof(StackType_t);
         uint32_t stackUsedBytes = stackTotalBytes - stackFreeBytes;
         int percentUsed = (stackUsedBytes * 100) / stackTotalBytes;
-  safePrint(info.name); safePrint(" | ");
-  safePrint(String(stackUsedBytes)); safePrint("/");
-  safePrint(String(stackTotalBytes)); safePrint(" = ");
-  safePrint(String(percentUsed)); safePrint("% | ");
-  safePrint(String(stackFreeBytes)); safePrint(" | 0x");
-  safePrint(String((uint32_t)(*(info.handle)), HEX)); safePrintln("");
+        safePrint(info.name);
+        safePrint(" | ");
+        safePrint(String(stackUsedBytes));
+        safePrint("/");
+        safePrint(String(stackTotalBytes));
+        safePrint(" = ");
+        safePrint(String(percentUsed));
+        safePrint("% | ");
+        safePrint(String(stackFreeBytes));
+        safePrint(" | 0x");
+        safePrint(String((uint32_t)(*(info.handle)), HEX));
+        safePrintln("");
       }
       else
       {
-        safePrint(info.name); safePrintln(" | (geen handle)");
+        safePrint(info.name);
+        safePrintln(" | (geen handle)");
       }
     }
 
@@ -447,19 +470,10 @@ void stackMonitorTask(void *pvParameters)
     safePrintln(String(currHighWaterMark * sizeof(StackType_t)));
 
     // Print WiFi en Firebase status
-    safePrint("WiFi status: "); safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden");
-    safePrint("Firebase status: "); safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden");
-
-    // Optioneel: log naar flash
-    // LogEntry entry;
-    // entry.timestamp = millis();
-    // entry.type = 0xAA; // stack monitor
-    // entry.value = 0;
-    // strncpy(entry.taskName, "stackMonitor", sizeof(entry.taskName));
-    // entry.freeHeap = freeHeap;
-    // entry.stackWatermark = currHighWaterMark * sizeof(StackType_t);
-    // logToFlash(&entry, sizeof(entry));
-
+    safePrint("WiFi status: ");
+    safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden");
+    safePrint("Firebase status: ");
+    safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden");
     vTaskDelay(15000 / portTICK_PERIOD_MS); // elke 15s
   }
 }
@@ -468,33 +482,39 @@ void stackMonitorTask(void *pvParameters)
 
 void safePrint(const String &msg)
 {
-  if (serialMutex)
+  if (debug)
   {
-    if (xSemaphoreTake(serialMutex, portMAX_DELAY) == pdTRUE)
+    if (serialMutex)
+    {
+      if (xSemaphoreTake(serialMutex, portMAX_DELAY) == pdTRUE)
+      {
+        Serial.print(msg);
+        xSemaphoreGive(serialMutex);
+      }
+    }
+    else
     {
       Serial.print(msg);
-      xSemaphoreGive(serialMutex);
     }
-  }
-  else
-  {
-    Serial.print(msg);
   }
 }
 
 void safePrintln(const String &msg)
 {
-  if (serialMutex)
+  if (debug)
   {
-    if (xSemaphoreTake(serialMutex, portMAX_DELAY) == pdTRUE)
+    if (serialMutex)
+    {
+      if (xSemaphoreTake(serialMutex, portMAX_DELAY) == pdTRUE)
+      {
+        Serial.println(msg);
+        xSemaphoreGive(serialMutex);
+      }
+    }
+    else
     {
       Serial.println(msg);
-      xSemaphoreGive(serialMutex);
     }
-  }
-  else
-  {
-    Serial.println(msg);
   }
 }
 
@@ -575,5 +595,5 @@ extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskNa
   entry.freeHeap = ESP.getFreeHeap();
   entry.stackWatermark = uxTaskGetStackHighWaterMark(xTask);
   logToFlash(&entry, sizeof(entry));
-  // Eventueel: knipper LED, reboot, etc.
+  
 }
