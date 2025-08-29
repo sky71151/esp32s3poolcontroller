@@ -6,8 +6,6 @@
 #include "secrets.h"
 #include "external_flash.h"
 
-
-
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
@@ -74,6 +72,7 @@ void updateTimeToFirebaseTask(void *pvParameters);
 void mainTask(void *pvParameters);
 void stackMonitorTask(void *pvParameters);
 void updateBootCount();
+void firmwareVersionCallback(FirebaseStream data);
 
 // ===================== SETUP & LOOP =====================
 
@@ -97,7 +96,8 @@ void setup()
   {
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
-  if (WiFi.status() != WL_CONNECTED) {
+  if (WiFi.status() != WL_CONNECTED)
+  {
     safePrintln("[ERROR] WiFi niet verbonden na timeout in setup!");
   }
   // Belgische tijdzone: CET/CEST (winter/zomertijd automatisch)
@@ -115,9 +115,9 @@ void setup()
   bootTimeStr = String(bootStr);
   safePrintln(String("Huidige tijd: ") + String(bootTimeStr));
 
-  xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1); // prioriteit 2
+  xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
-  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1); // prioriteit 1
+  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);                       // prioriteit 1
   if (debug)
   {
     xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, NULL, 1); // prioriteit 0
@@ -193,6 +193,7 @@ void initFirebaseTask(void *pvParameters)
 {
   String regPath = String("/devices/");
   regPath += deviceId;
+  bool streamConnected = false;
   for (;;)
   {
     if (WiFi.status() == WL_CONNECTED && !Firebase.ready())
@@ -208,6 +209,13 @@ void initFirebaseTask(void *pvParameters)
       Firebase.reconnectWiFi(true);
       safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
       firebaseInitialized = false; // reset status bij herinitialisatie
+      streamConnected = false;
+    }
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !streamConnected)
+    {
+      Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
+      Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
+      streamConnected = true;
     }
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !firebaseInitialized)
     {
@@ -238,7 +246,7 @@ void initFirebaseTask(void *pvParameters)
         String pathFirmware = "devices/";
         pathFirmware.concat(deviceId);
         pathFirmware.concat("/DeviceInfo/firmware");
-  if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(bootCount) + String(" ") + String(timeStr)))
+        if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), String(bootCount) + String(" ") + String(timeStr)))
         {
           safePrint("Firmware version update: ");
           safePrintln(String(bootCount));
@@ -595,5 +603,10 @@ extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskNa
   entry.freeHeap = ESP.getFreeHeap();
   entry.stackWatermark = uxTaskGetStackHighWaterMark(xTask);
   logToFlash(&entry, sizeof(entry));
-  
+}
+
+void firmwareVersionCallback(FirebaseStream data)
+{
+    String newVersion = data.stringData();
+    // Vergelijk met huidige versie en start OTA indien nodig
 }
