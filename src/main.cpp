@@ -471,7 +471,7 @@ void stackMonitorTask(void *pvParameters)
 
     // Print WiFi en Firebase status
     safePrint("WiFi status: ");
-    safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden");
+    safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden!");
     safePrint("Firebase status: ");
     safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden!");
     vTaskDelay(15000 / portTICK_PERIOD_MS); // elke 15s
