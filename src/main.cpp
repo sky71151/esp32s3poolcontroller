@@ -363,7 +363,7 @@ void systemStatusTask(void *pvParameters)
     vTaskDelay(30000 / portTICK_PERIOD_MS);
   }
 }
-
+/*
 void updateTimeToFirebaseTask(void *pvParameters)
 {
   while (true)
@@ -408,7 +408,7 @@ void updateTimeToFirebaseTask(void *pvParameters)
     }
     vTaskDelay(updateInterval / portTICK_PERIOD_MS);
   }
-}
+}*/
 
 // Zeer uitgebreide stack/heap monitoring task
 void stackMonitorTask(void *pvParameters)

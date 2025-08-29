@@ -7,5 +7,6 @@
 #include "secrets.h"
 
 void initFirebaseTask(void *pvParameters);
+void updateTimeToFirebaseTask(void *pvParameters);
 
 #endif
