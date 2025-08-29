@@ -220,6 +220,14 @@ void initFirebaseTask(void *pvParameters)
       auth.user.password = USER_PASSWORD;
       Firebase.begin(&config, &auth); // auth leeg laat anonieme login toe
       Firebase.reconnectWiFi(true);
+
+      safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
+      firebaseInitialized = false; // reset status bij herinitialisatie
+      streamConnected = false;
+    }
+
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized)
+    {
       if (Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version"))
       {
         Firebase.RTDB.setStreamCallback(&fbdo, streamCallback, streamTimeoutCallback);
@@ -230,9 +238,6 @@ void initFirebaseTask(void *pvParameters)
         Serial.print("Stream start mislukt: ");
         Serial.println(fbdo.errorReason());
       }
-      safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
-      firebaseInitialized = false; // reset status bij herinitialisatie
-      streamConnected = false;
     }
 
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !firebaseInitialized)
@@ -629,11 +634,14 @@ void firmwareVersionCallback(FirebaseStream data)
   // Vergelijk met huidige versie en start OTA indien nodig
 }
 
-void streamCallback(FirebaseStream data) {
+void streamCallback(FirebaseStream data)
+{
   Serial.print("[STREAM] Nieuwe waarde: ");
   Serial.println(data.stringData());
 }
 
-void streamTimeoutCallback(bool timeout) {
-  if (timeout) Serial.println("[STREAM] Timeout, probeer opnieuw...");
+void streamTimeoutCallback(bool timeout)
+{
+  if (timeout)
+    Serial.println("[STREAM] Timeout, probeer opnieuw...");
 }
