@@ -211,22 +211,28 @@ void initFirebaseTask(void *pvParameters)
       firebaseInitialized = false; // reset status bij herinitialisatie
       streamConnected = false;
     }
-    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !streamConnected)
-    {
-      try
-      {
-        Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
-        Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
-      }
-      catch (const std::exception &e)
-      {
-        Serial.println(e.what());
-      }
-
-      // Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
-      // Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
-      streamConnected = true;
+  if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !streamConnected)
+  {
+    static int streamRetryCount = 0;
+    if (fbdo.httpConnected()) {
+      Firebase.RTDB.endStream(&fbdo);
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
+    bool streamOk = Firebase.RTDB.beginStream(&fbdo, "/firmware/latest_version");
+    if (streamOk) {
+      Firebase.RTDB.setStreamCallback(&fbdo, firmwareVersionCallback, nullptr);
+      streamConnected = true;
+      streamRetryCount = 0;
+      safePrintln("Firmware stream gestart.");
+    } else {
+      streamRetryCount++;
+      safePrint("Stream start mislukt (poging ");
+      safePrint(String(streamRetryCount));
+      safePrint("): ");
+      safePrintln(fbdo.errorReason());
+      vTaskDelay(5000 / portTICK_PERIOD_MS);
+    }
+  }
     if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !firebaseInitialized)
     {
       // Voorbeeld: controleer of device geregistreerd is met unieke ID
