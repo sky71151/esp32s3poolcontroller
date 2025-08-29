@@ -22,11 +22,11 @@ typedef struct
   uint32_t stackWords;
 } TaskStackInfo;
 
-#define WIFI_STACK 4096
-#define FIREBASE_STACK 8192
-#define STATUS_STACK 8192
-#define UPDATE_STACK 8192
-#define MAIN_STACK 8192
+#define WIFI_STACK     8192
+#define FIREBASE_STACK 16384
+#define STATUS_STACK   16384
+#define UPDATE_STACK   16384
+#define MAIN_STACK     16384
 
 TaskHandle_t wifiHandle = nullptr;
 TaskHandle_t firebaseHandle = nullptr;
