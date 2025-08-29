@@ -20,7 +20,7 @@ typedef struct
 // Persistent boot counter
 uint32_t bootCount = 0;
 bool flashReady = false;
-bool streamConnected = false;
+
 
 #define WIFI_STACK 8192
 #define FIREBASE_STACK 16384
@@ -58,6 +58,7 @@ String bootTimeStr = "";
 
 bool bootTimeUploaded = false;
 bool firebaseInitialized = false;
+bool streamConnected = false;
 String deviceId;
 
 // Forward declarations
@@ -641,6 +642,11 @@ void streamCallback(FirebaseStream data)
 {
   Serial.print("[STREAM] Nieuwe waarde: ");
   Serial.println(data.stringData());
+  if (data.stringData() != FIRMWARE_VERSION)
+  {
+    Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...");
+    // Start OTA update hier
+  }
 }
 
 void streamTimeoutCallback(bool timeout)
