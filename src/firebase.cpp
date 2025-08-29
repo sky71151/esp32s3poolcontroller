@@ -24,8 +24,15 @@ void initFirebaseTask(void *pvParameters)
             Firebase.reconnectWiFi(true);
 
             safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
+            vTaskDelay(1000 / portTICK_PERIOD_MS); // Geef Firebase tijd om te initialiseren
+            if (Firebase.ready()) {
+                safePrintln("Firebase is nu ready!");
+            } else {
+                safePrintln("Firebase nog NIET ready na init!");
+            }
             firebaseInitialized = false; // reset status bij herinitialisatie
             streamConnected = false;
+            vTaskDelay(2000 / portTICK_PERIOD_MS); // Voorkom te snelle herhaling
         }
 
         if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized && !streamConnected)
