@@ -261,17 +261,34 @@ void FirebaseInputTask(void *pvParameters)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         while (xQueueReceive(FirebaseInputQueue, &cmd, 0) == pdTRUE)
         {
-            // Verwerk cmd (bijv. relais schakelen)
+                        // Verwacht formaat: "1,0,0,0,0,0,0,0"
+            int relaisStates[8] = {0};
+            int idx = 0;
+            int lastPos = 0;
+            for (int i = 0; i < cmd.length() && idx < 8; i++) {
+                if (cmd[i] == ',' || i == cmd.length() - 1) {
+                    String val = cmd.substring(lastPos, (cmd[i] == ',') ? i : i + 1);
+                    relaisStates[idx++] = val.toInt();
+                    lastPos = i + 1;
+                }
+            }
+            // Zet de relais
+            for (int i = 0; i < 8; i++) {
+                digitalWrite(RELAY_PINS[i], relaisStates[i] ? HIGH : LOW);
+            }
         }
     }
 }
 
 void streamCallbackinput(FirebaseStream data)
 {
+    String InputData = data.stringData();
     safePrint("[STREAM] Nieuwe waarde: ");
-    safePrintln(data.stringData());
+    safePrintln(InputData);
     safePrint("data afkomstig van path : ");
     safePrintln(data.dataPath());
+    xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
+    vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
 }
 
 void streamTimeoutCallbackinput(bool timeout)

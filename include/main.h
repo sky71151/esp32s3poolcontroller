@@ -19,6 +19,7 @@ extern TaskHandle_t statusHandle;
 extern TaskHandle_t updateHandle;
 extern TaskHandle_t mainHandle;
 extern TaskHandle_t stackMonitorHandle;
+extern TaskHandle_t FirebaseInputTaskHandle;
 extern TaskStackInfo taskStackInfos[];
 extern const int numTasks;
 extern FirebaseData fbdo;
