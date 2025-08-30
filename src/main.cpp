@@ -70,8 +70,12 @@ void setup()
   updateBootCount();
   // printLogFromFlash();
   deviceId = getUniqueClientId(); // Unieke FuseID van de esp32
-  safePrintln(String("Firmware versie: ") + String(FIRMWARE_VERSION));
-  safePrintln(String("Apparaat gestart, unieke ID: ") + String(deviceId));
+  String data = String("Firmware versie: ");
+  data.concat(FIRMWARE_VERSION);
+  safePrintln(data);
+  data = String("Apparaat gestart, unieke ID: ");
+  data.concat(deviceId);
+  safePrintln(data);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 2, &wifiHandle, 0); // prioriteit 2
 
   // WiFi-wachtrij met timeout (10s)
@@ -100,7 +104,9 @@ void setup()
   char bootStr[32];
   strftime(bootStr, sizeof(bootStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
   bootTimeStr = String(bootStr);
-  safePrintln(String("Huidige tijd: ") + String(bootTimeStr));
+  String msg = String("Huidige tijd: ");
+  msg.concat(bootTimeStr);
+  safePrintln(msg);
 
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
@@ -272,10 +278,15 @@ void mainTask(void *pvParameters)
       for (int i = 0; i < numTasks; i++)
       {
         handle = *(taskStackInfos[i].handle);
-        safePrintln(String("[MAIN] Controleren taak: ") + String(i));
+        String data = String("[MAIN] Controleren taak: ");
+        data.concat(i);
+        safePrintln(data);
         if (handle == nullptr || handle == mainHandle)
         {
-          safePrintln(String("[MAIN] Taak ") + String(i) + String(" is niet gestart."));
+          String taskName = String("[MAIN] Taak ");
+          taskName.concat(i);
+          taskName.concat(" is niet gestart.");
+          safePrintln(taskName);
           safePrintln("[MAIN] Of overslaan van opschorting van MainTask om deadlock te voorkomen.");
           safePrintln("[MAIN] MainTask is actief en blijft actief!");
           continue;
@@ -283,16 +294,31 @@ void mainTask(void *pvParameters)
         // check if task is running
         eTaskState state = eTaskGetState(handle);
 
-        safePrintln(String("[MAIN] Task ") + String(i) + " state: " + String(state));
+        String taskName = String("[MAIN] Task ");
+        taskName.concat(i);
+        taskName.concat(" state: ");
+        taskName.concat(state);
+        safePrintln(taskName);
         if (state == eRunning)
         {
-          safePrintln(String("[MAIN] Task ") + String(i) + " is running (eRunning). Probeer te suspenden...");
+          String data = String("[MAIN] Task ");
+          data.concat(i);
+          data.concat(" is running (eRunning). Probeer te suspenden...");
+          safePrintln(data);
           vTaskSuspend(handle);
-          safePrintln(String("[MAIN] Task ") + String(i) + " is gesuspendeerd!");
+          data = String("[MAIN] Task ");
+          data.concat(i);
+          data.concat(" is gesuspendeerd!");
+          safePrintln(data);
         }
         else
         {
-          safePrintln(String("[MAIN] Task ") + String(i) + " is NIET running (state=" + String(state) + ")");
+          data = String("[MAIN] Task ");
+          data.concat(i);
+          data.concat(" is NIET running (state=");
+          data.concat(state);
+          data.concat(")");
+          safePrintln(data);
         }
       }
 
