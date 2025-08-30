@@ -28,6 +28,7 @@ TaskHandle_t statusHandle = nullptr;
 TaskHandle_t updateHandle = nullptr;
 TaskHandle_t mainHandle = nullptr;
 TaskHandle_t stackMonitorHandle = nullptr;
+TaskHandle_t FirebaseInputTaskHandle = nullptr;
 
 TaskStackInfo taskStackInfos[] = {
     {"WiFiTask", &wifiHandle, WIFI_STACK},
@@ -36,15 +37,18 @@ TaskStackInfo taskStackInfos[] = {
     {"UpdateTask", &updateHandle, UPDATE_STACK},
     {"MainTask", &mainHandle, MAIN_STACK},
     {"StackMonitorTask", &stackMonitorHandle, STATUS_STACK},
+    {"FirebaseInputTask", &FirebaseInputTaskHandle, STATUS_STACK},
 };
 const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
 
 FirebaseData fbdo;
 FirebaseData fbdoStream;
+FirebaseData fbdoInput;
 FirebaseAuth auth;
 FirebaseConfig config;
 
 SemaphoreHandle_t serialMutex;
+QueueHandle_t FirebaseInputQueue = nullptr;
 
 unsigned long lastUpdate = 0;
 const unsigned long updateInterval = 60000; // 1 minuut
@@ -76,6 +80,7 @@ void setup()
   data = String("Apparaat gestart, unieke ID: ");
   data.concat(deviceId);
   safePrintln(data);
+  FirebaseInputQueue = xQueueCreate(10, sizeof(String));
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 2, &wifiHandle, 0); // prioriteit 2
 
   // WiFi-wachtrij met timeout (10s)
@@ -110,7 +115,8 @@ void setup()
 
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
-  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);                       // prioriteit 1
+  xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
+  xTaskCreatePinnedToCore(FirebaseInputTask, "FirebaseInputTask", 4096, NULL, configMAX_PRIORITIES - 1, &FirebaseInputTaskHandle, 1);               // prioriteit 1
   if (debug)
   {
     xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
