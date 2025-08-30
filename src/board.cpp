@@ -17,7 +17,7 @@ void gpioConfig()
   {
     pinMode(DIGITAL_INPUT_PINS[i], INPUT);
   }
-  for (int i = 0; i < NUM_ANALOG_INPUTS; i++)
+  for (int i = 0; i < (int)(sizeof(ANALOG_INPUT_PINS) / sizeof(ANALOG_INPUT_PINS[0])); i++)
   {
     pinMode(ANALOG_INPUT_PINS[i], INPUT);
   }

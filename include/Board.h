@@ -20,9 +20,7 @@ const int NUM_DIGITAL_INPUTS = sizeof(DIGITAL_INPUT_PINS) / sizeof(DIGITAL_INPUT
 
 // Analog Input Configuration
 const int ANALOG_INPUT_PINS[] = {4, 5, 6, 7};
-#ifndef NUM_ANALOG_INPUTS
-#define NUM_ANALOG_INPUTS (sizeof(ANALOG_INPUT_PINS) / sizeof(ANALOG_INPUT_PINS[0]))
-#endif
+#define NUM_ADC_INPUTS (sizeof(ANALOG_INPUT_PINS) / sizeof(ANALOG_INPUT_PINS[0]))
 #define ANALOG_RESOLUTION_BITS 12     // ESP32-S3 has 12-bit ADC
 #define ANALOG_MAX_VALUE 4095         // 2^12 - 1
 #define ANALOG_REFERENCE_VOLTAGE 3.3  // ESP32-S3 reference voltage
@@ -41,7 +39,7 @@ const int ANALOG_INPUT_PINS[] = {4, 5, 6, 7};
 void gpioConfig();
 String getUniqueClientId();
 String readDipSwitches();
-
+void updateFirebaseInstant(String path, String data);
 
 
 
