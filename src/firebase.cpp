@@ -53,7 +53,7 @@ void initFirebaseTask(void *pvParameters)
              firebaseInitialized = false; // reset status bij herinitialisatie
              streamConnected = false;*/
 
-            firebaseInitialized = false; // reset status bij herinitialisatie
+            //firebaseInitialized = false; // reset status bij herinitialisatie
             streamConnected = false;
             //connectFirebase();
         }
@@ -317,8 +317,8 @@ void streamCallbackinput(FirebaseStream data)
     safePrintln(InputData);
     safePrint("data afkomstig van path : ");
     safePrintln(data.dataPath());
-    xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
-    vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
+    //xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
+    //vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
 }
 
 void streamTimeoutCallbackinput(bool timeout)
