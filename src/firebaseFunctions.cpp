@@ -131,31 +131,43 @@ void initFirebase()
     {
         safePrintln("Firebase is ready and initialized");
         safePrintln("setting up Firebase RTDB stream");
-        if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
-        {
-            Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
-            safePrintln("Stream gestart!");
-            streamConnected = true;
+        connectFirmwareStream();
+        ConnectInputStream();
+    }
+}
 
-        }
-        else
-        {
-            safePrint("Stream start mislukt: ");
-            safePrintln(fbdoStream.errorReason());
-        }
-        String StreamInputPath = "/devices/";
-        StreamInputPath.concat(deviceId);
-        StreamInputPath.concat("/GPIO/Relays");
-        if (Firebase.RTDB.beginStream(&fbdoInput, StreamInputPath.c_str()))
-        {
-            Firebase.RTDB.setStreamCallback(&fbdoInput, streamCallbackinput, streamTimeoutCallbackinput);
-            safePrintln("Input stream gestart!");
-        }
-        else
-        {
-            safePrint("Stream start mislukt: ");
-            safePrintln(fbdoInput.errorReason());
-        }
+void ConnectInputStream()
+{
+    String StreamInputPath = "/devices/";
+    StreamInputPath.concat(deviceId);
+    StreamInputPath.concat("/GPIO/Relays");
+    if (Firebase.RTDB.beginStream(&fbdoInput, StreamInputPath.c_str()))
+    {
+        Firebase.RTDB.setStreamCallback(&fbdoInput, streamCallbackinput, streamTimeoutCallbackinput);
+        safePrintln("Input stream gestart!");
+        inputStreamConnected = true;
+    }
+    else
+    {
+        safePrint("Stream start mislukt: ");
+        safePrintln(fbdoInput.errorReason());
+        inputStreamConnected = false;
+    }
+}
+
+void connectFirmwareStream()
+{
+    if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
+    {
+        Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
+        safePrintln("Stream gestart!");
+        firmwareStreamConnected = true;
+    }
+    else
+    {
+        firmwareStreamConnected = false;
+        safePrint("Stream start mislukt: ");
+        safePrintln(fbdoStream.errorReason());
     }
 }
 
@@ -225,7 +237,7 @@ void streamTimeoutCallbackinput(bool timeout)
         safePrintln("[STREAM] Timeout, probeer opnieuw...");
         Firebase.RTDB.endStream(&fbdoInput);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        streamConnected = false;
+        inputStreamConnected = false;
     }
 }
 
@@ -251,7 +263,8 @@ void streamTimeoutCallback(bool timeout)
         safePrintln("[STREAM] Timeout, probeer opnieuw...");
         Firebase.RTDB.endStream(&fbdoStream);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        streamConnected = false;
+        firmwareStreamConnected = false;
     }
 }
+
 

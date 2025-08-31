@@ -38,6 +38,8 @@ bool firebaseInitialized = false;
 bool updateAvailable = false;
 bool streamConnected = false;
 bool bootTimeUploaded = false;
+bool firmwareStreamConnected = false;
+bool inputStreamConnected = false;
 
 const unsigned long updateInterval = 60000; // 1 minuut
 
@@ -99,6 +101,16 @@ void mainTask(void *pvParameters)
     if(updateAvailable)
     {
       performOTA();
+    }
+    if (!firmwareStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
+    {
+        safePrintln("[STREAM] Probeer opnieuw te verbinden...");
+        connectFirmwareStream();
+    }
+    if (!inputStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
+    {
+        safePrintln("[STREAM] Probeer opnieuw te verbinden...");
+        ConnectInputStream();
     }
     // Hoofdtaken uitvoeren
     vTaskDelay(1000 / portTICK_PERIOD_MS);

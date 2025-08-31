@@ -68,6 +68,8 @@ extern bool updateAvailable;
 extern uint32_t bootCount;
 extern bool flashReady;
 extern bool signupOK;
+extern bool firmwareStreamConnected;
+extern bool inputStreamConnected; 
 
 extern bool debugMode;
 extern time_t timeNow;
