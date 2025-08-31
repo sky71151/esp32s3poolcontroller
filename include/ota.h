@@ -1,8 +1,10 @@
-#pragma once
+#ifndef OTA_H
+#define OTA_H
 
-#include <HTTPUpdate.h>
-#include <WiFiClientSecure.h>
+#include "main.h"
+
 
 void performOTA();
 void downloadAndApplyFirmware();
 bool startOTAUpdate(WiFiClient *client, int contentLength);
+#endif

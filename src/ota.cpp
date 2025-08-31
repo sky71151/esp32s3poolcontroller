@@ -1,9 +1,4 @@
-#include <HTTPUpdate.h>
-#include <WiFiClientSecure.h>
-#include <WiFiClient.h>
 #include "ota.h"
-#include "Update.h"
-#include <HTTPClient.h>
 
 // Zet dit op je eigen GitHub release-asset URL
 const char *firmwareUrl = "https://github.com/sky71151/esp32s3poolcontroller/raw/refs/heads/herstel-v25-7/.pio/build/esp32-s3-devkitc-1/firmware.bin"; //"https://github.com/sky71151/esp32s3poolcontroller/raw/refs/heads/main/.pio/build/esp32-s3-devkitc-1/firmware.bin";

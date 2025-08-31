@@ -1,0 +1,254 @@
+#include "firebaseFunctions.h"
+
+// firebase paths
+
+void initFirebase()
+{
+    safePrint("Firebase Client v");
+    safePrintln(FIREBASE_CLIENT_VERSION);
+    config.api_key = API_KEY;
+    config.database_url = DATABASE_URL;
+    fbdo.setBSSLBufferSize(4096, 1024);
+    safePrint("Sign up new user... ");
+    if (Firebase.signUp(&config, &auth, "", ""))
+    {
+        safePrintln("ok");
+        signupOK = true;
+    }
+    else
+        safePrintln(config.signer.signupError.message.c_str());
+
+    // config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
+    Firebase.begin(&config, &auth);
+    String idPath = "devices/" + deviceId;
+    String lastBootPath = idPath + "/lastBoot";
+    String firmwarePath = idPath + "/DeviceInfo/firmware";
+
+    if (Firebase.ready() && signupOK && !firebaseInitialized)
+    {
+
+        // check if device is already registered
+        if (WiFi.status() == WL_CONNECTED && Firebase.ready() && !firebaseInitialized)
+        {
+            // Voorbeeld: controleer of device geregistreerd is met unieke ID
+            if (Firebase.RTDB.pathExisted(&fbdo, idPath.c_str()))
+            {
+                {
+                    String msg = "Pad bestaat: ";
+                    msg.concat(idPath);
+                    safePrintln(msg);
+                }
+                time_t now = time(nullptr);
+                char timeStr[32];
+                strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
+                String pathTime = idPath;
+                pathTime.concat("/Registration/lastBoot");
+                if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
+                {
+                    safePrint("Boot Time update: ");
+                    safePrintln(timeStr);
+                }
+                else
+                {
+                    safePrint("Fout bij uploaden boot tijd: ");
+                    safePrintln(fbdo.errorReason());
+                }
+                String pathFirmware = idPath;
+                pathFirmware.concat("/DeviceInfo/firmware");
+                String firmwareVersion = FIRMWARE_VERSION;
+                firmwareVersion.concat(" ");
+                firmwareVersion.concat(timeStr);
+                if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), firmwareVersion))
+                {
+                    safePrint("Firmware version update: ");
+                    safePrintln(firmwareVersion);
+                }
+                else
+                {
+                    safePrint("Fout bij uploaden firmware versie: ");
+                    safePrintln(fbdo.errorReason());
+                }
+                firebaseInitialized = true;
+            }
+            else
+            {
+
+                String msg = "Pad bestaat niet: ";
+                msg.concat(idPath);
+                safePrintln(msg);
+
+                msg = "Device wordt geregistreerd: ";
+                msg.concat(deviceId);
+                safePrintln(msg);
+
+                // Create device data JSON
+                FirebaseJson deviceJson;
+
+                // Device info section
+                FirebaseJson DeviceInfo;
+                DeviceInfo.set("clientId", deviceId);
+                DeviceInfo.set("boardType", "ESP32-S3  R1N16");
+                DeviceInfo.set("firmware", FIRMWARE_VERSION);
+                deviceJson.set("DeviceInfo", DeviceInfo);
+
+                // Registration section
+                FirebaseJson Registration;
+                Registration.set("firstRegistratione", bootTimeStr);
+                Registration.set("lastBoot", bootTimeStr);
+                Registration.set("lastSeen", bootTimeStr);
+                Registration.set("uptime", "0");
+                deviceJson.set("Registration", Registration);
+
+                // GPIO section
+                FirebaseJson Device;
+                Device.set("Relays", "0,0,0,0,0,0,0,0");
+                Device.set("DipSwitches", "0,0,0,0");
+                Device.set("DigitalInputs", "0,0,0,0");
+                Device.set("AnalogInputs", "0,0,0,0");
+                deviceJson.set("GPIO", Device);
+
+                if (Firebase.RTDB.setJSON(&fbdo, idPath.c_str(), &deviceJson))
+                {
+                    safePrintln("Device geregistreerd in Firebase Realtime Database.");
+                    firebaseInitialized = true;
+                }
+                else
+                {
+                    safePrint("Fout bij registreren device: ");
+                    safePrintln(fbdo.errorReason());
+                }
+            }
+        }
+        else
+        {
+            safePrintln("Firebase is not ready");
+        }
+    }
+    if (Firebase.ready() && signupOK && firebaseInitialized)
+    {
+        safePrintln("Firebase is ready and initialized");
+        safePrintln("setting up Firebase RTDB stream");
+        if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
+        {
+            Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
+            safePrintln("Stream gestart!");
+            streamConnected = true;
+
+        }
+        else
+        {
+            safePrint("Stream start mislukt: ");
+            safePrintln(fbdoStream.errorReason());
+        }
+        String StreamInputPath = "/devices/";
+        StreamInputPath.concat(deviceId);
+        StreamInputPath.concat("/GPIO/Relays");
+        if (Firebase.RTDB.beginStream(&fbdoInput, StreamInputPath.c_str()))
+        {
+            Firebase.RTDB.setStreamCallback(&fbdoInput, streamCallbackinput, streamTimeoutCallbackinput);
+            safePrintln("Input stream gestart!");
+        }
+        else
+        {
+            safePrint("Stream start mislukt: ");
+            safePrintln(fbdoInput.errorReason());
+        }
+    }
+}
+
+void updateFirebaseTask(void *pvParameters)
+{
+    while (true)
+    {
+        if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized)
+        {
+            time_t now = time(nullptr);
+            char timeStr[32];
+            strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
+            String pathTime = "devices/";
+            pathTime.concat(deviceId);
+            pathTime.concat("/Registration/lastSeen");
+            if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
+            {
+                safePrint("Tijd geüpload: ");
+                safePrintln(timeStr);
+            }
+            else
+            {
+                safePrint("Fout bij uploaden tijd: ");
+                safePrintln(fbdo.errorReason());
+            }
+            unsigned long runtimeMillis = millis();
+            unsigned long totalMinutes = runtimeMillis / 60000;
+            unsigned int hours = totalMinutes / 60;
+            unsigned int minutes = totalMinutes % 60;
+            char runtimeStr[16];
+            snprintf(runtimeStr, sizeof(runtimeStr), "%02u:%02u", hours, minutes);
+            String pathRuntime = "devices/";
+            pathRuntime.concat(deviceId);
+            pathRuntime.concat("/Registration/uptime");
+            if (Firebase.RTDB.setString(&fbdo, pathRuntime, runtimeStr))
+            {
+                safePrint("Runtime geüpload: ");
+                safePrintln(runtimeStr);
+            }
+            else
+            {
+                safePrint("Fout bij uploaden runtime: ");
+                safePrintln(fbdo.errorReason());
+            }
+        }
+        vTaskDelay(updateInterval / portTICK_PERIOD_MS);
+    }
+}
+
+void streamCallbackinput(FirebaseStream data)
+{
+    char InputData[32];
+    strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
+    InputData[sizeof(InputData) - 1] = '\0';
+    safePrint("[STREAM] Nieuwe waarde: ");
+    safePrintln(InputData);
+    safePrint("data afkomstig van path : ");
+    safePrintln(data.dataPath());
+    // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
+    // vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
+}
+
+void streamTimeoutCallbackinput(bool timeout)
+{
+    if (timeout)
+    {
+        Serial.println("[STREAM] Timeout, probeer opnieuw...");
+        Firebase.RTDB.endStream(&fbdoInput);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        streamConnected = false;
+    }
+}
+
+void streamCallback(FirebaseStream data)
+{
+    Serial.print("[STREAM] Nieuwe waarde: ");
+    Serial.println(data.stringData());
+    // convert strindata to double
+    if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
+    {
+        Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
+        updateAvailable = true;
+        digitalWrite(LED_PIN, HIGH);
+
+       
+    }
+}
+
+void streamTimeoutCallback(bool timeout)
+{
+    if (timeout)
+    {
+        Serial.println("[STREAM] Timeout, probeer opnieuw...");
+        Firebase.RTDB.endStream(&fbdoStream);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        streamConnected = false;
+    }
+}
+

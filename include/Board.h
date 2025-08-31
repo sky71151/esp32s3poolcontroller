@@ -39,8 +39,5 @@ const int ANALOG_INPUT_PINS[] = {4, 5, 6, 7};
 void gpioConfig();
 String getUniqueClientId();
 String readDipSwitches();
-void updateFirebaseInstant(String path, String data);
-
-
 
 #endif // BOARD_H
