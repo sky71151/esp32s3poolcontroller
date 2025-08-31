@@ -8,6 +8,19 @@ void initFirebaseTask(void *pvParameters)
 {
     String regPath = String("/devices/");
     regPath += deviceId;
+    config.api_key = "AIzaSyBoYWaBsPkQ2llH4sqxL1lG7ooHrmRe-GY"; // Jouw Web API Key
+    config.database_url = "https://pool-671d1-default-rtdb.europe-west1.firebasedatabase.app/";
+    Firebase.begin(&config, &auth);
+    Firebase.reconnectWiFi(true);
+    if (Firebase.signUp(&config, &auth, "", ""))
+    {
+        Serial.println("[FIREBASE] Anoniem ingelogd!");
+        firebaseInitialized = true;
+    }
+    else
+    {
+        Serial.printf("[FIREBASE] Fout bij anoniem inloggen: %s\n", config.signer.signupError.message.c_str());
+    }
 
     for (;;)
     {
@@ -27,10 +40,9 @@ void initFirebaseTask(void *pvParameters)
              firebaseInitialized = false; // reset status bij herinitialisatie
              streamConnected = false;*/
 
-            
             firebaseInitialized = false; // reset status bij herinitialisatie
             streamConnected = false;
-            connectFirebase();
+            //connectFirebase();
         }
 
         if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized && !streamConnected)
