@@ -60,6 +60,8 @@ bool streamConnected = false;
 String deviceId;
 bool updateAvailable = false;
 
+void firebaseTask(void *pvParameters);
+
 // ===================== SETUP & LOOP =====================
 
 void setup()
@@ -112,6 +114,17 @@ void setup()
   String msg = String("Huidige tijd: ");
   msg.concat(bootTimeStr);
   safePrintln(msg);
+
+    // Start FreeRTOS taak voor Firebase initialisatie en uploads
+  xTaskCreatePinnedToCore(
+    firebaseTask,    // Functie
+    "FirebaseTask", // Naam
+    8192,            // Stack grootte (iets groter ivm init)
+    NULL,            // Parameters
+    1,               // Prioriteit
+    NULL,            // Handle
+    1                // Core (1 = app core op ESP32)
+  );
 
   //xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
   //xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
@@ -369,4 +382,28 @@ extern "C" void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskNa
   entry.freeHeap = ESP.getFreeHeap();
   entry.stackWatermark = uxTaskGetStackHighWaterMark(xTask);
   logToFlash(&entry, sizeof(entry));
+}
+
+void firebaseTask(void *pvParameters) {
+  // Firebase initialiseren met anonieme login
+  config.api_key = "AIzaSyBoYWaBsPkQ2llH4sqxL1lG7ooHrmRe-GY"; // Jouw Web API Key
+  config.database_url = "https://pool-671d1-default-rtdb.europe-west1.firebasedatabase.app/";
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+  if (Firebase.signUp(&config, &auth, "", "")) {
+    Serial.println("[FIREBASE] Anoniem ingelogd!");
+  } else {
+    Serial.printf("[FIREBASE] Fout bij anoniem inloggen: %s\n", config.signer.signupError.message.c_str());
+  }
+  while (true) {
+    String path = "/test";
+    float temp = random(1, 300); // Simuleer een temperatuurwaarde
+    if (Firebase.RTDB.setString(&fbdo, path, String(temp))) {
+      Serial.println("[FreeRTOS] Data succesvol verzonden!");
+    } else {
+      Serial.print("[FreeRTOS] Fout bij verzenden: ");
+      Serial.println(fbdo.errorReason());
+    }
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+  }
 }
