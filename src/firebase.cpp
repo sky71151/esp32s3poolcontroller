@@ -16,12 +16,19 @@ void initFirebaseTask(void *pvParameters)
             // Firebase.reset(&config);
             config.api_key = API_KEY;
             config.database_url = DATABASE_URL;
-            // Anonieme login: geen e-mail/wachtwoord invullen
-            // auth.user.email en auth.user.password NIET instellen
-            auth.user.email = USER_EMAIL;
-            auth.user.password = USER_PASSWORD;
+            // auth.user.email = USER_EMAIL;
+            // auth.user.password = USER_PASSWORD;
             Firebase.begin(&config, &auth); // auth leeg laat anonieme login toe
             Firebase.reconnectWiFi(true);
+            if (Firebase.signUp(&config, &auth, "", ""))
+            {
+                safePrintln("[FIREBASE] Anoniem ingelogd!");
+            }
+            else    
+            {
+                safePrint("[FIREBASE] Fout bij anoniem inloggen: ");
+                safePrintln(config.signer.signupError.message.c_str());
+            }
 
             safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
             firebaseInitialized = false; // reset status bij herinitialisatie
@@ -261,19 +268,22 @@ void FirebaseInputTask(void *pvParameters)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         while (xQueueReceive(FirebaseInputQueue, &cmd, 0) == pdTRUE)
         {
-                        // Verwacht formaat: "1,0,0,0,0,0,0,0"
+            // Verwacht formaat: "1,0,0,0,0,0,0,0"
             int relaisStates[8] = {0};
             int idx = 0;
             int lastPos = 0;
-            for (int i = 0; i < cmd.length() && idx < 8; i++) {
-                if (cmd[i] == ',' || i == cmd.length() - 1) {
+            for (int i = 0; i < cmd.length() && idx < 8; i++)
+            {
+                if (cmd[i] == ',' || i == cmd.length() - 1)
+                {
                     String val = cmd.substring(lastPos, (cmd[i] == ',') ? i : i + 1);
                     relaisStates[idx++] = val.toInt();
                     lastPos = i + 1;
                 }
             }
             // Zet de relais
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 8; i++)
+            {
                 digitalWrite(RELAY_PINS[i], relaisStates[i] ? HIGH : LOW);
             }
         }
