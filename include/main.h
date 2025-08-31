@@ -2,9 +2,11 @@
 #define MAIN_H
 
 #include <Arduino.h>
-#include <Firebase_ESP_Client.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include "version.h"
+#include "secrets.h"
+#include <Firebase_ESP_Client.h>
 
 typedef struct {
   const char *name;

@@ -155,7 +155,8 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src/SPI.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal-spi.h \
- include/Board.h include/external_flash.h include/main.h \
+ include/Board.h include/external_flash.h include/main.h src/version.h \
+ include/secrets.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase_ESP_Client.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./core/Firebase_Client_Version.h \

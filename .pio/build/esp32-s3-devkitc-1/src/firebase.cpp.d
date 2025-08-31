@@ -1,8 +1,5 @@
 .pio/build/esp32-s3-devkitc-1/src/firebase.cpp.o: src/firebase.cpp \
- include/firebase.h \
- .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase_ESP_Client.h \
- .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase.h \
- .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./core/Firebase_Client_Version.h \
+ include/firebase.h include/main.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp_arduino_version.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32-libs/esp32s3/include/freertos/FreeRTOS-Kernel/include/freertos/FreeRTOS.h \
@@ -156,6 +153,10 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/freertos_stats.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
+ src/version.h include/secrets.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase_ESP_Client.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/Firebase.h \
+ .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./core/Firebase_Client_Version.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./mbfs/MB_MCU.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/./FirebaseFS.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/LittleFS/src/LittleFS.h \
@@ -303,8 +304,7 @@
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FunctionsConfig.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/PolicyBuilder.h \
  .pio/libdeps/esp32-s3-devkitc-1/Firebase\ Arduino\ Client\ Library\ for\ ESP8266\ and\ ESP32/src/functions/FunctionsConfig.h \
- include/main.h src/version.h include/secrets.h include/external_flash.h \
- include/ota.h \
+ include/external_flash.h include/ota.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src/HTTPUpdate.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src/HTTPClient.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
