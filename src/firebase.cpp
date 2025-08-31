@@ -16,11 +16,11 @@ void initFirebaseTask(void *pvParameters)
             // Firebase.reset(&config);
             config.api_key = API_KEY;
             config.database_url = DATABASE_URL;
-            // auth.user.email = USER_EMAIL;
-            // auth.user.password = USER_PASSWORD;
+             auth.user.email = USER_EMAIL;
+            auth.user.password = USER_PASSWORD;
             Firebase.begin(&config, &auth); // auth leeg laat anonieme login toe
             Firebase.reconnectWiFi(true);
-            if (Firebase.signUp(&config, &auth, "", ""))
+            /*if (Firebase.signUp(&config, &auth, "", ""))
             {
                 safePrintln("[FIREBASE] Anoniem ingelogd!");
             }
@@ -28,7 +28,7 @@ void initFirebaseTask(void *pvParameters)
             {
                 safePrint("[FIREBASE] Fout bij anoniem inloggen: ");
                 safePrintln(config.signer.signupError.message.c_str());
-            }
+            }*/
 
             safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
             firebaseInitialized = false; // reset status bij herinitialisatie
