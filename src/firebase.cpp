@@ -20,7 +20,7 @@ void firebaseTask(void *pvParameters)
     }
     while (true)
     {
-
+       
         /*
         String path = "/test";
         float temp = random(1, 300); // Simuleer een temperatuurwaarde
