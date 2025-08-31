@@ -20,9 +20,12 @@ void initFirebase()
 
     // config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
     Firebase.begin(&config, &auth);
-    String idPath = "devices/" + deviceId;
-    String lastBootPath = idPath + "/lastBoot";
-    String firmwarePath = idPath + "/DeviceInfo/firmware";
+    String idPath = "devices/";
+    idPath.concat(deviceId);
+    String lastBootPath = idPath;
+    lastBootPath.concat("/lastBoot");
+    String firmwarePath = idPath;
+    firmwarePath.concat("/DeviceInfo/firmware");
 
     if (Firebase.ready() && signupOK && !firebaseInitialized)
     {
@@ -219,7 +222,7 @@ void streamTimeoutCallbackinput(bool timeout)
 {
     if (timeout)
     {
-        Serial.println("[STREAM] Timeout, probeer opnieuw...");
+        safePrintln("[STREAM] Timeout, probeer opnieuw...");
         Firebase.RTDB.endStream(&fbdoInput);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         streamConnected = false;
@@ -228,12 +231,12 @@ void streamTimeoutCallbackinput(bool timeout)
 
 void streamCallback(FirebaseStream data)
 {
-    Serial.print("[STREAM] Nieuwe waarde: ");
-    Serial.println(data.stringData());
+    safePrint("[STREAM] Nieuwe waarde: ");
+    safePrintln(data.stringData());
     // convert strindata to double
     if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
     {
-        Serial.println("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
+        safePrintln("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
         updateAvailable = true;
         digitalWrite(LED_PIN, HIGH);
 
@@ -245,7 +248,7 @@ void streamTimeoutCallback(bool timeout)
 {
     if (timeout)
     {
-        Serial.println("[STREAM] Timeout, probeer opnieuw...");
+        safePrintln("[STREAM] Timeout, probeer opnieuw...");
         Firebase.RTDB.endStream(&fbdoStream);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         streamConnected = false;
