@@ -30,6 +30,7 @@ def after_build(source, target, env):
         subprocess.run(["git", "commit", "-m", msg], check=True)
         subprocess.run(["git", "tag", msg], check=True)
         subprocess.run(["git", "push"], check=True)
+        subprocess.run(["git", "push", "origin", msg], check=True)
     except subprocess.CalledProcessError as e:
         print(f"[auto_commit.py] Git commit failed: {e}")
 
