@@ -15,6 +15,5 @@ jobs:
         with:
           files: .pio/build/esp32-s3-devkitc-1/firmware.bin
           tag_name: ${{ github.ref_name }}
-          release_name: ${{ github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
