@@ -12,20 +12,56 @@ void initFirebaseTask(void *pvParameters)
     for (;;)
     {
         if (WiFi.status() == WL_CONNECTED && !Firebase.ready())
-        {
-            // Firebase.reset(&config);
+        { /*
+             // Firebase.reset(&config);
+             config.api_key = API_KEY;
+             config.database_url = DATABASE_URL;
+             //auth.user.email = USER_EMAIL;
+             //auth.user.password = USER_PASSWORD;
+             //Firebase.begin(&config, &auth); // auth leeg laat anonieme login toe
+
+             Firebase.signUp(&config, &auth, "", "");
+
+             Firebase.reconnectWiFi(true);
+             safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
+             firebaseInitialized = false; // reset status bij herinitialisatie
+             streamConnected = false;*/
+
             config.api_key = API_KEY;
             config.database_url = DATABASE_URL;
-            //auth.user.email = USER_EMAIL;
-            //auth.user.password = USER_PASSWORD;
-            //Firebase.begin(&config, &auth); // auth leeg laat anonieme login toe
 
-            Firebase.signUp(&config, &auth, "", "");
+            // 1. Anonymous signup
+            if (Firebase.signUp(&config, &auth, "", ""))
+            {
+                safePrintln("[FIREBASE] Anoniem ingelogd!");
+            }
+            else
+            {
+                safePrint("[FIREBASE] Fout bij anoniem inloggen: ");
+                safePrintln(config.signer.signupError.message.c_str());
+                return; // Stop als signup faalt!
+            }
 
+            // 2. Wacht tot token geldig is (max 10s)
+            unsigned long start = millis();
+            while (auth.token.uid == "" && millis() - start < 10000)
+            {
+                delay(100);
+            }
+            if (auth.token.uid == "")
+            {
+                safePrintln("[FIREBASE] Geen geldige UID ontvangen na signup!");
+                return;
+            }
+
+            // 3. Start Firebase client
+            Firebase.begin(&config, &auth);
             Firebase.reconnectWiFi(true);
-            safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
             firebaseInitialized = false; // reset status bij herinitialisatie
             streamConnected = false;
+            
+
+                safePrintln("[FIREBASE] Firebase client gestart en klaar voor gebruik!");
         }
 
         if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized && !streamConnected)
