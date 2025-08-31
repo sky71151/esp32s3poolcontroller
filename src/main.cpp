@@ -119,7 +119,7 @@ void setup()
   //xTaskCreatePinnedToCore(FirebaseInputTask, "FirebaseInputTask", 4096, NULL, configMAX_PRIORITIES - 1, &FirebaseInputTaskHandle, 1);               // prioriteit 1
   if (debug)
   {
-    //xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
+    xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
   }
 }
 
@@ -216,7 +216,7 @@ void systemStatusTask(void *pvParameters)
     uint32_t freeHeap = ESP.getFreeHeap();
     UBaseType_t stackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
     String wifiStatus = (WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden";
-    String firebaseStatus = Firebase.ready() ? "Verbonden" : "Niet verbonden";
+    //String firebaseStatus = Firebase.ready() ? "Verbonden" : "Niet verbonden";
     safePrint("[STATUS] Heap: ");
     safePrint(String(freeHeap));
     safePrint(" bytes | Stack: ");
@@ -224,7 +224,7 @@ void systemStatusTask(void *pvParameters)
     safePrint(" bytes | WiFi: ");
     safePrint(wifiStatus);
     safePrint(" | Firebase: ");
-    safePrintln(firebaseStatus);
+    //safePrintln(firebaseStatus);
     safePrintln("[TASKS] Naam | Stack gebruikt (bytes) | Stack totaal (bytes) | % gebruikt");
     for (int i = 0; i < numTasks; i++)
     {
@@ -305,8 +305,8 @@ void stackMonitorTask(void *pvParameters)
     // Print WiFi en Firebase status
     safePrint("WiFi status: ");
     safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden!");
-    safePrint("Firebase status: ");
-    safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden!");
+    //safePrint("Firebase status: ");
+    //safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden!");
     vTaskDelay(15000 / portTICK_PERIOD_MS); // elke 15s
   }
 }
