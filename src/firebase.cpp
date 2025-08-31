@@ -16,8 +16,8 @@ void initFirebaseTask(void *pvParameters)
             // Firebase.reset(&config);
             config.api_key = API_KEY;
             config.database_url = DATABASE_URL;
-            auth.user.email = USER_EMAIL;
-            auth.user.password = USER_PASSWORD;
+            //auth.user.email = USER_EMAIL;
+            //auth.user.password = USER_PASSWORD;
             //Firebase.begin(&config, &auth); // auth leeg laat anonieme login toe
             
             if (Firebase.signUp(&config, &auth, "", ""))
