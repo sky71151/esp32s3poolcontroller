@@ -7,6 +7,10 @@
 #include "version.h"
 #include "secrets.h"
 #include <Firebase_ESP_Client.h>
+#include "external_flash.h"
+#include "ota.h"
+#include "wifitask.h"
+#include "board.h"
 
 typedef struct {
   const char *name;
