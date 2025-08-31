@@ -397,5 +397,5 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/WiFiClientSecure.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
  include/serial.h include/main.h include/wifiTask.h include/board.h \
- include/secrets.h include/firebaseFunctions.h include/version.h \
+ include/secrets.h include/firebaseFunctions.h src/version.h \
  include/ota.h
