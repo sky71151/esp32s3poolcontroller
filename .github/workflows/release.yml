@@ -2,8 +2,8 @@ name: Build & Release Firmware
 
 on:
   push:
-    branches:
-      - herstel-v25-7
+    tags:
+      - '*'  # Trigger op elke tag-push
 jobs:
   build:
     runs-on: ubuntu-latest
