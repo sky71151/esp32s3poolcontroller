@@ -8,19 +8,32 @@ void initFirebaseTask(void *pvParameters)
 {
     String regPath = String("/devices/");
     regPath += deviceId;
-    config.api_key = "AIzaSyBoYWaBsPkQ2llH4sqxL1lG7ooHrmRe-GY"; // Jouw Web API Key
-    config.database_url = "https://pool-671d1-default-rtdb.europe-west1.firebasedatabase.app/";
+    config.api_key = API_KEY;
+    config.database_url = DATABASE_URL;
+
+    // 1. Anonymous signup
+    if (Firebase.signUp(&config, &auth, "", "")) {
+        Serial.println("[FIREBASE] Anoniem ingelogd!");
+    } else {
+        Serial.printf("[FIREBASE] Fout bij anoniem inloggen: %s\n", config.signer.signupError.message.c_str());
+        vTaskDelete(NULL); // Stop deze task als signup faalt
+    }
+
+    // 2. Wacht tot token geldig is (max 10s)
+    unsigned long start = millis();
+    while (auth.token.uid == "" && millis() - start < 10000) {
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
+    if (auth.token.uid == "") {
+        Serial.println("[FIREBASE] Geen geldige UID ontvangen na signup!");
+        vTaskDelete(NULL);
+    }
+
+    // 3. Start Firebase client
     Firebase.begin(&config, &auth);
     Firebase.reconnectWiFi(true);
-    if (Firebase.signUp(&config, &auth, "", ""))
-    {
-        Serial.println("[FIREBASE] Anoniem ingelogd!");
-        firebaseInitialized = true;
-    }
-    else
-    {
-        Serial.printf("[FIREBASE] Fout bij anoniem inloggen: %s\n", config.signer.signupError.message.c_str());
-    }
+    Serial.println("[FIREBASE] Firebase client gestart en klaar voor gebruik!");
+    firebaseInitialized = true;
 
     for (;;)
     {
