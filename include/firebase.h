@@ -14,5 +14,7 @@ void updateFirebaseInstant(String path, String data);
 void FirebaseInputTask(void *pvParameters);
 void streamCallbackinput(FirebaseStream data);
 void streamTimeoutCallbackinput(bool timeout);
+void connectFirebase();
+
 
 #endif

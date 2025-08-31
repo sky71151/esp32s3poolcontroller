@@ -27,41 +27,10 @@ void initFirebaseTask(void *pvParameters)
              firebaseInitialized = false; // reset status bij herinitialisatie
              streamConnected = false;*/
 
-            config.api_key = API_KEY;
-            config.database_url = DATABASE_URL;
-
-            // 1. Anonymous signup
-            if (Firebase.signUp(&config, &auth, "", ""))
-            {
-                safePrintln("[FIREBASE] Anoniem ingelogd!");
-            }
-            else
-            {
-                safePrint("[FIREBASE] Fout bij anoniem inloggen: ");
-                safePrintln(config.signer.signupError.message.c_str());
-                return; // Stop als signup faalt!
-            }
-
-            // 2. Wacht tot token geldig is (max 10s)
-            unsigned long start = millis();
-            while (auth.token.uid == "" && millis() - start < 10000)
-            {
-                delay(100);
-            }
-            if (auth.token.uid == "")
-            {
-                safePrintln("[FIREBASE] Geen geldige UID ontvangen na signup!");
-                return;
-            }
-
-            // 3. Start Firebase client
-            Firebase.begin(&config, &auth);
-            Firebase.reconnectWiFi(true);
+            
             firebaseInitialized = false; // reset status bij herinitialisatie
             streamConnected = false;
-            
-
-                safePrintln("[FIREBASE] Firebase client gestart en klaar voor gebruik!");
+            connectFirebase();
         }
 
         if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized && !streamConnected)
@@ -335,5 +304,25 @@ void streamTimeoutCallbackinput(bool timeout)
         Firebase.RTDB.endStream(&fbdoInput);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         streamConnected = false;
+    }
+}
+
+void connectFirebase()
+{
+    if (!firebaseInitialized)
+    {
+        config.api_key = "AIzaSyBoYWaBsPkQ2llH4sqxL1lG7ooHrmRe-GY"; // Jouw Web API Key
+        config.database_url = "https://pool-671d1-default-rtdb.europe-west1.firebasedatabase.app/";
+        Firebase.begin(&config, &auth);
+        Firebase.reconnectWiFi(true);
+        if (Firebase.signUp(&config, &auth, "", ""))
+        {
+            Serial.println("[FIREBASE] Anoniem ingelogd!");
+        }
+        else
+        {
+            Serial.printf("[FIREBASE] Fout bij anoniem inloggen: %s\n", config.signer.signupError.message.c_str());
+        }
+        firebaseInitialized = true;
     }
 }
