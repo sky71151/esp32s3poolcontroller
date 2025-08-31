@@ -14,11 +14,7 @@
 uint32_t bootCount = 0;
 bool flashReady = false;
 
-#define WIFI_STACK 8192
-#define FIREBASE_STACK 16384
-#define STATUS_STACK 16384
-#define UPDATE_STACK 16384
-#define MAIN_STACK 16384
+
 
 #define debug true
 

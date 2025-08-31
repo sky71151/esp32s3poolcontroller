@@ -12,6 +12,12 @@
 #include "wifitask.h"
 #include "board.h"
 
+#define WIFI_STACK 8192
+#define FIREBASE_STACK 16384
+#define STATUS_STACK 16384
+#define UPDATE_STACK 16384
+#define MAIN_STACK 16384
+
 typedef struct {
   const char *name;
   TaskHandle_t *handle;
