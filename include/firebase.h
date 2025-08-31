@@ -14,6 +14,7 @@ void FirebaseInputTask(void *pvParameters);
 void streamCallbackinput(FirebaseStream data);
 void streamTimeoutCallbackinput(bool timeout);
 void connectFirebase();
+void firebaseTask(void *pvParameters);
 
 
 #endif

@@ -1,5 +1,28 @@
 #include "firebase.h"
 
+void firebaseTask(void *pvParameters) {
+  // Firebase initialiseren met anonieme login
+  config.api_key = "AIzaSyBoYWaBsPkQ2llH4sqxL1lG7ooHrmRe-GY"; // Jouw Web API Key
+  config.database_url = "https://pool-671d1-default-rtdb.europe-west1.firebasedatabase.app/";
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+  if (Firebase.signUp(&config, &auth, "", "")) {
+    Serial.println("[FIREBASE] Anoniem ingelogd!");
+  } else {
+    Serial.printf("[FIREBASE] Fout bij anoniem inloggen: %s\n", config.signer.signupError.message.c_str());
+  }
+  while (true) {
+    String path = "/test";
+    float temp = random(1, 300); // Simuleer een temperatuurwaarde
+    if (Firebase.RTDB.setString(&fbdo, path, String(temp))) {
+      Serial.println("[FreeRTOS] Data succesvol verzonden!");
+    } else {
+      Serial.print("[FreeRTOS] Fout bij verzenden: ");
+      Serial.println(fbdo.errorReason());
+    }
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+  }
+}
 
 void initFirebaseTask(void *pvParameters)
 {
