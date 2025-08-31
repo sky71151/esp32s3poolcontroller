@@ -113,13 +113,22 @@ void setup()
   msg.concat(bootTimeStr);
   safePrintln(msg);
 
-  xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
-  xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
+  xTaskCreatePinnedToCore(
+      firebaseTask,   // Functie
+      "FirebaseTask", // Naam
+      8192,           // Stack grootte (iets groter ivm init)
+      NULL,           // Parameters
+      1,              // Prioriteit
+      NULL,           // Handle
+      1               // Core (1 = app core op ESP32)
+  );
+  //xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
+  //xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
   xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
-  xTaskCreatePinnedToCore(FirebaseInputTask, "FirebaseInputTask", 4096, NULL, configMAX_PRIORITIES - 1, &FirebaseInputTaskHandle, 1);               // prioriteit 1
+  //xTaskCreatePinnedToCore(FirebaseInputTask, "FirebaseInputTask", 4096, NULL, configMAX_PRIORITIES - 1, &FirebaseInputTaskHandle, 1); // prioriteit 1
   if (debug)
   {
-    //xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
+    // xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
   }
 }
 
@@ -487,7 +496,7 @@ void stackMonitorTask(void *pvParameters)
     safePrint("WiFi status: ");
     safePrintln((WiFi.status() == WL_CONNECTED) ? "Verbonden" : "Niet verbonden!");
     safePrint("Firebase status: ");
-    //safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden!");
+    // safePrintln(Firebase.ready() ? "Verbonden" : "Niet verbonden!");
     vTaskDelay(15000 / portTICK_PERIOD_MS); // elke 15s
   }
 }
