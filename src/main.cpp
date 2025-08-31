@@ -116,7 +116,7 @@ void setup()
   xTaskCreatePinnedToCore(initFirebaseTask, "FirebaseTask", FIREBASE_STACK, NULL, 2, &firebaseHandle, 1);   // prioriteit 2
   xTaskCreatePinnedToCore(updateTimeToFirebaseTask, "UpdateTask", UPDATE_STACK, NULL, 1, &updateHandle, 1); // prioriteit 1
   xTaskCreatePinnedToCore(mainTask, "MainTask", MAIN_STACK, NULL, 1, &mainHandle, 1);
-  xTaskCreatePinnedToCore(FirebaseInputTask, "FirebaseInputTask", 4096, NULL, configMAX_PRIORITIES - 1, &FirebaseInputTaskHandle, 1);               // prioriteit 1
+  //xTaskCreatePinnedToCore(FirebaseInputTask, "FirebaseInputTask", 4096, NULL, configMAX_PRIORITIES - 1, &FirebaseInputTaskHandle, 1);               // prioriteit 1
   if (debug)
   {
     xTaskCreatePinnedToCore(stackMonitorTask, "StackMonitorTask", STATUS_STACK, NULL, 0, &stackMonitorHandle, 1); // prioriteit 0
