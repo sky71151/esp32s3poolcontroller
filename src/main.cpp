@@ -118,7 +118,7 @@ void setup()
     8192,            // Stack grootte (iets groter ivm init)
     NULL,            // Parameters
     1,               // Prioriteit
-    &firebaseHandle,            // Handle
+    NULL,            // Handle
     1                // Core (1 = app core op ESP32)
   );
 
