@@ -33,9 +33,9 @@ void initFirebaseTask(void *pvParameters)
     firebaseInitialized = true;
 
     for (;;)
-    {
+    {/*
         if (WiFi.status() == WL_CONNECTED && !Firebase.ready())
-        { /*
+        { 
              // Firebase.reset(&config);
              config.api_key = API_KEY;
              config.database_url = DATABASE_URL;
@@ -48,7 +48,7 @@ void initFirebaseTask(void *pvParameters)
              Firebase.reconnectWiFi(true);
              safePrintln("Firebase opnieuw geïnitialiseerd (anoniem)");
              firebaseInitialized = false; // reset status bij herinitialisatie
-             streamConnected = false;*/
+             streamConnected = false;
 
             //firebaseInitialized = false; // reset status bij herinitialisatie
             streamConnected = false;
@@ -179,7 +179,7 @@ void initFirebaseTask(void *pvParameters)
 
             // firebaseInitialized = true;
         }
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(5000 / portTICK_PERIOD_MS);*/
     }
 }
 
