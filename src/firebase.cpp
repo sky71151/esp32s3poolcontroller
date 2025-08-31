@@ -24,7 +24,7 @@ void initFirebaseTask(void *pvParameters)
             {
                 safePrintln("[FIREBASE] Anoniem ingelogd!");
             }
-            else    
+            else
             {
                 safePrint("[FIREBASE] Fout bij anoniem inloggen: ");
                 safePrintln(config.signer.signupError.message.c_str());
@@ -262,26 +262,21 @@ void updateFirebaseInstant(String path, String data)
 
 void FirebaseInputTask(void *pvParameters)
 {
-    String cmd;
+
     while (true)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        char cmd[32];
         while (xQueueReceive(FirebaseInputQueue, &cmd, 0) == pdTRUE)
         {
-            // Verwacht formaat: "1,0,0,0,0,0,0,0"
             int relaisStates[8] = {0};
             int idx = 0;
-            int lastPos = 0;
-            for (int i = 0; i < cmd.length() && idx < 8; i++)
+            char *token = strtok(cmd, ",");
+            while (token != NULL && idx < 8)
             {
-                if (cmd[i] == ',' || i == cmd.length() - 1)
-                {
-                    String val = cmd.substring(lastPos, (cmd[i] == ',') ? i : i + 1);
-                    relaisStates[idx++] = val.toInt();
-                    lastPos = i + 1;
-                }
+                relaisStates[idx++] = atoi(token);
+                token = strtok(NULL, ",");
             }
-            // Zet de relais
             for (int i = 0; i < 8; i++)
             {
                 digitalWrite(RELAY_PINS[i], relaisStates[i] ? HIGH : LOW);
@@ -292,7 +287,9 @@ void FirebaseInputTask(void *pvParameters)
 
 void streamCallbackinput(FirebaseStream data)
 {
-    String InputData = data.stringData();
+    char InputData[32];
+    strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
+    InputData[sizeof(InputData) - 1] = '\0';
     safePrint("[STREAM] Nieuwe waarde: ");
     safePrintln(InputData);
     safePrint("data afkomstig van path : ");

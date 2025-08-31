@@ -80,7 +80,7 @@ void setup()
   data = String("Apparaat gestart, unieke ID: ");
   data.concat(deviceId);
   safePrintln(data);
-  FirebaseInputQueue = xQueueCreate(10, sizeof(String));
+  FirebaseInputQueue = xQueueCreate(10, 32);
   xTaskCreatePinnedToCore(connectToWiFiTask, "WiFiTask", WIFI_STACK, NULL, 2, &wifiHandle, 0); // prioriteit 2
 
   // WiFi-wachtrij met timeout (10s)
