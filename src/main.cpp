@@ -42,7 +42,7 @@ bool inputStreamConnected = false;
 
 const unsigned long updateInterval = 60000; // 1 minuut
 
-String deviceId;
+//String device.Id;
 String bootTimeStr = "";
 
 time_t timeNow = 0;

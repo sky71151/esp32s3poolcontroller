@@ -34,6 +34,7 @@ void downloadAndApplyFirmware()
       else
       {
         Serial.println("OTA update failed");
+        ESP.restart();
       }
     }
     else

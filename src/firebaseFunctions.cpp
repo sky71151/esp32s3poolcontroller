@@ -21,7 +21,7 @@ void initFirebase()
     // config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
     Firebase.begin(&config, &auth);
     String idPath = "devices/";
-    idPath.concat(deviceId);
+    idPath.concat(device.Id);
     String lastBootPath = idPath;
     lastBootPath.concat("/lastBoot");
     String firmwarePath = idPath;
@@ -81,7 +81,7 @@ void initFirebase()
                 safePrintln(msg);
 
                 msg = "Device wordt geregistreerd: ";
-                msg.concat(deviceId);
+                msg.concat(device.Id);
                 safePrintln(msg);
 
                 // Create device data JSON
@@ -89,7 +89,7 @@ void initFirebase()
 
                 // Device info section
                 FirebaseJson DeviceInfo;
-                DeviceInfo.set("clientId", deviceId);
+                DeviceInfo.set("clientId", device.Id);
                 DeviceInfo.set("boardType", "ESP32-S3  R1N16");
                 DeviceInfo.set("firmware", FIRMWARE_VERSION);
                 deviceJson.set("DeviceInfo", DeviceInfo);
@@ -139,7 +139,7 @@ void initFirebase()
 void ConnectInputStream()
 {
     String StreamInputPath = "/devices/";
-    StreamInputPath.concat(deviceId);
+    StreamInputPath.concat(device.Id);
     StreamInputPath.concat("/GPIO/Relays");
     if (Firebase.RTDB.beginStream(&fbdoInput, StreamInputPath.c_str()))
     {
@@ -181,7 +181,7 @@ void updateFirebaseTask(void *pvParameters)
             char timeStr[32];
             strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", localtime(&now));
             String pathTime = "devices/";
-            pathTime.concat(deviceId);
+            pathTime.concat(device.Id);
             pathTime.concat("/Registration/lastSeen");
             if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
             {
@@ -200,7 +200,7 @@ void updateFirebaseTask(void *pvParameters)
             char runtimeStr[16];
             snprintf(runtimeStr, sizeof(runtimeStr), "%02u:%02u", hours, minutes);
             String pathRuntime = "devices/";
-            pathRuntime.concat(deviceId);
+            pathRuntime.concat(device.Id);
             pathRuntime.concat("/Registration/uptime");
             if (Firebase.RTDB.setString(&fbdo, pathRuntime, runtimeStr))
             {
