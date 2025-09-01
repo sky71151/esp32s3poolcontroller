@@ -66,6 +66,7 @@ void setup()
   String data = String("Apparaat gestart, unieke ID: ");
   data.concat(deviceId);
   safePrintln(data);
+  
 
   xTaskCreatePinnedToCore(connectToWiFiTask, "connectToWiFiTask", WIFI_STACK, NULL, 1, &wifiTaskHandle, 1);
     // WiFi-wachtrij met timeout (10s)
