@@ -23,8 +23,7 @@ TaskStackInfo taskStackInfos[] = {
     {"firebaseTask", &firebaseTaskHandle, FIREBASE_STACK},
     {"wifiTask", &wifiTaskHandle, WIFI_STACK},
     {"updateFirebaseTask", &updateFirebaseTaskHandle, UPDATE_FIREBASE_STACK},
-    {"mainTask", &mainTaskHandle, MAIN_STACK}
-};
+    {"mainTask", &mainTaskHandle, MAIN_STACK}};
 
 const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
 
@@ -48,28 +47,31 @@ String bootTimeStr = "";
 
 time_t timeNow = 0;
 
+// lokale variabelen
+unsigned long lastFirmwareConnectAttempt = 0;
+const unsigned long firmwareConnectInterval = 5000; // 5 seconden
+unsigned long lastInputConnectAttempt = 0;
+const unsigned long inputConnectInterval = 5000; // 5 seconden
+
 // lokale functies
 String HuidigeTijd();
 void setupTime();
 void mainTask(void *pvParameters);
-
-
 
 void setup()
 {
   Serial.begin(115200);
   delay(5000);
   Serial.println("Setup gestart!");
-  //gpioConfig();
+  // gpioConfig();
   device.Init();
   Serial.println("GPIO geconfigureerd.");
   String data = String("Apparaat gestart, unieke ID: ");
   data.concat(device.Id);
   safePrintln(data);
-  
 
   xTaskCreatePinnedToCore(connectToWiFiTask, "connectToWiFiTask", WIFI_STACK, NULL, 1, &wifiTaskHandle, 1);
-    // WiFi-wachtrij met timeout (10s)
+  // WiFi-wachtrij met timeout (10s)
   unsigned long wifiWaitStart = millis();
   while (WiFi.status() != WL_CONNECTED && (millis() - wifiWaitStart < 10000))
   {
@@ -79,14 +81,14 @@ void setup()
   {
     safePrintln("[ERROR] WiFi niet verbonden na timeout in setup!");
   }
-  
+
   setupTime();
   safePrint("Tijd gesynchroniseerd: ");
   safePrintln(HuidigeTijd());
   safePrintln("setup firebase");
   initFirebase();
   xTaskCreatePinnedToCore(updateFirebaseTask, "updateFirebaseTask", UPDATE_FIREBASE_STACK, NULL, 1, &updateFirebaseTaskHandle, 1);
-  xTaskCreatePinnedToCore(mainTask, "mainTask", MAIN_STACK, NULL, 1, &mainTaskHandle, 1); 
+  xTaskCreatePinnedToCore(mainTask, "mainTask", MAIN_STACK, NULL, 1, &mainTaskHandle, 1);
 }
 
 void loop()
@@ -110,25 +112,34 @@ void mainTask(void *pvParameters)
           device.inputChanged[i] = false;
         }
       }
-      
+
       device.irsTriggered = false;
     }
 
-    if(updateAvailable)
+    if (updateAvailable)
     {
       performOTA();
     }
     if (!firmwareStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
     {
+      unsigned long currentMillis = millis();
+      if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
+      {
+        lastFirmwareConnectAttempt = currentMillis;
         safePrintln("[STREAM] Probeer opnieuw te verbinden...");
         connectFirmwareStream();
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+      }
     }
+
     if (!inputStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
     {
+      unsigned long currentMillis = millis();
+      if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
+      {
+        lastInputConnectAttempt = currentMillis;
         safePrintln("[STREAM] Probeer opnieuw te verbinden...");
         ConnectInputStream();
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+      }
     }
     // Hoofdtaken uitvoeren
     vTaskDelay(10 / portTICK_PERIOD_MS);
