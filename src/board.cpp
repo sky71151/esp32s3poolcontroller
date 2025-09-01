@@ -48,15 +48,15 @@ String readDipSwitches()
   return dipStates;
 }
 
-Board board;
+Board device;
 
 // ISR's voor alle 6 ingangen
-void IRAM_ATTR inputISR0() { board.handleInputInterrupt(0); }
-void IRAM_ATTR inputISR1() { board.handleInputInterrupt(1); }
-void IRAM_ATTR inputISR2() { board.handleInputInterrupt(2); }
-void IRAM_ATTR inputISR3() { board.handleInputInterrupt(3); }
-void IRAM_ATTR inputISR4() { board.handleInputInterrupt(4); }
-void IRAM_ATTR inputISR5() { board.handleInputInterrupt(5); }
+void IRAM_ATTR inputISR0() { device.handleInputInterrupt(0); }
+void IRAM_ATTR inputISR1() { device.handleInputInterrupt(1); }
+void IRAM_ATTR inputISR2() { device.handleInputInterrupt(2); }
+void IRAM_ATTR inputISR3() { device.handleInputInterrupt(3); }
+void IRAM_ATTR inputISR4() { device.handleInputInterrupt(4); }
+void IRAM_ATTR inputISR5() { device.handleInputInterrupt(5); }
 
 Board::Board()
 {
@@ -69,10 +69,13 @@ Board::Board()
   }
   for (int i = 0; i < 4; i++)
     adc[i] = 0.0;
+
+  irsTriggered = false;
 }
 
 void Board::handleInputInterrupt(int index) {
     inputChanged[index] = true;
+    irsTriggered = true;
 }
 
 void Board::setRelay(int index, int value)
@@ -98,11 +101,11 @@ void Board::setRelays(String relayValues)
   }
 }
 
-bool Board::readInput(int index, int value)
+bool Board::readInput(int index)
 {
   if (index >= 0 && index < 6)
   {
-    input[index] = DIGITAL_INPUT_PINS[index];
+    input[index] = digitalRead(DIGITAL_INPUT_PINS[index]);
     return input[index];
   }
   return -1;
@@ -157,6 +160,7 @@ void Board::Init()
     pinMode(ANALOG_INPUT_PINS[i], INPUT);
   }
   digitalWrite(LED_PIN, LOW);
+  Id = getUniqueClientId();
 
   attachInterrupt(DIGITAL_INPUT_PINS[0], inputISR0, CHANGE);
   attachInterrupt(DIGITAL_INPUT_PINS[1], inputISR1, CHANGE);
@@ -164,4 +168,5 @@ void Board::Init()
   attachInterrupt(DIGITAL_INPUT_PINS[3], inputISR3, CHANGE);
   attachInterrupt(DIGITAL_INPUT_PINS[4], inputISR4, CHANGE);
   attachInterrupt(DIGITAL_INPUT_PINS[5], inputISR5, CHANGE);
+  
 }

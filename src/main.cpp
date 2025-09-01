@@ -60,11 +60,11 @@ void setup()
   Serial.begin(115200);
   delay(5000);
   Serial.println("Setup gestart!");
-  gpioConfig();
+  //gpioConfig();
+  device.Init();
   Serial.println("GPIO geconfigureerd.");
-  deviceId = getUniqueClientId();
   String data = String("Apparaat gestart, unieke ID: ");
-  data.concat(deviceId);
+  data.concat(device.Id);
   safePrintln(data);
   
 
@@ -99,6 +99,21 @@ void mainTask(void *pvParameters)
 {
   while (true)
   {
+    if (device.irsTriggered)
+    {
+      for (int i = 0; i < NUM_DIGITAL_INPUTS; i++)
+      {
+        if (device.inputChanged[i])
+        {
+          String message = String("Digitale ingang ") + String(i) + String(" veranderd: ") + String(device.readInput(i));
+          safePrintln(message);
+          device.inputChanged[i] = false;
+        }
+      }
+      
+      device.irsTriggered = false;
+    }
+
     if(updateAvailable)
     {
       performOTA();
@@ -107,14 +122,16 @@ void mainTask(void *pvParameters)
     {
         safePrintln("[STREAM] Probeer opnieuw te verbinden...");
         connectFirmwareStream();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
     if (!inputStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
     {
         safePrintln("[STREAM] Probeer opnieuw te verbinden...");
         ConnectInputStream();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
     // Hoofdtaken uitvoeren
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
 

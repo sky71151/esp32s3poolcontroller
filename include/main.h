@@ -19,7 +19,7 @@
 #include "version.h"
 #include "ota.h"
 #include "Update.h"
-#include "device.h"
+
 
 
 #define WIFI_STACK 8192
@@ -75,6 +75,6 @@ extern bool inputStreamConnected;
 extern bool debugMode;
 extern time_t timeNow;
 
-extern Device device;
+extern Board device;
 
 #endif

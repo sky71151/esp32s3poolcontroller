@@ -47,12 +47,14 @@ public:
     double adcValues[4];
     double adc[4];
     volatile bool inputChanged[6];
+    volatile bool irsTriggered;
+    String Id; // Unieke ID van het bord
     
     // Voeg hier meer eigenschappen/methodes toe
 
     Board(); // constructor
     void setRelay(int index, int value);
-    bool readInput(int index, int value);
+    bool readInput(int index);
     double getAdcValue(int index) const;
     void updateAdcValues();
     void updateInputValues();
