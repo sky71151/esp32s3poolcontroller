@@ -219,6 +219,7 @@ void updateFirebaseTask(void *pvParameters)
 
 void streamCallbackinput(FirebaseStream data)
 {
+    digitalWrite(LED_PIN, HIGH);
     char InputData[32];
     strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
     InputData[sizeof(InputData) - 1] = '\0';
@@ -226,6 +227,7 @@ void streamCallbackinput(FirebaseStream data)
     safePrintln(InputData);
     safePrint("data afkomstig van path : ");
     safePrintln(data.dataPath());
+    digitalWrite(LED_PIN, LOW);
     // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
     // vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
 }
