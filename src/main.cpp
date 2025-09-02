@@ -102,13 +102,22 @@ void mainTask(void *pvParameters)
 {
   while (true)
   {
+    //---------------------------------------------------------------------
+    // Hoofdtaken uitvoeren
+    //---------------------------------------------------------------------
+
+    //check if interrupt is triggered
+    //---------------------------------------------------------------------
     if (device.irsTriggered)
     {
       for (int i = 0; i < NUM_DIGITAL_INPUTS; i++)
       {
         if (device.inputChanged[i])
         {
-          String message = String("Digitale ingang ") + String(i) + String(" veranderd: ") + String(device.readInput(i));
+          String message = String("Digitale ingang ");
+          message.concat(String(i));
+          message.concat(" veranderd: ");
+          message.concat(String(device.readInput(i)));
           safePrintln(message);
           device.inputChanged[i] = false;
         }
@@ -118,20 +127,29 @@ void mainTask(void *pvParameters)
     }
 
     // stream ontvangen
+    //---------------------------------------------------------------------
     if (streamReceived)
     {
       safePrintln("[STREAM] Nieuwe stream data ontvangen.");
       String message = String("Laatst ontvangen stream: ");
       message.concat(HuidigeTijd());
-      Firebase.RTDB.setString(&fbdo, "devices/" + device.Id + "/Registration/lastStreamData", message);
+      String path = "devices/";
+      path.concat(device.Id);
+      path.concat("/Registration/lastStreamData");
+      Firebase.RTDB.setString(&fbdo, path, message);
       streamReceived = false;
     }
 
+    //check if update is available
+    //---------------------------------------------------------------------
     if (updateAvailable)
     {
       performOTA();
     }
-    if (!firmwareStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
+
+    // check stream verbinding.
+    //---------------------------------------------------------------------
+    if ((!firmwareStreamConnected || !fbdoStream.httpConnected()) && WiFi.status() == WL_CONNECTED && Firebase.ready())
     {
       unsigned long currentMillis = millis();
       if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
@@ -142,7 +160,7 @@ void mainTask(void *pvParameters)
       }
     }
 
-    if (!inputStreamConnected && WiFi.status() == WL_CONNECTED && Firebase.ready())
+    if ((!inputStreamConnected || !fbdoInput.httpConnected()) && WiFi.status() == WL_CONNECTED && Firebase.ready())
     {
       unsigned long currentMillis = millis();
       if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
@@ -152,7 +170,7 @@ void mainTask(void *pvParameters)
         ConnectInputStream();
       }
     }
-    // Hoofdtaken uitvoeren
+      
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }

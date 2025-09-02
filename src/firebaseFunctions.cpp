@@ -219,18 +219,28 @@ void updateFirebaseTask(void *pvParameters)
 
 void streamCallbackinput(FirebaseStream data)
 {
-    streamReceived = true;
-    digitalWrite(LED_PIN, HIGH);
-    char InputData[32];
-    strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
-    InputData[sizeof(InputData) - 1] = '\0';
-    safePrint("[STREAM] Nieuwe waarde: ");
-    safePrintln(InputData);
-    safePrint("data afkomstig van path : ");
-    safePrintln(data.dataPath());
-    digitalWrite(LED_PIN, LOW);
-    // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
-    // vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
+    if (fbdoInput.errorCode() != 0)
+    {
+        String Message = "[STREAM] Error: ";
+        Message.concat(String(fbdoInput.errorCode()));
+        safePrintln(Message);
+        inputStreamConnected = false;
+    }
+    else
+    {
+        streamReceived = true;
+        digitalWrite(LED_PIN, HIGH);
+        char InputData[32];
+        strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
+        InputData[sizeof(InputData) - 1] = '\0';
+        safePrint("[STREAM] Nieuwe waarde: ");
+        safePrintln(InputData);
+        safePrint("data afkomstig van path : ");
+        safePrintln(data.dataPath());
+        digitalWrite(LED_PIN, LOW);
+        // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
+        // vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
+    }
 }
 
 void streamTimeoutCallbackinput(bool timeout)
@@ -246,17 +256,26 @@ void streamTimeoutCallbackinput(bool timeout)
 
 void streamCallback(FirebaseStream data)
 {
-    streamReceived = true;
-    safePrint("[STREAM] Nieuwe waarde: ");
-    safePrintln(data.stringData());
-    // convert strindata to double
-    if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
+    if (fbdoStream.errorCode() != 0)
     {
-        safePrintln("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
-        updateAvailable = true;
-        digitalWrite(LED_PIN, HIGH);
-
-       
+        String Message = "[STREAM] Error: ";
+        Message.concat(String(fbdoStream.errorCode()));
+        safePrintln(Message);
+        firmwareStreamConnected = false;
+    }
+    else
+    {
+        firmwareStreamConnected = true;
+        streamReceived = true;
+        safePrint("[STREAM] Nieuwe waarde: ");
+        safePrintln(data.stringData());
+        // convert strindata to double
+        if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
+        {
+            safePrintln("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
+            updateAvailable = true;
+            digitalWrite(LED_PIN, HIGH);
+        }
     }
 }
 
@@ -270,5 +289,3 @@ void streamTimeoutCallback(bool timeout)
         firmwareStreamConnected = false;
     }
 }
-
-
