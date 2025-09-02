@@ -39,6 +39,7 @@ bool streamConnected = false;
 bool bootTimeUploaded = false;
 bool firmwareStreamConnected = false;
 bool inputStreamConnected = false;
+bool streamReceived = false;
 
 const unsigned long updateInterval = 60000; // 1 minuut
 
@@ -114,6 +115,16 @@ void mainTask(void *pvParameters)
       }
 
       device.irsTriggered = false;
+    }
+
+    // stream ontvangen
+    if (streamReceived)
+    {
+      safePrintln("[STREAM] Nieuwe stream data ontvangen.");
+      String message = String("Laatst ontvangen stream: ");
+      message.concat(HuidigeTijd());
+      Firebase.RTDB.setString(&fbdo, "devices/" + device.Id + "/Registration/lastStreamData", message);
+      streamReceived = false;
     }
 
     if (updateAvailable)

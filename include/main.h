@@ -71,6 +71,7 @@ extern bool flashReady;
 extern bool signupOK;
 extern bool firmwareStreamConnected;
 extern bool inputStreamConnected; 
+extern bool streamReceived;
 
 extern bool debugMode;
 extern time_t timeNow;

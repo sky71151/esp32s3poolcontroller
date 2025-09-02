@@ -219,6 +219,7 @@ void updateFirebaseTask(void *pvParameters)
 
 void streamCallbackinput(FirebaseStream data)
 {
+    streamReceived = true;
     digitalWrite(LED_PIN, HIGH);
     char InputData[32];
     strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
@@ -245,6 +246,7 @@ void streamTimeoutCallbackinput(bool timeout)
 
 void streamCallback(FirebaseStream data)
 {
+    streamReceived = true;
     safePrint("[STREAM] Nieuwe waarde: ");
     safePrintln(data.stringData());
     // convert strindata to double
