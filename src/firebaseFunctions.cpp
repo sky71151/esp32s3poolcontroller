@@ -300,6 +300,10 @@ void streamCallbackinput(FirebaseStream data)
         safePrint("data afkomstig van path : ");
         safePrintln(data.dataPath());
         digitalWrite(LED_PIN, LOW);
+        if (data.dataPath() == "/led")
+        {
+            digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+        }
         // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
         // vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
     }
