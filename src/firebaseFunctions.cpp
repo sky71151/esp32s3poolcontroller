@@ -136,8 +136,8 @@ void initFirebase()
     {
         safePrintln("Firebase is ready and initialized");
         safePrintln("setting up Firebase RTDB stream");
-        connectFirmwareStream();
-        ConnectInputStream();
+        //connectFirmwareStream();
+        //ConnectInputStream();
     }
 }
 
