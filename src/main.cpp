@@ -17,13 +17,15 @@ TaskHandle_t firebaseTaskHandle;
 TaskHandle_t wifiTaskHandle;
 TaskHandle_t updateFirebaseTaskHandle;
 TaskHandle_t mainTaskHandle;
+TaskHandle_t FirebaseStreamTaskHandle;
 
 // TaskStackInfo
 TaskStackInfo taskStackInfos[] = {
     {"firebaseTask", &firebaseTaskHandle, FIREBASE_STACK},
     {"wifiTask", &wifiTaskHandle, WIFI_STACK},
     {"updateFirebaseTask", &updateFirebaseTaskHandle, UPDATE_FIREBASE_STACK},
-    {"mainTask", &mainTaskHandle, MAIN_STACK}};
+    {"mainTask", &mainTaskHandle, MAIN_STACK},
+    {"FirebaseStreamTask", &FirebaseStreamTaskHandle, FIREBASE_STREAM_STACK}};
 
 const int numTasks = sizeof(taskStackInfos) / sizeof(taskStackInfos[0]);
 
@@ -58,6 +60,7 @@ const unsigned long inputConnectInterval = 5000; // 5 seconden
 String HuidigeTijd();
 void setupTime();
 void mainTask(void *pvParameters);
+void firebaseStreamTask(void *pvParameters);
 
 void setup()
 {
@@ -71,7 +74,7 @@ void setup()
   data.concat(device.Id);
   safePrintln(data);
 
-  xTaskCreatePinnedToCore(connectToWiFiTask, "connectToWiFiTask", WIFI_STACK, NULL, 1, &wifiTaskHandle, 1);
+  xTaskCreatePinnedToCore(connectToWiFiTask, "connectToWiFiTask", WIFI_STACK, NULL, 1, &wifiTaskHandle, 0);
   // WiFi-wachtrij met timeout (10s)
   unsigned long wifiWaitStart = millis();
   while (WiFi.status() != WL_CONNECTED && (millis() - wifiWaitStart < 10000))
@@ -88,8 +91,9 @@ void setup()
   safePrintln(HuidigeTijd());
   safePrintln("setup firebase");
   initFirebase();
-  xTaskCreatePinnedToCore(updateFirebaseTask, "updateFirebaseTask", UPDATE_FIREBASE_STACK, NULL, 1, &updateFirebaseTaskHandle, 1);
+  xTaskCreatePinnedToCore(updateFirebaseTask, "updateFirebaseTask", UPDATE_FIREBASE_STACK, NULL, 1, &updateFirebaseTaskHandle, 0);
   xTaskCreatePinnedToCore(mainTask, "mainTask", MAIN_STACK, NULL, 1, &mainTaskHandle, 1);
+  xTaskCreatePinnedToCore(firebaseStreamTask, "firebaseStreamTask", FIREBASE_STREAM_STACK, NULL, 1, &FirebaseStreamTaskHandle, 1);
 }
 
 void loop()
@@ -149,9 +153,27 @@ void mainTask(void *pvParameters)
 
     // check stream verbinding.
     //---------------------------------------------------------------------
-    manageFirebaseStreams();
+    //manageFirebaseStreams();
 
     vTaskDelay(100 / portTICK_PERIOD_MS);
+  }
+}
+
+void firebaseStreamTask(void *pvParameters)
+{
+  while (true)
+  {
+    if (firebaseInitialized && !streamConnected && (millis() - lastFirmwareConnectAttempt > firmwareConnectInterval))
+    {
+      connectFirmwareStream();
+      lastFirmwareConnectAttempt = millis();
+    }
+    if (firebaseInitialized && !inputStreamConnected && (millis() - lastInputConnectAttempt > inputConnectInterval))
+    {
+      ConnectInputStream();
+      lastInputConnectAttempt = millis();
+    }
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
 }
 

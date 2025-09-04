@@ -28,6 +28,7 @@
 #define UPDATE_STACK 16384
 #define MAIN_STACK 16384
 #define UPDATE_FIREBASE_STACK 16384
+#define FIREBASE_STREAM_STACK 8000
 
 typedef struct {
   const char *name;
@@ -44,6 +45,7 @@ extern TaskHandle_t mainHandle;
 extern TaskHandle_t stackMonitorHandle;
 extern TaskHandle_t FirebaseInputTaskHandle;
 extern TaskHandle_t updateFirebaseTaskHandle;
+extern TaskHandle_t FirebaseStreamTaskHandle;
 
 extern TaskStackInfo taskStackInfos[];
 
