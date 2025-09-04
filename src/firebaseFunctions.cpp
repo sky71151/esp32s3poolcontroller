@@ -291,7 +291,7 @@ void streamCallbackinput(FirebaseStream data)
     else
     {
         streamReceived = true;
-        digitalWrite(LED_PIN, HIGH);
+
         char InputData[32];
         strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
         InputData[sizeof(InputData) - 1] = '\0';
@@ -299,7 +299,6 @@ void streamCallbackinput(FirebaseStream data)
         safePrintln(InputData);
         safePrint("data afkomstig van path : ");
         safePrintln(data.dataPath());
-        digitalWrite(LED_PIN, LOW);
         if (data.dataPath() == "/Led")
         {
             digitalWrite(LED_PIN, !digitalRead(LED_PIN));
