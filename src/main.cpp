@@ -43,7 +43,7 @@ bool streamReceived = false;
 
 const unsigned long updateInterval = 60000; // 1 minuut
 
-//String device.Id;
+// String device.Id;
 String bootTimeStr = "";
 
 time_t timeNow = 0;
@@ -106,7 +106,7 @@ void mainTask(void *pvParameters)
     // Hoofdtaken uitvoeren
     //---------------------------------------------------------------------
 
-    //check if interrupt is triggered
+    // check if interrupt is triggered
     //---------------------------------------------------------------------
     if (device.irsTriggered)
     {
@@ -140,7 +140,7 @@ void mainTask(void *pvParameters)
       streamReceived = false;
     }
 
-    //check if update is available
+    // check if update is available
     //---------------------------------------------------------------------
     if (updateAvailable)
     {
@@ -149,29 +149,9 @@ void mainTask(void *pvParameters)
 
     // check stream verbinding.
     //---------------------------------------------------------------------
-    if ((!firmwareStreamConnected || !fbdoStream.httpConnected()) && WiFi.status() == WL_CONNECTED && Firebase.ready())
-    {
-      unsigned long currentMillis = millis();
-      if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
-      {
-        lastFirmwareConnectAttempt = currentMillis;
-        safePrintln("[STREAM] Probeer opnieuw te verbinden...");
-        connectFirmwareStream();
-      }
-    }
+    manageFirebaseStreams();
 
-    if ((!inputStreamConnected || !fbdoInput.httpConnected()) && WiFi.status() == WL_CONNECTED && Firebase.ready())
-    {
-      unsigned long currentMillis = millis();
-      if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
-      {
-        lastInputConnectAttempt = currentMillis;
-        safePrintln("[STREAM] Probeer opnieuw te verbinden...");
-        ConnectInputStream();
-      }
-    }
-      
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
 

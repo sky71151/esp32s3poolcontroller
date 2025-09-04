@@ -73,6 +73,11 @@ extern bool firmwareStreamConnected;
 extern bool inputStreamConnected; 
 extern bool streamReceived;
 
+extern unsigned long lastFirmwareConnectAttempt;
+extern const unsigned long firmwareConnectInterval;
+extern unsigned long lastInputConnectAttempt;
+extern const unsigned long inputConnectInterval;
+
 extern bool debugMode;
 extern time_t timeNow;
 

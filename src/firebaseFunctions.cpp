@@ -1,6 +1,8 @@
 #include "firebaseFunctions.h"
 
 // firebase paths
+unsigned long lastStreamResetTime = 0;
+const unsigned long streamResetInterval = 30 * 60 * 1000; // 30 minuten
 
 void initFirebase()
 {
@@ -171,6 +173,40 @@ void connectFirmwareStream()
     }
 }
 
+void manageFirebaseStreams()
+{
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready()) {
+        unsigned long currentMillis = millis();
+
+        // Check voor periodieke herstart van de streams
+        if (currentMillis - lastStreamResetTime >= streamResetInterval) {
+            safePrintln("[STREAM] Periodieke reset van alle streams...");
+            Firebase.RTDB.endStream(&fbdoStream);
+            Firebase.RTDB.endStream(&fbdoInput);
+            firmwareStreamConnected = false;
+            inputStreamConnected = false;
+            lastStreamResetTime = currentMillis;
+        }
+
+        // Firmware stream
+        if (!firmwareStreamConnected) {
+            if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval) {
+                lastFirmwareConnectAttempt = currentMillis;
+                safePrintln("[STREAM] Probeer firmware stream opnieuw te verbinden...");
+                connectFirmwareStream();
+            }
+        }
+        // Input stream
+        if (!inputStreamConnected) {
+            if (currentMillis - lastInputConnectAttempt >= inputConnectInterval) {
+                lastInputConnectAttempt = currentMillis;
+                safePrintln("[STREAM] Probeer input stream opnieuw te verbinden...");
+                ConnectInputStream();
+            }
+        }
+    }
+}
+
 void updateFirebaseTask(void *pvParameters)
 {
     while (true)
@@ -265,7 +301,6 @@ void streamCallback(FirebaseStream data)
     }
     else
     {
-        firmwareStreamConnected = true;
         streamReceived = true;
         safePrint("[STREAM] Nieuwe waarde: ");
         safePrintln(data.stringData());

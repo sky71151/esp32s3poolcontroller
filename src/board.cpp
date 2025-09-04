@@ -115,7 +115,7 @@ double Board::getAdcValue(int index) const
 {
   if (index >= 0 && index < 4)
   {
-    double adc = analogRead(input[index]);
+    double adc = analogRead(ANALOG_INPUT_PINS[index]);
     return adc;
   }
 
