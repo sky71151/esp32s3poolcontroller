@@ -300,7 +300,7 @@ void streamCallbackinput(FirebaseStream data)
         safePrint("data afkomstig van path : ");
         safePrintln(data.dataPath());
         digitalWrite(LED_PIN, LOW);
-        if (data.dataPath() == "/led")
+        if (data.dataPath() == "/Led")
         {
             digitalWrite(LED_PIN, !digitalRead(LED_PIN));
         }
