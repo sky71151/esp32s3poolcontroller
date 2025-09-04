@@ -11,6 +11,8 @@ void initFirebase()
     config.api_key = API_KEY;
     config.database_url = DATABASE_URL;
     fbdo.setBSSLBufferSize(4096, 1024);
+    fbdoStream.setBSSLBufferSize(4096, 1024);
+    fbdoInput.setBSSLBufferSize(4096, 1024);
     safePrint("Sign up new user... ");
     if (Firebase.signUp(&config, &auth, "", ""))
     {
