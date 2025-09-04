@@ -149,7 +149,7 @@ void mainTask(void *pvParameters)
 
     // check stream verbinding.
     //---------------------------------------------------------------------
-    //manageFirebaseStreams();
+    manageFirebaseStreams();
 
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }

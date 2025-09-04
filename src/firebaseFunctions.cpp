@@ -68,6 +68,7 @@ void initFirebase()
                     safePrint("Firmware version update: ");
                     safePrintln(firmwareVersion);
                     firebaseInitialized = true;
+                    vTaskDelay(500 / portTICK_PERIOD_MS);
                 }
                 else
                 {
@@ -117,6 +118,7 @@ void initFirebase()
                 {
                     safePrintln("Device geregistreerd in Firebase Realtime Database.");
                     firebaseInitialized = true;
+                    vTaskDelay(500 / portTICK_PERIOD_MS);
                 }
                 else
                 {
@@ -185,7 +187,7 @@ void connectFirmwareStream()
 
 void manageFirebaseStreams()
 {
-    if (WiFi.status() == WL_CONNECTED && Firebase.ready()) {
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized) {
         unsigned long currentMillis = millis();
 
         // Check voor periodieke herstart van de streams
