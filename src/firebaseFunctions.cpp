@@ -361,7 +361,14 @@ void streamCallbackinput(FirebaseStream data)
         #endif
         if (data.dataPath() == "/Led")
         {
-            digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+            if (data.stringData() == "1")
+            {
+                digitalWrite(LED_PIN, HIGH);
+            }
+            else if (data.stringData() == "0")
+            {
+                digitalWrite(LED_PIN, LOW);
+            }
         }
         // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
         // vTaskNotifyGiveFromISR(FirebaseInputTaskHandle, NULL);
