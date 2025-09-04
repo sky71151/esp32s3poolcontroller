@@ -9,6 +9,7 @@
 #include <HTTPUpdate.h>
 #include <WiFiClientSecure.h>
 #include <WiFiClient.h>
+#include <ArduinoJson.h>
 
 //eigen includes
 #include "serial.h"

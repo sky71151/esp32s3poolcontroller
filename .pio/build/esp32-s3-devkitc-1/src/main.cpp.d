@@ -396,6 +396,9 @@
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src/HTTPUpdate.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/WiFiClientSecure.h \
  C:/Users/vanba/.platformio/packages/framework-arduinoespressif32/libraries/NetworkClientSecure/src/NetworkClientSecure.h \
+ .pio/libdeps/esp32-s3-devkitc-1/ArduinoJson/src/ArduinoJson.h \
+ .pio/libdeps/esp32-s3-devkitc-1/ArduinoJson/src/ArduinoJson.hpp \
+ .pio/libdeps/esp32-s3-devkitc-1/ArduinoJson/src/ArduinoJson/Configuration.hpp \
  include/serial.h include/main.h include/wifiTask.h include/board.h \
  include/secrets.h include/firebaseFunctions.h src/version.h \
  include/ota.h
