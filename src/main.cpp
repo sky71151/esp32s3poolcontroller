@@ -153,7 +153,7 @@ void mainTask(void *pvParameters)
 
     // check stream verbinding.
     //---------------------------------------------------------------------
-    //manageFirebaseStreams();
+    // manageFirebaseStreams();
 
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
@@ -163,15 +163,45 @@ void firebaseStreamTask(void *pvParameters)
 {
   while (true)
   {
-    if (firebaseInitialized && !streamConnected && (millis() - lastFirmwareConnectAttempt > firmwareConnectInterval))
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready())
     {
-      connectFirmwareStream();
-      lastFirmwareConnectAttempt = millis();
-    }
-    if (firebaseInitialized && !inputStreamConnected && (millis() - lastInputConnectAttempt > inputConnectInterval))
-    {
-      ConnectInputStream();
-      lastInputConnectAttempt = millis();
+      unsigned long currentMillis = millis();
+
+      // Check voor periodieke herstart van de streams
+      if (currentMillis - lastStreamResetTime >= streamResetInterval)
+      {
+        safePrintln("[STREAM] Periodieke reset van alle streams...");
+        Firebase.RTDB.endStream(&fbdoStream);
+        Firebase.RTDB.endStream(&fbdoInput);
+        firmwareStreamConnected = false;
+        inputStreamConnected = false;
+        lastStreamResetTime = currentMillis;
+      }
+
+      // Firmware stream
+      if (!firmwareStreamConnected)
+      {
+        // Voeg hier een korte vertraging toe om de stack te laten herstellen
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+        if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
+        {
+          lastFirmwareConnectAttempt = currentMillis;
+          safePrintln("[STREAM] Probeer firmware stream opnieuw te verbinden...");
+          connectFirmwareStream();
+        }
+      }
+      // Input stream
+      if (!inputStreamConnected)
+      {
+        // Voeg hier een korte vertraging toe om de stack te laten herstellen
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+        if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
+        {
+          lastInputConnectAttempt = currentMillis;
+          safePrintln("[STREAM] Probeer input stream opnieuw te verbinden...");
+          ConnectInputStream();
+        }
+      }
     }
     vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
