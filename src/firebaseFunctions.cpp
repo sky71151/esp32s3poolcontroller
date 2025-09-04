@@ -151,7 +151,7 @@ void ConnectInputStream()
     }
     String StreamInputPath = "/devices/";
     StreamInputPath.concat(device.Id);
-    StreamInputPath.concat("/GPIO/Relays");
+    StreamInputPath.concat("/GPIO");
     if (Firebase.RTDB.beginStream(&fbdoInput, StreamInputPath.c_str()))
     {
         Firebase.RTDB.setStreamCallback(&fbdoInput, streamCallbackinput, streamTimeoutCallbackinput);
