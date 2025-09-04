@@ -68,8 +68,6 @@ void initFirebase()
                     safePrint("Firmware version update: ");
                     safePrintln(firmwareVersion);
                     firebaseInitialized = true;
-                    connectFirmwareStream();
-                    ConnectInputStream();
                 }
                 else
                 {
@@ -119,8 +117,6 @@ void initFirebase()
                 {
                     safePrintln("Device geregistreerd in Firebase Realtime Database.");
                     firebaseInitialized = true;
-                    connectFirmwareStream();
-                    ConnectInputStream();
                 }
                 else
                 {
@@ -138,8 +134,8 @@ void initFirebase()
     {
         safePrintln("Firebase is ready and initialized");
         safePrintln("setting up Firebase RTDB stream");
-        //connectFirmwareStream();
-        //ConnectInputStream();
+        connectFirmwareStream();
+        ConnectInputStream();
     }
 }
 
@@ -162,6 +158,7 @@ void ConnectInputStream()
         safePrint("Stream start mislukt: ");
         safePrintln(fbdoInput.errorReason());
         inputStreamConnected = false;
+        fbdoInput.clear(); // Reset de interne status
     }
 }
 
@@ -170,6 +167,7 @@ void connectFirmwareStream()
     if (fbdoStream.httpConnected()) {
         Firebase.RTDB.endStream(&fbdoStream);
     }
+
     if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
     {
         Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
@@ -181,6 +179,7 @@ void connectFirmwareStream()
         firmwareStreamConnected = false;
         safePrint("Stream start mislukt: ");
         safePrintln(fbdoStream.errorReason());
+        fbdoStream.clear(); // Reset de interne status
     }
 }
 
