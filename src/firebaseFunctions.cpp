@@ -145,6 +145,9 @@ void initFirebase()
 
 void ConnectInputStream()
 {
+    if (fbdoInput.httpConnected()) {
+        Firebase.RTDB.endStream(&fbdoInput);
+    }
     String StreamInputPath = "/devices/";
     StreamInputPath.concat(device.Id);
     StreamInputPath.concat("/GPIO/Relays");
@@ -164,6 +167,9 @@ void ConnectInputStream()
 
 void connectFirmwareStream()
 {
+    if (fbdoStream.httpConnected()) {
+        Firebase.RTDB.endStream(&fbdoStream);
+    }
     if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
     {
         Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
