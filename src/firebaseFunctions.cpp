@@ -67,13 +67,16 @@ void initFirebase()
                 {
                     safePrint("Firmware version update: ");
                     safePrintln(firmwareVersion);
+                    firebaseInitialized = true;
+                    connectFirmwareStream();
+                    ConnectInputStream();
                 }
                 else
                 {
                     safePrint("Fout bij uploaden firmware versie: ");
                     safePrintln(fbdo.errorReason());
                 }
-                firebaseInitialized = true;
+                
             }
             else
             {
@@ -116,6 +119,8 @@ void initFirebase()
                 {
                     safePrintln("Device geregistreerd in Firebase Realtime Database.");
                     firebaseInitialized = true;
+                    connectFirmwareStream();
+                    ConnectInputStream();
                 }
                 else
                 {
@@ -133,8 +138,8 @@ void initFirebase()
     {
         safePrintln("Firebase is ready and initialized");
         safePrintln("setting up Firebase RTDB stream");
-        connectFirmwareStream();
-        ConnectInputStream();
+        //connectFirmwareStream();
+        //ConnectInputStream();
     }
 }
 
@@ -255,7 +260,7 @@ void updateFirebaseTask(void *pvParameters)
 
 void streamCallbackinput(FirebaseStream data)
 {
-    if (fbdoInput.errorCode() != 0)
+    if (fbdoInput.errorCode() != 0 && fbdoInput.errorCode() != 200)
     {
         String Message = "[STREAM] Error: ";
         Message.concat(String(fbdoInput.errorCode()));
@@ -292,7 +297,7 @@ void streamTimeoutCallbackinput(bool timeout)
 
 void streamCallback(FirebaseStream data)
 {
-    if (fbdoStream.errorCode() != 0)
+    if (fbdoStream.errorCode() != 0 && fbdoStream.errorCode() != 200)
     {
         String Message = "[STREAM] Error: ";
         Message.concat(String(fbdoStream.errorCode()));
