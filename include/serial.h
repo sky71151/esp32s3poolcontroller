@@ -3,7 +3,9 @@
 
 #include "main.h"
 
+#if DEBUG
 void safePrint(const String &msg);
 void safePrintln(const String &msg);
+#endif
 
 #endif

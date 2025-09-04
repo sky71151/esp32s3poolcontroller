@@ -6,22 +6,33 @@ const unsigned long streamResetInterval = 30 * 60 * 1000; // 30 minuten
 
 void initFirebase()
 {
+    #if DEBUG
     safePrint("Firebase Client v");
     safePrintln(FIREBASE_CLIENT_VERSION);
+    #endif
     config.api_key = API_KEY;
     config.database_url = DATABASE_URL;
     // Verhoog de SSL-buffergrootte om SSL-fouten te voorkomen
     fbdo.setBSSLBufferSize(32768, 4096);
     fbdoStream.setBSSLBufferSize(32768, 4096);
     fbdoInput.setBSSLBufferSize(32768, 4096);
+    #if DEBUG
     safePrint("Sign up new user... ");
+    #endif
     if (Firebase.signUp(&config, &auth, "", ""))
     {
+        #if DEBUG
         safePrintln("ok");
+        #endif
         signupOK = true;
     }
-    else
+    else{
+        #if DEBUG
+        safePrintln("Fout bij aanmaken gebruiker: ");
         safePrintln(config.signer.signupError.message.c_str());
+        #endif
+    }
+        
 
     // config.token_status_callback = tokenStatusCallback; // see addons/TokenHelper.h
     Firebase.begin(&config, &auth);
@@ -44,7 +55,9 @@ void initFirebase()
                 {
                     String msg = "Pad bestaat: ";
                     msg.concat(idPath);
+                    #if DEBUG
                     safePrintln(msg);
+                    #endif
                 }
                 time_t now = time(nullptr);
                 char timeStr[32];
@@ -53,13 +66,17 @@ void initFirebase()
                 pathTime.concat("/Registration/lastBoot");
                 if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
                 {
+                    #if DEBUG
                     safePrint("Boot Time update: ");
                     safePrintln(timeStr);
+                    #endif
                 }
                 else
                 {
+                    #if DEBUG
                     safePrint("Fout bij uploaden boot tijd: ");
                     safePrintln(fbdo.errorReason());
+                    #endif
                 }
                 String pathFirmware = idPath;
                 pathFirmware.concat("/DeviceInfo/firmware");
@@ -68,15 +85,19 @@ void initFirebase()
                 firmwareVersion.concat(timeStr);
                 if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), firmwareVersion))
                 {
+                    #if DEBUG
                     safePrint("Firmware version update: ");
                     safePrintln(firmwareVersion);
+                    #endif
                     firebaseInitialized = true;
                     vTaskDelay(500 / portTICK_PERIOD_MS);
                 }
                 else
                 {
+                    #if DEBUG
                     safePrint("Fout bij uploaden firmware versie: ");
                     safePrintln(fbdo.errorReason());
+                    #endif
                 }
             }
             else
@@ -84,11 +105,15 @@ void initFirebase()
 
                 String msg = "Pad bestaat niet: ";
                 msg.concat(idPath);
+                #if DEBUG
                 safePrintln(msg);
+                #endif
 
                 msg = "Device wordt geregistreerd: ";
                 msg.concat(device.Id);
+                #if DEBUG
                 safePrintln(msg);
+                #endif
 
                 // Create device data JSON
                 FirebaseJson deviceJson;
@@ -118,26 +143,34 @@ void initFirebase()
 
                 if (Firebase.RTDB.setJSON(&fbdo, idPath.c_str(), &deviceJson))
                 {
+                    #if DEBUG
                     safePrintln("Device geregistreerd in Firebase Realtime Database.");
+                    #endif
                     firebaseInitialized = true;
                     vTaskDelay(500 / portTICK_PERIOD_MS);
                 }
                 else
                 {
+                    #if DEBUG
                     safePrint("Fout bij registreren device: ");
                     safePrintln(fbdo.errorReason());
+                    #endif
                 }
             }
         }
         else
         {
+            #if DEBUG
             safePrintln("Firebase is not ready");
+            #endif
         }
     }
     if (Firebase.ready() && signupOK && firebaseInitialized)
     {
+        #if DEBUG
         safePrintln("Firebase is ready and initialized");
         safePrintln("setting up Firebase RTDB stream");
+        #endif
         // connectFirmwareStream();
         // ConnectInputStream();
     }
@@ -155,13 +188,17 @@ void ConnectInputStream()
     if (Firebase.RTDB.beginStream(&fbdoInput, StreamInputPath.c_str()))
     {
         Firebase.RTDB.setStreamCallback(&fbdoInput, streamCallbackinput, streamTimeoutCallbackinput);
+        #if DEBUG
         safePrintln("Input stream gestart!");
+        #endif
         inputStreamConnected = true;
     }
     else
     {
+        #if DEBUG
         safePrint("Stream start mislukt: ");
         safePrintln(fbdoInput.errorReason());
+        #endif
         inputStreamConnected = false;
         fbdoInput.clear(); // Reset de interne status
     }
@@ -177,14 +214,18 @@ void connectFirmwareStream()
     if (Firebase.RTDB.beginStream(&fbdoStream, "/firmware/latest_version"))
     {
         Firebase.RTDB.setStreamCallback(&fbdoStream, streamCallback, streamTimeoutCallback);
+        #if DEBUG
         safePrintln("Stream gestart!");
+        #endif
         firmwareStreamConnected = true;
     }
     else
     {
         firmwareStreamConnected = false;
+        #if DEBUG
         safePrint("Stream start mislukt: ");
         safePrintln(fbdoStream.errorReason());
+        #endif
         fbdoStream.clear(); // Reset de interne status
     }
 }
@@ -198,7 +239,9 @@ void manageFirebaseStreams()
         // Check voor periodieke herstart van de streams
         if (currentMillis - lastStreamResetTime >= streamResetInterval)
         {
+            #if DEBUG
             safePrintln("[STREAM] Periodieke reset van alle streams...");
+            #endif
             Firebase.RTDB.endStream(&fbdoStream);
             Firebase.RTDB.endStream(&fbdoInput);
             firmwareStreamConnected = false;
@@ -212,7 +255,9 @@ void manageFirebaseStreams()
             if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
             {
                 lastFirmwareConnectAttempt = currentMillis;
+                #if DEBUG
                 safePrintln("[STREAM] Probeer firmware stream opnieuw te verbinden...");
+                #endif
                 connectFirmwareStream();
             }
         }
@@ -222,7 +267,9 @@ void manageFirebaseStreams()
             if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
             {
                 lastInputConnectAttempt = currentMillis;
+                #if DEBUG
                 safePrintln("[STREAM] Probeer input stream opnieuw te verbinden...");
+                #endif
                 ConnectInputStream();
             }
         }
@@ -243,17 +290,22 @@ void updateFirebaseTask(void *pvParameters)
             pathTime.concat("/Registration/lastSeen");
             if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
             {
+                #if DEBUG
                 safePrint("Tijd geüpload: ");
                 safePrintln(timeStr);
                 // Log de hoeveelheid vrij geheugen
                 safePrint("Vrije heap: ");
                 safePrint(String(ESP.getFreeHeap()));
+                
                 safePrintln(" bytes");
+                #endif
             }
             else
             {
+                #if DEBUG
                 safePrint("Fout bij uploaden tijd: ");
                 safePrintln(fbdo.errorReason());
+                #endif
             }
             unsigned long runtimeMillis = millis();
             unsigned long totalMinutes = runtimeMillis / 60000;
@@ -266,13 +318,17 @@ void updateFirebaseTask(void *pvParameters)
             pathRuntime.concat("/Registration/uptime");
             if (Firebase.RTDB.setString(&fbdo, pathRuntime, runtimeStr))
             {
+                #if DEBUG
                 safePrint("Runtime geüpload: ");
                 safePrintln(runtimeStr);
+                #endif
             }
             else
             {
+                #if DEBUG
                 safePrint("Fout bij uploaden runtime: ");
                 safePrintln(fbdo.errorReason());
+                #endif
             }
         }
         vTaskDelay(updateInterval / portTICK_PERIOD_MS);
@@ -285,7 +341,9 @@ void streamCallbackinput(FirebaseStream data)
     {
         String Message = "[STREAM] Error: ";
         Message.concat(String(fbdoInput.errorCode()));
+        #if DEBUG
         safePrintln(Message);
+        #endif
         inputStreamConnected = false;
     }
     else
@@ -295,10 +353,12 @@ void streamCallbackinput(FirebaseStream data)
         char InputData[32];
         strncpy(InputData, data.stringData().c_str(), sizeof(InputData) - 1);
         InputData[sizeof(InputData) - 1] = '\0';
+        #if DEBUG
         safePrint("[STREAM] Nieuwe waarde: ");
         safePrintln(InputData);
         safePrint("data afkomstig van path : ");
         safePrintln(data.dataPath());
+        #endif
         if (data.dataPath() == "/Led")
         {
             digitalWrite(LED_PIN, !digitalRead(LED_PIN));
@@ -312,7 +372,9 @@ void streamTimeoutCallbackinput(bool timeout)
 {
     if (timeout)
     {
+        #if DEBUG
         safePrintln("[STREAM] Timeout, probeer opnieuw...");
+        #endif
         Firebase.RTDB.endStream(&fbdoInput);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         inputStreamConnected = false;
@@ -325,18 +387,24 @@ void streamCallback(FirebaseStream data)
     {
         String Message = "[STREAM] Error: ";
         Message.concat(String(fbdoStream.errorCode()));
+        #if DEBUG
         safePrintln(Message);
+        #endif
         firmwareStreamConnected = false;
     }
     else
     {
         streamReceived = true;
+        #if DEBUG
         safePrint("[STREAM] Nieuwe waarde: ");
         safePrintln(data.stringData());
+        #endif
         // convert strindata to double
         if (atof(data.stringData().c_str()) > atof(FIRMWARE_VERSION))
         {
+            #if DEBUG
             safePrintln("[STREAM] Nieuwe firmware versie gedetecteerd, start OTA...!!");
+            #endif
             updateAvailable = true;
             digitalWrite(LED_PIN, HIGH);
         }
@@ -347,7 +415,9 @@ void streamTimeoutCallback(bool timeout)
 {
     if (timeout)
     {
+        #if DEBUG
         safePrintln("[STREAM] Timeout, probeer opnieuw...");
+        #endif
         Firebase.RTDB.endStream(&fbdoStream);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         firmwareStreamConnected = false;

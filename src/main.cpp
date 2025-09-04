@@ -72,8 +72,9 @@ void setup()
   Serial.println("GPIO geconfigureerd.");
   String data = String("Apparaat gestart, unieke ID: ");
   data.concat(device.Id);
+  #if DEBUG
   safePrintln(data);
-
+  #endif
   xTaskCreatePinnedToCore(connectToWiFiTask, "connectToWiFiTask", WIFI_STACK, NULL, 1, &wifiTaskHandle, 0);
   // WiFi-wachtrij met timeout (10s)
   unsigned long wifiWaitStart = millis();
@@ -83,13 +84,17 @@ void setup()
   }
   if (WiFi.status() != WL_CONNECTED)
   {
+    #if DEBUG
     safePrintln("[ERROR] WiFi niet verbonden na timeout in setup!");
+    #endif
   }
 
   setupTime();
+  #if DEBUG
   safePrint("Tijd gesynchroniseerd: ");
   safePrintln(HuidigeTijd());
   safePrintln("setup firebase");
+  #endif
   initFirebase();
   xTaskCreatePinnedToCore(updateFirebaseTask, "updateFirebaseTask", UPDATE_FIREBASE_STACK, NULL, 1, &updateFirebaseTaskHandle, 0);
   xTaskCreatePinnedToCore(mainTask, "mainTask", MAIN_STACK, NULL, 1, &mainTaskHandle, 1);
@@ -118,11 +123,13 @@ void mainTask(void *pvParameters)
       {
         if (device.inputChanged[i])
         {
+          #if DEBUG
           String message = String("Digitale ingang ");
           message.concat(String(i));
           message.concat(" veranderd: ");
           message.concat(String(device.readInput(i)));
           safePrintln(message);
+          #endif
           device.inputChanged[i] = false;
         }
       }
@@ -134,7 +141,9 @@ void mainTask(void *pvParameters)
     //---------------------------------------------------------------------
     if (streamReceived)
     {
+      #if DEBUG
       safePrintln("[STREAM] Nieuwe stream data ontvangen.");
+      #endif
       String message = String("Laatst ontvangen stream: ");
       message.concat(HuidigeTijd());
       String path = "devices/";
@@ -170,7 +179,9 @@ void firebaseStreamTask(void *pvParameters)
       // Check voor periodieke herstart van de streams
       if (currentMillis - lastStreamResetTime >= streamResetInterval)
       {
+        #if DEBUG
         safePrintln("[STREAM] Periodieke reset van alle streams...");
+        #endif
         Firebase.RTDB.endStream(&fbdoStream);
         Firebase.RTDB.endStream(&fbdoInput);
         firmwareStreamConnected = false;
@@ -187,7 +198,9 @@ void firebaseStreamTask(void *pvParameters)
         if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
         {
           lastFirmwareConnectAttempt = currentMillis;
+          #if DEBUG
           safePrintln("[STREAM] Probeer firmware stream opnieuw te verbinden...");
+          #endif
           connectFirmwareStream();
         }
       }
@@ -199,7 +212,9 @@ void firebaseStreamTask(void *pvParameters)
         if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
         {
           lastInputConnectAttempt = currentMillis;
+          #if DEBUG
           safePrintln("[STREAM] Probeer input stream opnieuw te verbinden...");
+          #endif
           ConnectInputStream();
         }
       }

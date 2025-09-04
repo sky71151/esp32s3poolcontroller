@@ -1,6 +1,6 @@
 #include "serial.h"
 
-
+#if DEBUG
 void safePrint(const String &msg)
 {
   if (debugMode)
@@ -38,3 +38,4 @@ void safePrintln(const String &msg)
     }
   }
 }
+#endif
