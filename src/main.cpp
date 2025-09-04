@@ -176,6 +176,7 @@ void firebaseStreamTask(void *pvParameters)
         firmwareStreamConnected = false;
         inputStreamConnected = false;
         lastStreamResetTime = currentMillis;
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
       }
 
       // Firmware stream
