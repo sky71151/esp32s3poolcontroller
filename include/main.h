@@ -30,7 +30,7 @@
 #define UPDATE_FIREBASE_STACK 16384
 #define FIREBASE_STREAM_STACK 8000
 
-#define DEBUG 0
+#define DEBUG 1
 
 typedef struct {
   const char *name;
