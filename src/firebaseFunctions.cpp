@@ -372,16 +372,14 @@ void streamCallbackinput(FirebaseStream data)
         else
         {
             String ledValue = doc["Led"];
-            if (data.dataPath() == "/Led")
+
+            if (ledValue == "1")
             {
-                if (ledValue == "1")
-                {
-                    digitalWrite(LED_PIN, HIGH);
-                }
-                else if (ledValue == "0")
-                {
-                    digitalWrite(LED_PIN, LOW);
-                }
+                digitalWrite(LED_PIN, HIGH);
+            }
+            else if (ledValue == "0")
+            {
+                digitalWrite(LED_PIN, LOW);
             }
         }
         // xQueueSendToBackFromISR(FirebaseInputQueue, &InputData, 0);
