@@ -3,6 +3,7 @@
 #if DEBUG
 void safePrint(const String &msg)
 {
+  #if DEBUG
   if (debugMode)
   {
     if (serialMutex)
@@ -18,10 +19,12 @@ void safePrint(const String &msg)
       Serial.print(msg);
     }
   }
+  #endif
 }
 
 void safePrintln(const String &msg)
 {
+  #if DEBUG
   if (debugMode)
   {
     if (serialMutex)
@@ -37,5 +40,6 @@ void safePrintln(const String &msg)
       Serial.println(msg);
     }
   }
+  #endif
 }
 #endif
