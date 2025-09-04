@@ -10,9 +10,10 @@ void initFirebase()
     safePrintln(FIREBASE_CLIENT_VERSION);
     config.api_key = API_KEY;
     config.database_url = DATABASE_URL;
-    fbdo.setBSSLBufferSize(4096, 1024);
-    fbdoStream.setBSSLBufferSize(4096, 1024);
-    fbdoInput.setBSSLBufferSize(4096, 1024);
+    // Verhoog de SSL-buffergrootte om SSL-fouten te voorkomen
+    fbdo.setBSSLBufferSize(16384, 2048);
+    fbdoStream.setBSSLBufferSize(16384, 2048);
+    fbdoInput.setBSSLBufferSize(16384, 2048);
     safePrint("Sign up new user... ");
     if (Firebase.signUp(&config, &auth, "", ""))
     {
@@ -77,7 +78,6 @@ void initFirebase()
                     safePrint("Fout bij uploaden firmware versie: ");
                     safePrintln(fbdo.errorReason());
                 }
-                
             }
             else
             {
@@ -138,14 +138,15 @@ void initFirebase()
     {
         safePrintln("Firebase is ready and initialized");
         safePrintln("setting up Firebase RTDB stream");
-        //connectFirmwareStream();
-        //ConnectInputStream();
+        // connectFirmwareStream();
+        // ConnectInputStream();
     }
 }
 
 void ConnectInputStream()
 {
-    if (fbdoInput.httpConnected()) {
+    if (fbdoInput.httpConnected())
+    {
         Firebase.RTDB.endStream(&fbdoInput);
     }
     String StreamInputPath = "/devices/";
@@ -168,7 +169,8 @@ void ConnectInputStream()
 
 void connectFirmwareStream()
 {
-    if (fbdoStream.httpConnected()) {
+    if (fbdoStream.httpConnected())
+    {
         Firebase.RTDB.endStream(&fbdoStream);
     }
 
@@ -189,11 +191,13 @@ void connectFirmwareStream()
 
 void manageFirebaseStreams()
 {
-    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized) {
+    if (WiFi.status() == WL_CONNECTED && Firebase.ready() && firebaseInitialized)
+    {
         unsigned long currentMillis = millis();
 
         // Check voor periodieke herstart van de streams
-        if (currentMillis - lastStreamResetTime >= streamResetInterval) {
+        if (currentMillis - lastStreamResetTime >= streamResetInterval)
+        {
             safePrintln("[STREAM] Periodieke reset van alle streams...");
             Firebase.RTDB.endStream(&fbdoStream);
             Firebase.RTDB.endStream(&fbdoInput);
@@ -203,16 +207,20 @@ void manageFirebaseStreams()
         }
 
         // Firmware stream
-        if (!firmwareStreamConnected) {
-            if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval) {
+        if (!firmwareStreamConnected)
+        {
+            if (currentMillis - lastFirmwareConnectAttempt >= firmwareConnectInterval)
+            {
                 lastFirmwareConnectAttempt = currentMillis;
                 safePrintln("[STREAM] Probeer firmware stream opnieuw te verbinden...");
                 connectFirmwareStream();
             }
         }
         // Input stream
-        if (!inputStreamConnected) {
-            if (currentMillis - lastInputConnectAttempt >= inputConnectInterval) {
+        if (!inputStreamConnected)
+        {
+            if (currentMillis - lastInputConnectAttempt >= inputConnectInterval)
+            {
                 lastInputConnectAttempt = currentMillis;
                 safePrintln("[STREAM] Probeer input stream opnieuw te verbinden...");
                 ConnectInputStream();
@@ -237,6 +245,10 @@ void updateFirebaseTask(void *pvParameters)
             {
                 safePrint("Tijd geüpload: ");
                 safePrintln(timeStr);
+                // Log de hoeveelheid vrij geheugen
+                safePrint("Vrije heap: ");
+                safePrint(String(ESP.getFreeHeap()));
+                safePrintln(" bytes");
             }
             else
             {
