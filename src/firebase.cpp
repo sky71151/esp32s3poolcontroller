@@ -192,8 +192,11 @@ void checkDeviceExists()
         }
         String pathTime = idPath;
         pathTime.concat("/Registration/lastBoot");
-        
+        String lastSeenPath = idPath;
+        lastSeenPath.concat(String(PATH_REGISTRATION_LASTSEEN));
+
         sendStringToFirebaseQueue(pathTime, timeStr);
+        sendStringToFirebaseQueue(lastSeenPath, timeStr);
 
         /*if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
         {
