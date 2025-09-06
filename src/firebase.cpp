@@ -43,8 +43,8 @@ void firebaseTask(void *pvParameters)
                 safePrintln(formatLog("INFO", "Bericht ontvangen van Firebase Queue."));
                 if (receivedMsg.type == ActionType::SEND_STRING)
                 {
-                    safePrintln(formatLog("INFO", "Verzend string naar Firebase path: " + String(receivedMsg.path)));
-                    safePrintln(formatLog("INFO", "Data: " + String(receivedMsg.data)));
+                    safePrintln(formatLog("QUEUE", "Verzend string naar Firebase path: " + String(receivedMsg.path)));
+                    safePrintln(formatLog("QUEUE", "Data: " + String(receivedMsg.data)));
                     if(Firebase.RTDB.setString(&fbdo, receivedMsg.path, receivedMsg.data))
                     {
                         safePrintln(formatLog("SUCCESS", "String succesvol verzonden van Queue naar Firebase."));
