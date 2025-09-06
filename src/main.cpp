@@ -62,7 +62,7 @@ void mainTask(void *pvParameters)
   for (;;)
   {
     // wait 30 seconden per try
-    if (!firebaseInitialized && (millis() - lastTryTime > 30000))
+    if (!firebaseInitialized && (millis() - lastTryTime > 30))
     {
       // Firebase is not initialized, handle accordingly
       safePrintln(formatLog("ERROR", "Firebase is niet geïnitialiseerd!"));
@@ -81,8 +81,11 @@ void mainTask(void *pvParameters)
 
       lastTryTime = millis();
     }
+    safePrintln(formatLog("MAIN", "mainTask is running..."));
     vTaskDelay(pdMS_TO_TICKS(1000)); // Wacht 1 seconde
   }
+
+  
 }
 
 void loop()
