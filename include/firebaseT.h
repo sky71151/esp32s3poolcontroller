@@ -12,6 +12,7 @@ void firmwareCallback(FirebaseStream data);
 void firmwareTimeout(bool timeout);
 void setupStreamInputs();
 void updateFirebase();
+void sendStringToFirebaseQueue(const String& path, const String& value);
 
 
 #endif

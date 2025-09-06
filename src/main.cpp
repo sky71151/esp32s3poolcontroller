@@ -18,6 +18,8 @@ SemaphoreHandle_t serialMutex = NULL;
 QueueHandle_t firebaseQueue;
 Preferences preferences;
 
+FirebaseMsg firebaseMsg;
+
 void setup()
 {
   serialInit();
@@ -49,6 +51,17 @@ void setup()
   {
     safePrintln("");
     safePrintln(formatLog("ERROR", "WiFi verbinding mislukt!"));
+  }
+
+  safePrintln(formatLog("INFO", "create firebase queue"));
+
+  firebaseQueue = xQueueCreate(10, sizeof(FirebaseMsg));
+  if (firebaseQueue == NULL)
+  {
+    safePrintln(formatLog("ERROR", "Failed to create Firebase queue"));
+  }else
+  {
+    safePrintln(formatLog("SUCCESS", "Firebase queue created"));
   }
 
   xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, &firebaseTaskHandle, 1);

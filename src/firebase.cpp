@@ -17,6 +17,7 @@ void firebaseTask(void *pvParameters)
     }
 
     int counter = 0;
+    FirebaseMsg receivedMsg;
 
     for (;;)
     {
@@ -34,6 +35,28 @@ void firebaseTask(void *pvParameters)
                 streamRecieved = false;
                 safePrintln(formatLog("INFO", "Stream data ontvangen, inputs updaten..."));
                 Firebase.RTDB.setString(&fbdo, "/devices/" + device.Id + "/Registration/laststreamreceived", device.getTime());
+            }
+
+            if(xQueueReceive(firebaseQueue, &receivedMsg, 0) == pdTRUE)
+            {
+                safePrintln(formatLog("INFO", "Bericht ontvangen van Firebase Queue."));
+                if (receivedMsg.type == ActionType::SEND_STRING)
+                {
+
+                    if(Firebase.RTDB.setString(&fbdo, receivedMsg.path, receivedMsg.data))
+                    {
+                        safePrintln(formatLog("SUCCESS", "String succesvol verzonden van Queue naar Firebase."));
+                    }
+                    else
+                    {
+                        safePrintln(formatLog("ERROR", "Fout bij het verzenden van Queue naar Firebase."));
+                    }
+                }
+                else if (receivedMsg.type == ActionType::SEND_JSON)
+                {
+                    safePrintln(formatLog("INFO", "Verwerk JSON bericht."));
+                    // Verwerk het JSON bericht
+                }
             }
         }
         else
@@ -169,27 +192,31 @@ void checkDeviceExists()
         }
         String pathTime = idPath;
         pathTime.concat("/Registration/lastBoot");
-        if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
+        
+        sendStringToFirebaseQueue(pathTime, timeStr);
+
+        /*if (Firebase.RTDB.setString(&fbdo, pathTime, timeStr))
         {
             safePrintln(formatLog("INFO", String("Boot Time update: ") + timeStr));
         }
         else
         {
             safePrintln(formatLog("ERROR", String("Fout bij uploaden boot tijd: ") + fbdo.errorReason()));
-        }
+        }*/
         String pathFirmware = idPath;
         pathFirmware.concat("/DeviceInfo/firmware");
         String firmwareVersion = FIRMWARE_VERSION;
         firmwareVersion.concat(" ");
         firmwareVersion.concat(timeStr);
-        if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), firmwareVersion))
+        sendStringToFirebaseQueue(pathFirmware, firmwareVersion);
+        /*if (Firebase.RTDB.setString(&fbdo, pathFirmware.c_str(), firmwareVersion))
         {
             safePrintln(formatLog("INFO", String("Firmware version update: ") + firmwareVersion));
         }
         else
         {
             safePrintln(formatLog("ERROR", String("Fout bij uploaden firmware versie: ") + fbdo.errorReason()));
-        }
+        }*/
     }
     else
     {
@@ -334,5 +361,21 @@ void updateFirebase()
     else
     {
     safePrintln(formatLog("ERROR", String("Fout bij uploaden runtime: ") + fbdo.errorReason()));
+    }
+}
+void sendStringToFirebaseQueue(const String& path, const String& value) {
+    FirebaseMsg msg;
+
+    msg.type = SEND_STRING;
+    // De cruciale stap: Kopieer de data
+    strncpy(msg.path, path.c_str(), sizeof(msg.path) - 1);
+    msg.path[sizeof(msg.path) - 1] = '\0'; 
+
+    strncpy(msg.data, value.c_str(), sizeof(msg.data) - 1);
+    msg.data[sizeof(msg.data) - 1] = '\0';
+
+    // De structuur wordt nu veilig naar de wachtrij gekopieerd
+    if (xQueueSend(firebaseQueue, (void*)&msg, 0) != pdPASS) {
+        Serial.println("Wachtrij vol!");
     }
 }

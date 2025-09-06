@@ -19,5 +19,6 @@ void streamTimeoutCallbackinput(bool timeout);
 void connectFirmwareStream();
 void ConnectInputStream();
 void manageFirebaseStreams();
+void sendToFirebaseQueue(const String& path, const String& value, ActionType type)
 
 #endif // FIREBASE_FUNCTIONS_H

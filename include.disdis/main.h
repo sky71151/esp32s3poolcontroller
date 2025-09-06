@@ -88,4 +88,16 @@ extern time_t timeNow;
 
 extern Board device;
 
+enum ActionType {
+  SEND_STRING,
+  SEND_JSON
+};
+
+typedef struct {
+  ActionType type;
+  char path[128];
+  char data[256]; // Used if type is SEND_STRING
+  char json[512];  // Used if type is SEND_JSON
+} FirebaseAction;
+
 #endif
