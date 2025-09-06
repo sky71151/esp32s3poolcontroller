@@ -29,6 +29,7 @@ void firebaseTask(void *pvParameters)
         {
             safePrintln("Firebase is not ready!");
             safePrintln(fbdo.errorReason());
+            
         }
 
         if (counter >= 6000) // Elke 60 iteraties (ongeveer elk uur)
