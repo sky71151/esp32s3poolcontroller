@@ -6,3 +6,7 @@ include/secrets.h
 .vscode/ipch
 pool-671d1-firebase-adminsdk-fbsvc-f5e2ff230f.json
 update_firebase_version_admin.py
+include.dis/*.*
+include.disdis/*.*
+src.dis/*.*
+src.disdis/*.*
