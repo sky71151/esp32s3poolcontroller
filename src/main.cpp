@@ -1,4 +1,6 @@
 #include "main.h"
+// Professionele serial logging
+
 
 FirebaseData fbdo;
 FirebaseData Stream;
@@ -21,29 +23,31 @@ void setup()
   Serial.begin(115200);
   delay(5000);
   device.Init();
-  safePrintln("Start WiFi verbinding...");
+  safePrintln(formatLog("INFO", "Start WiFi verbinding..."));
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   int wifiTries = 0;
   while (WiFi.status() != WL_CONNECTED && wifiTries < 40)
   {
     delay(500);
-    safePrint(".");
+    safePrint("."); // Progress indicator, geen loglevel nodig
     wifiTries++;
   }
   if (WiFi.status() == WL_CONNECTED)
   {
-    safePrintln("\nWiFi connected!");
+    safePrintln("");
+    safePrintln(formatLog("SUCCESS", "WiFi connected!"));
     configTime(3600, 3600, "pool.ntp.org");
     while (timeNow < 100000)
     {
       timeNow = time(nullptr);
     }
 
-    safePrintln("Huidige tijd: " + device.getTime());
+    safePrintln(formatLog("INFO", "Huidige tijd: " + device.getTime()));
   }
   else
   {
-    safePrintln("\nWiFi verbinding mislukt!");
+    safePrintln("");
+    safePrintln(formatLog("ERROR", "WiFi verbinding mislukt!"));
   }
   
   xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, NULL, 1);
@@ -60,8 +64,8 @@ void mainTask(void *pvParameters)
     if (!firebaseInitialized && (millis() - lastTryTime > 30000))
     {
       // Firebase is not initialized, handle accordingly
-      safePrintln("Firebase is niet geïnitialiseerd!");
-      safePrintln("Herstart Firebase taak...");
+  safePrintln(formatLog("ERROR", "Firebase is niet geïnitialiseerd!"));
+  safePrintln(formatLog("INFO", "Herstart Firebase taak..."));
       //retry to start firebase task
       xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, NULL, 1);
       lastTryTime = millis();

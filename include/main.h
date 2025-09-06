@@ -10,6 +10,7 @@
 #include "firebaseT.h"
 #include "version.h"
 #include "ota.h"
+#include "serial_format.h"
 
 #include <HTTPClient.h>
 #include <HTTPUpdate.h>
