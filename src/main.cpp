@@ -11,6 +11,7 @@ time_t bootTime = 0;
 
 SemaphoreHandle_t serialMutex = NULL;
 QueueHandle_t firebaseQueue;
+Preferences preferences;
 
 void setup()
 {

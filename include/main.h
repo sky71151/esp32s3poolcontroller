@@ -17,6 +17,7 @@
 #include <WiFiClient.h>
 #include "Update.h"
 #include <ArduinoJson.h>
+#include "Preferences.h"
 
 #define DEBUG 1
 
@@ -33,7 +34,7 @@ extern Board device;
 extern SemaphoreHandle_t serialMutex;
 
 extern bool streamRecieved;
-
+extern Preferences preferences;
 void mainTask(void *pvParameters);
 
 
