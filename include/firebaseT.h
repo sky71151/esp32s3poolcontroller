@@ -4,7 +4,7 @@
 #include "main.h"
 
 void firebaseTask(void *pvParameters);
-void initFirebase();
+bool initFirebase();
 void streamCallback(FirebaseStream data);
 void streamTimeout(bool timeout);
 void checkDeviceExists();

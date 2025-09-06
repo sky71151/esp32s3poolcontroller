@@ -32,6 +32,7 @@ extern time_t bootTime;
 
 extern Board device;
 extern SemaphoreHandle_t serialMutex;
+extern bool firebaseInitialized;
 
 extern bool streamRecieved;
 extern Preferences preferences;

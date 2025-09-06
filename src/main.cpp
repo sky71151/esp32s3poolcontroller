@@ -9,6 +9,8 @@ FirebaseConfig config;
 time_t timeNow = 0;
 time_t bootTime = 0;
 
+bool firebaseInitialized = false;
+
 SemaphoreHandle_t serialMutex = NULL;
 QueueHandle_t firebaseQueue;
 Preferences preferences;
@@ -48,10 +50,22 @@ void setup()
   xTaskCreatePinnedToCore(mainTask, "MainTask", 8192, NULL, 1, NULL, 1);
 }
 
+unsigned long lastTryTime = millis();
+
 void mainTask(void *pvParameters)
 {
   for (;;)
   {
+    //wait 30 seconden per try
+    if (!firebaseInitialized && (millis() - lastTryTime > 30000))
+    {
+      // Firebase is not initialized, handle accordingly
+      safePrintln("Firebase is niet geïnitialiseerd!");
+      safePrintln("Herstart Firebase taak...");
+      //retry to start firebase task
+      xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, NULL, 1);
+      lastTryTime = millis();
+    }
     vTaskDelay(pdMS_TO_TICKS(1000)); // Wacht 1 seconde
   }
 }

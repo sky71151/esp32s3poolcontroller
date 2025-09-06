@@ -4,7 +4,17 @@ bool streamRecieved = false;
 
 void firebaseTask(void *pvParameters)
 {
-    initFirebase();
+    if (!initFirebase())
+    {
+        safePrintln("Firebase initialisatie mislukt!");
+        vTaskDelete(NULL);
+        firebaseInitialized = false;
+    }else
+    {
+        safePrintln("Firebase initialisatie gelukt!");
+        firebaseInitialized = true;
+    }
+
     int counter = 0;
 
     for (;;)
@@ -44,7 +54,7 @@ void firebaseTask(void *pvParameters)
     }
 }
 
-void initFirebase()
+bool initFirebase()
 {
     safePrintln("Initialiseer Firebase config...");
     config.database_url = DATABASE_URL;
@@ -60,6 +70,7 @@ void initFirebase()
     {
         safePrintln("Firebase aanmelding mislukt!");
         safePrintln(fbdo.errorReason());
+        return false;
     }
 
     if (Firebase.ready())
@@ -69,12 +80,16 @@ void initFirebase()
         checkDeviceExists();
         delay(500);
         setupStreamInputs();
+
     }
     else
     {
         safePrintln("Firebase is niet klaar!");
         safePrintln(fbdo.errorReason());
+        return false;
     }
+
+    return true;
 }
 
 void streamCallback(FirebaseStream data)
