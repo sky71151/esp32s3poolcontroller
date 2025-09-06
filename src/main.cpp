@@ -59,11 +59,13 @@ unsigned long lastTryTime = millis();
 
 void mainTask(void *pvParameters)
 {
+  safePrintln(formatLog("MAIN", "mainTask gestart..."));
   for (;;)
   {
     // wait 30 seconden per try
-    if (!firebaseInitialized && (millis() - lastTryTime > 30))
+    if (!firebaseInitialized && (millis() - lastTryTime > 30000))
     {
+      lastTryTime = millis();
       // Firebase is not initialized, handle accordingly
       safePrintln(formatLog("ERROR", "Firebase is niet geïnitialiseerd!"));
       safePrintln(formatLog("INFO", "Herstart Firebase taak..."));
@@ -79,7 +81,7 @@ void mainTask(void *pvParameters)
         xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, &firebaseTaskHandle, 1);
       }
 
-      lastTryTime = millis();
+      
     }
     safePrintln(formatLog("MAIN", "mainTask is running..."));
     vTaskDelay(pdMS_TO_TICKS(1000)); // Wacht 1 seconde
