@@ -28,6 +28,8 @@ extern FirebaseData FirmwareStream;
 extern FirebaseAuth auth;
 extern FirebaseConfig config;
 
+extern TaskHandle_t firebaseTaskHandle;
+
 extern time_t timeNow;
 extern time_t bootTime;
 

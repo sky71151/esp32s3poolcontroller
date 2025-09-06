@@ -1,7 +1,6 @@
 #include "main.h"
 // Professionele serial logging
 
-
 FirebaseData fbdo;
 FirebaseData Stream;
 FirebaseData FirmwareStream;
@@ -12,6 +11,8 @@ time_t timeNow = 0;
 time_t bootTime = 0;
 
 bool firebaseInitialized = false;
+
+TaskHandle_t firebaseTaskHandle = NULL;
 
 SemaphoreHandle_t serialMutex = NULL;
 QueueHandle_t firebaseQueue;
@@ -49,8 +50,8 @@ void setup()
     safePrintln("");
     safePrintln(formatLog("ERROR", "WiFi verbinding mislukt!"));
   }
-  
-  xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, NULL, 1);
+
+  xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, &firebaseTaskHandle, 1);
   xTaskCreatePinnedToCore(mainTask, "MainTask", 8192, NULL, 1, NULL, 1);
 }
 
@@ -60,14 +61,24 @@ void mainTask(void *pvParameters)
 {
   for (;;)
   {
-    //wait 30 seconden per try
+    // wait 30 seconden per try
     if (!firebaseInitialized && (millis() - lastTryTime > 30000))
     {
       // Firebase is not initialized, handle accordingly
-  safePrintln(formatLog("ERROR", "Firebase is niet geïnitialiseerd!"));
-  safePrintln(formatLog("INFO", "Herstart Firebase taak..."));
-      //retry to start firebase task
-      xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, NULL, 1);
+      safePrintln(formatLog("ERROR", "Firebase is niet geïnitialiseerd!"));
+      safePrintln(formatLog("INFO", "Herstart Firebase taak..."));
+      // retry to start firebase task
+      if (firebaseTaskHandle != NULL)
+      {
+        vTaskDelete(firebaseTaskHandle);
+        firebaseTaskHandle = NULL;
+      }
+      else
+      {
+        safePrintln(formatLog("INFO", "Firebase taak is al gestopt, start een nieuwe..."));
+        xTaskCreatePinnedToCore(firebaseTask, "FirebaseTask", 8192, NULL, 1, &firebaseTaskHandle, 1);
+      }
+
       lastTryTime = millis();
     }
     vTaskDelay(pdMS_TO_TICKS(1000)); // Wacht 1 seconde
