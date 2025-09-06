@@ -4,7 +4,7 @@ import os
 import re
 
 version_file = os.path.join("c:/Users/vanba/OneDrive/Documenten/PlatformIO/Projects/firebase test", "firmware_version.txt")
-header_file = os.path.join("c:/Users/vanba/OneDrive/Documenten/PlatformIO/Projects/firebase test/src", "version.h")
+header_file = os.path.join("c:/Users/vanba/OneDrive/Documenten/PlatformIO/Projects/firebase test/include", "version.h")
 
 # Lees huidige versie
 if os.path.exists(version_file):
