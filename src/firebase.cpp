@@ -34,7 +34,8 @@ void firebaseTask(void *pvParameters)
             {
                 streamRecieved = false;
                 safePrintln(formatLog("INFO", "Stream data ontvangen, inputs updaten..."));
-                Firebase.RTDB.setString(&fbdo, "/devices/" + device.Id + "/Registration/laststreamreceived", device.getTime());
+                sendStringToFirebaseQueue("/devices/" + device.Id + String(PATH_REGISTRATION_LASTSTREAM), device.getTime());
+                //Firebase.RTDB.setString(&fbdo, "/devices/" + device.Id + "/Registration/laststreamreceived", device.getTime());
             }
 
             if(xQueueReceive(firebaseQueue, &receivedMsg, 0) == pdTRUE)
@@ -191,7 +192,7 @@ void checkDeviceExists()
             safePrintln(formatLog("INFO", msg));
         }
         String pathTime = idPath;
-        pathTime.concat("/Registration/lastBoot");
+        pathTime.concat(String(PATH_REGISTRATION_LASTBOOT));
         String lastSeenPath = idPath;
         lastSeenPath.concat(String(PATH_REGISTRATION_LASTSEEN));
 
