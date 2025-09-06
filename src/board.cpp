@@ -170,3 +170,13 @@ void Board::Init()
   attachInterrupt(DIGITAL_INPUT_PINS[5], inputISR5, CHANGE);
   
 }
+
+String Board::getTime() {
+  time_t now = time(nullptr);
+  struct tm *timeinfo = localtime(&now);
+  char buffer[32];
+  strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
+  return String(buffer);
+} 
+
+

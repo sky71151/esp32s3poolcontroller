@@ -61,6 +61,7 @@ public:
     void setRelays(String relayValues);
     void Init();
     void handleInputInterrupt(int index);
+    String getTime();
     // etc.
 };
 

@@ -6,6 +6,7 @@
 
 void safePrint(const String &msg);
 void safePrintln(const String &msg);
+void serialInit();
 
 
 #endif
