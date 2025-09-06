@@ -255,7 +255,7 @@ void firmwareCallback(FirebaseStream data)
     if (data.stringData() > FIRMWARE_VERSION)
     {
         safePrintln("Nieuwe firmware versie beschikbaar: " + data.stringData());
-        //performOTA();
+        performOTA();
     }
     else
     {
