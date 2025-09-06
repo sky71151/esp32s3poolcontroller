@@ -55,7 +55,7 @@ void setup()
 
   safePrintln(formatLog("INFO", "create firebase queue"));
 
-  firebaseQueue = xQueueCreate(10, sizeof(FirebaseMsg));
+  firebaseQueue = xQueueCreate(5, sizeof(FirebaseMsg));
   if (firebaseQueue == NULL)
   {
     safePrintln(formatLog("ERROR", "Failed to create Firebase queue"));
