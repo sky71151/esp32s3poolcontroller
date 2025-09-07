@@ -29,5 +29,6 @@ bool initFirebase();
 void checkDeviceExists();
 void updateFirebase();
 void sendStringToFirebaseQueue(const String &path, const String &value);
+void sendJsonToFirebaseQueue(const String& path, const String& json);
 
 #endif
