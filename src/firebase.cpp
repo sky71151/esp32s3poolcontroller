@@ -281,3 +281,20 @@ void sendStringToFirebaseQueue(const String& path, const String& value) {
         Serial.println("Wachtrij vol!");
     }
 }
+
+void sendJsonToFirebaseQueue(const String& path, const String& json) {
+    FirebaseMsg msg;
+    msg.type = SEND_JSON;
+
+    // De cruciale stap: Kopieer de data
+    strncpy(msg.path, path.c_str(), sizeof(msg.path) - 1);
+    msg.path[sizeof(msg.path) - 1] = '\0';
+
+    strncpy(msg.data, json.c_str(), sizeof(msg.data) - 1);
+    msg.data[sizeof(msg.data) - 1] = '\0';
+
+    // De structuur wordt nu veilig naar de wachtrij gekopieerd
+    if (xQueueSend(firebaseQueue, (void*)&msg, 0) != pdPASS) {
+        Serial.println("Wachtrij vol!");
+    }
+}
