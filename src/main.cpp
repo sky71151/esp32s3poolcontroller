@@ -11,7 +11,7 @@ time_t timeNow = 0;
 time_t bootTime = 0;
 
 bool firebaseInitialized = false;
-
+bool streamRecieved = false;
 TaskHandle_t firebaseTaskHandle = NULL;
 
 SemaphoreHandle_t serialMutex = NULL;

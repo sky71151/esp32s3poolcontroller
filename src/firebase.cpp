@@ -1,7 +1,7 @@
 #include "firebaseT.h"
 #include "serial_format.h"
 
-bool streamRecieved = false;
+//ol streamRecieved = false;
 
 void firebaseTask(void *pvParameters)
 {

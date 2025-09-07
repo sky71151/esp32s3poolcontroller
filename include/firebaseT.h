@@ -26,10 +26,7 @@ constexpr const char *PATH_REGISTRATION_UPTIME = "/Registration/uptime";
 
 void firebaseTask(void *pvParameters);
 bool initFirebase();
-
 void checkDeviceExists();
-
-
 void updateFirebase();
 void sendStringToFirebaseQueue(const String &path, const String &value);
 
