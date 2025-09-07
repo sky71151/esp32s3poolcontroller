@@ -11,6 +11,7 @@
 #include "version.h"
 #include "ota.h"
 #include "serial_format.h"
+#include "streams.h"
 
 #include <HTTPClient.h>
 #include <HTTPUpdate.h>
@@ -39,6 +40,8 @@ extern bool firebaseInitialized;
 
 extern bool streamRecieved;
 extern Preferences preferences;
+extern bool streamRecieved;
+
 void mainTask(void *pvParameters);
 
 enum ActionType {
@@ -55,6 +58,7 @@ typedef struct {
 
 extern FirebaseMsg firebaseMsg;
 extern QueueHandle_t firebaseQueue;
+
 
 
 
